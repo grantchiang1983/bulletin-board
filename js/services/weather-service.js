@@ -1,6 +1,6 @@
 /**
  * Weather Service
- * Direct Live Feeds from Central Weather Administration (CWA / 中央氣象署)
+ * 100% Direct Official Live Feeds from Central Weather Administration (CWA / 中央氣象署)
  */
 export const WeatherService = {
   cities: [
@@ -54,19 +54,29 @@ export const WeatherService = {
     return { ...city, hourly, weekly };
   },
 
-  // Central Weather Administration (CWA / 中央氣象署) Direct Image Feeds
+  // Official Live Imagery from Central Weather Administration (CWA / 中央氣象署)
   getRadarLayers() {
     const ts = Date.now();
     return [
       {
         id: 'cwa_radar_standard',
-        name: '中央氣象署雷達回波 (標準)',
+        name: '台灣鄰近雷達回波 (標準 1000px)',
         type: 'live_image',
-        description: '中央氣象署官方即時雷達合成回波圖 (台灣鄰近區域 1000x1000)',
+        description: '中央氣象署官方即時合成雷達回波圖 (台灣及鄰近區域)',
         url: `https://www.cwa.gov.tw/Data/radar/CV1_1000.png?t=${ts}`,
         hdUrl: `https://www.cwa.gov.tw/Data/radar/CV1_3600.png?t=${ts}`,
-        source: '中央氣象署 CWA 官方連線',
-        unit: 'dBZ'
+        source: '交通部中央氣象署 (CWA)',
+        unit: '回波強度 (dBZ)'
+      },
+      {
+        id: 'cwa_radar_hd',
+        name: '高解析雷達回波 (超清 3600px)',
+        type: 'live_image',
+        description: '中央氣象署 3600x3600 頂級超高清全解析雷達回波',
+        url: `https://www.cwa.gov.tw/Data/radar/CV1_3600.png?t=${ts}`,
+        hdUrl: `https://www.cwa.gov.tw/Data/radar/CV1_3600.png?t=${ts}`,
+        source: '交通部中央氣象署 (CWA)',
+        unit: '回波強度 (dBZ)'
       },
       {
         id: 'cwa_satellite_ir',
@@ -74,6 +84,7 @@ export const WeatherService = {
         type: 'live_image',
         description: '向日葵9號氣象衛星即時紅外線色調強化雲圖 (2750x2750)',
         url: `https://www.cwa.gov.tw/Data/satellite/LCC_IR1_CR_2750/LCC_IR1_CR_2750.jpg?t=${ts}`,
+        hdUrl: `https://www.cwa.gov.tw/Data/satellite/LCC_IR1_CR_2750/LCC_IR1_CR_2750.jpg?t=${ts}`,
         source: '向日葵9號 氣象衛星即時觀測',
         unit: '雲頂溫度 (°C)'
       },
@@ -83,16 +94,9 @@ export const WeatherService = {
         type: 'live_image',
         description: '向日葵9號氣象衛星黑白紅外線雲圖',
         url: `https://www.cwa.gov.tw/Data/satellite/LCC_IR1_MB_2750/LCC_IR1_MB_2750.jpg?t=${ts}`,
+        hdUrl: `https://www.cwa.gov.tw/Data/satellite/LCC_IR1_MB_2750/LCC_IR1_MB_2750.jpg?t=${ts}`,
         source: '向日葵9號 氣象衛星即時觀測',
         unit: '紅外線波段'
-      },
-      {
-        id: 'radar_canvas_sim',
-        name: '動態雷達掃描模擬 (60fps)',
-        type: 'canvas_sim',
-        description: '即時動態雷達掃描與降雨回波運動模擬',
-        source: '本機即時動態渲染引擎',
-        unit: '即時動態'
       }
     ];
   },
