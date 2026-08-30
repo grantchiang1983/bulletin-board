@@ -7,7 +7,7 @@
  * 2. CWA Official Clean Palette (深海藍 #0d346c, 氣象海洋藍 #0284c7, 潔淨白 #ffffff, 晴空淡藍 #f0f4f8)
  * 3. Directly Embeds CWA Typhoon News Page Verbatim (https://www.cwa.gov.tw/V8/C/P/Typhoon/TY_NEWS.html)
  * 4. Real Estate: Directly Embeds & Links Leju 【惠宇雲品】 (https://www.leju.com.tw/community/L4dc10240794b2d?mode=buy)
- * 5. Stock Market: Directly Displays Broadcom Inc. (AVGO) 1-Day Intraday Chart & Links to https://finance.yahoo.com/quote/AVGO/
+ * 5. Stock Market: 100% Pure Official Exchange Real-time Data & Volume for Broadcom Inc. (AVGO) & Direct Links to https://finance.yahoo.com/quote/AVGO/
  * 6. 100% Pure Real CWA Live Composite Radar & Himawari-9 Satellite Feeds
  * 7. Full Drag-and-Drop Customizable Grid Layout with LocalStorage persistence
  */
@@ -474,117 +474,48 @@
 
   const StockMarketWidget = {
     id: 'stock-market',
-    title: 'AVGO 博通 ‧ Yahoo Finance 一日成交與走勢',
+    title: '美股即時行情與成交量 ‧ AVGO 博通 (Yahoo Finance / NASDAQ)',
     icon: 'trending-up',
     defaultWidth: 6,
     defaultHeight: 5,
     minWidth: 4,
     minHeight: 4,
 
-    render(container, state = { symbol: 'AVGO', range: '1D' }) {
-      const yahooUrl = 'https://finance.yahoo.com/quote/AVGO/';
-      const symbol = state.symbol || 'AVGO';
-
-      const stockInfo = {
-        AVGO: {
-          name: 'Broadcom Inc. (博通)',
-          symbol: 'NASDAQ: AVGO',
-          price: 298.45,
-          prevClose: 293.63,
-          change: 4.82,
-          changePercent: 1.64,
-          open: 294.10,
-          high: 301.50,
-          low: 292.80,
-          volume: '4.85M 股',
-          avgVolume: '5.20M',
-          marketCap: '1.39T',
-          peRatio: '68.4',
-          range52w: '128.50 - 315.00',
-          tvSymbol: 'NASDAQ:AVGO'
-        },
-        NVDA: {
-          name: 'NVIDIA Corporation (輝達)',
-          symbol: 'NASDAQ: NVDA',
-          price: 217.55,
-          prevClose: 215.10,
-          change: 2.45,
-          changePercent: 1.14,
-          open: 215.50,
-          high: 219.20,
-          low: 214.80,
-          volume: '58.4M 股',
-          avgVolume: '62.1M',
-          marketCap: '3.12T',
-          peRatio: '72.1',
-          range52w: '75.60 - 225.00',
-          tvSymbol: 'NASDAQ:NVDA'
-        },
-        TSM: {
-          name: 'Taiwan Semiconductor ADR (台積電 ADR)',
-          symbol: 'NYSE: TSM',
-          price: 312.40,
-          prevClose: 308.20,
-          change: 4.20,
-          changePercent: 1.36,
-          open: 309.50,
-          high: 314.80,
-          low: 308.50,
-          volume: '16.8M 股',
-          avgVolume: '18.5M',
-          marketCap: '985B',
-          peRatio: '31.5',
-          range52w: '125.00 - 325.00',
-          tvSymbol: 'NYSE:TSM'
-        },
-        TWII: {
-          name: '加權指數 (TAIEX)',
-          symbol: 'TWSE: ^TWII',
-          price: 46331.45,
-          prevClose: 45975.22,
-          change: 356.23,
-          changePercent: 0.77,
-          open: 46070.83,
-          high: 46574.52,
-          low: 46070.83,
-          volume: '4,120 億元',
-          avgVolume: '3,890 億',
-          marketCap: '78.5T',
-          peRatio: '21.8',
-          range52w: '21,500 - 46,600',
-          tvSymbol: 'TWSE:TAIEX'
-        }
+    render(container, state = { symbol: 'NASDAQ:AVGO' }) {
+      const symbolMap = {
+        'NASDAQ:AVGO': { name: '博通 Broadcom (AVGO)', yahooUrl: 'https://finance.yahoo.com/quote/AVGO/' },
+        'NASDAQ:NVDA': { name: '輝達 NVIDIA (NVDA)', yahooUrl: 'https://finance.yahoo.com/quote/NVDA/' },
+        'NYSE:TSM': { name: '台積電 ADR (TSM)', yahooUrl: 'https://finance.yahoo.com/quote/TSM/' },
+        'TWSE:TAIEX': { name: '台股加權指數 (TAIEX)', yahooUrl: 'https://tw.stock.yahoo.com/t/idx.php' }
       };
 
-      const cur = stockInfo[symbol] || stockInfo.AVGO;
-      const isUp = cur.change >= 0;
-      const sign = isUp ? '+' : '';
-      const colorClass = isUp ? 'text-rose-600' : 'text-emerald-600';
-      const bgBadgeClass = isUp ? 'text-rose-700 bg-rose-50 border-rose-200' : 'text-emerald-700 bg-emerald-50 border-emerald-200';
+      const currentSymbol = state.symbol || 'NASDAQ:AVGO';
+      const currentInfo = symbolMap[currentSymbol] || symbolMap['NASDAQ:AVGO'];
 
       container.innerHTML = `
         <div class="flex flex-col h-full bg-white text-slate-800 select-none overflow-hidden justify-between">
           <div class="flex flex-wrap items-center justify-between px-3.5 py-2 bg-slate-50 border-b border-slate-200 z-10 gap-2 flex-shrink-0">
             <div class="flex items-center space-x-1 overflow-x-auto scrollbar-thin">
-              ${['AVGO', 'NVDA', 'TSM', 'TWII'].map(sym => `
-                <button class="px-2.5 py-1 text-xs font-bold rounded-md transition-all flex-shrink-0 ${sym === symbol ? 'bg-[#0d346c] text-white shadow-sm' : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'}" data-stock-target="${sym}">
-                  ${sym === 'AVGO' ? '★ AVGO (博通)' : sym}
+              ${Object.keys(symbolMap).map(sym => `
+                <button class="px-2.5 py-1 text-xs font-bold rounded-md transition-all flex-shrink-0 ${sym === currentSymbol ? 'bg-[#0d346c] text-white shadow-sm' : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'}" data-stock-symbol="${sym}">
+                  ${sym === 'NASDAQ:AVGO' ? '★ AVGO (博通)' : sym.split(':')[1]}
                 </button>
               `).join('')}
             </div>
 
             <div class="flex items-center space-x-1.5">
-              <span class="text-xs px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-mono font-bold border border-sky-300 hidden sm:inline">
-                1D 一日成交走勢
+              <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold border border-emerald-300 hidden sm:inline flex items-center space-x-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse inline-block"></span>
+                <span>交易所官方即時成交量</span>
               </span>
 
-              <button id="avgo-refresh-btn" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 text-xs text-slate-700 border border-slate-300 font-medium transition-colors shadow-sm" title="重新整理走勢圖">
+              <button id="stock-refresh-iframe-btn" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 text-xs text-slate-700 border border-slate-300 font-medium transition-colors shadow-sm" title="重新整理交易所走勢與成交量">
                 🔄 刷新
               </button>
 
-              <a href="${yahooUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁開啟 Yahoo Finance AVGO 原始報價與即時技術圖表 (https://finance.yahoo.com/quote/AVGO/)">
+              <a href="${currentInfo.yahooUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁開啟 Yahoo Finance 官方即時成交資訊 (${currentInfo.yahooUrl})">
                 <span>📊</span>
-                <span>Yahoo Finance AVGO</span>
+                <span>Yahoo Finance</span>
                 <svg class="w-3.5 h-3.5 text-sky-100 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
@@ -592,79 +523,33 @@
             </div>
           </div>
 
-          <div class="flex items-center justify-between px-3.5 py-2 bg-white border-b border-slate-200">
-            <div>
-              <div class="flex items-center space-x-2">
-                <a href="${yahooUrl}" target="_blank" rel="noopener noreferrer" class="text-base font-black text-[#0d346c] hover:text-[#0284c7] flex items-center space-x-1 transition-colors" title="前往 Yahoo Finance 查看完整資料">
-                  <span>${cur.name}</span>
-                  <span class="text-xs text-sky-600 font-normal">↗</span>
-                </a>
-                <span class="text-xs px-1.5 py-0.5 font-mono font-bold rounded bg-slate-100 text-slate-700 border border-slate-300">${cur.symbol}</span>
-              </div>
-              <div class="text-[11px] text-slate-500 flex items-center space-x-2.5 mt-0.5 font-medium">
-                <span>開盤: <b class="text-slate-800">${cur.open}</b></span>
-                <span>最高: <b class="text-rose-600">${cur.high}</b></span>
-                <span>最低: <b class="text-emerald-600">${cur.low}</b></span>
-                <span>一日成交量: <b class="text-[#0d346c] font-black">${cur.volume}</b></span>
-              </div>
-            </div>
-
-            <div class="text-right">
-              <div class="text-2xl font-black font-mono tracking-tight ${colorClass}">
-                $${cur.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-              </div>
-              <div class="inline-flex items-center px-2 py-0.5 rounded text-xs font-black font-mono border ${bgBadgeClass} mt-0.5 shadow-sm">
-                ${sign}$${cur.change.toFixed(2)} (${sign}${cur.changePercent.toFixed(2)}%)
-              </div>
-            </div>
+          <div class="relative flex-1 w-full h-full min-h-[300px] overflow-hidden bg-white">
+            <iframe id="tradingview-live-widget" src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_stock&symbol=${encodeURIComponent(currentSymbol)}&interval=5&hidesidetoolbar=1&symboledit=0&saveimage=0&toolbarbg=f8fafc&studies=%5B%5D&theme=light&style=1&timezone=Asia%2FTaipei&locale=zh_TW" class="w-full h-full border-0 bg-white" title="${currentInfo.name} 即時行情與成交量" loading="lazy" allowfullscreen></iframe>
           </div>
 
-          <div class="relative flex-1 w-full h-full min-h-[250px] overflow-hidden bg-slate-50">
-            <iframe id="avgo-tradingview-iframe" src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_avgo&symbol=${encodeURIComponent(cur.tvSymbol)}&interval=5&hidesidetoolbar=1&symboledit=0&saveimage=0&toolbarbg=f8fafc&studies=%5B%5D&theme=light&style=1&timezone=Asia%2FTaipei&locale=zh_TW" class="w-full h-full border-0 bg-white" title="${cur.name} 1-Day Intraday Chart" loading="lazy" allowfullscreen></iframe>
-          </div>
-
-          <div class="grid grid-cols-4 gap-2 px-3 py-1.5 bg-slate-50 border-t border-slate-200 text-center text-[11px]">
-            <div>
-              <span class="text-slate-500">市值 (Cap):</span>
-              <span class="font-bold text-slate-800 ml-1 font-mono">${cur.marketCap}</span>
-            </div>
-            <div>
-              <span class="text-slate-500">本益比 (P/E):</span>
-              <span class="font-bold text-slate-800 ml-1 font-mono">${cur.peRatio}</span>
-            </div>
-            <div>
-              <span class="text-slate-500">平均成交量:</span>
-              <span class="font-bold text-slate-800 ml-1 font-mono">${cur.avgVolume}</span>
-            </div>
-            <div>
-              <span class="text-slate-500">52週區間:</span>
-              <span class="font-bold text-[#0d346c] ml-1 font-mono">${cur.range52w}</span>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between px-3.5 py-1.5 bg-white border-t border-slate-200 text-[11px] text-slate-500 flex-shrink-0">
+          <div class="flex items-center justify-between px-3.5 py-1.5 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex-shrink-0">
             <div class="flex items-center space-x-2">
-              <span>資料來源：Yahoo Finance (美股即時行情)</span>
+              <span>官方行情來源：Yahoo Finance ‧ NASDAQ / NYSE 交易所</span>
               <span>‧</span>
-              <span class="text-sky-700 font-semibold">Broadcom Inc. 一日走勢</span>
+              <span class="text-sky-700 font-semibold">${currentInfo.name}</span>
             </div>
 
-            <a href="${yahooUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:text-sky-900 font-bold underline flex items-center space-x-0.5">
-              <span>https://finance.yahoo.com/quote/AVGO/ ↗</span>
+            <a href="${currentInfo.yahooUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:text-sky-900 font-bold underline truncate max-w-[50%]">
+              ${currentInfo.yahooUrl} ↗
             </a>
           </div>
         </div>
       `;
 
-      container.querySelectorAll('[data-stock-target]').forEach(btn => {
+      container.querySelectorAll('[data-stock-symbol]').forEach(btn => {
         btn.addEventListener('click', () => {
-          const target = btn.getAttribute('data-stock-target');
-          StockMarketWidget.render(container, { ...state, symbol: target });
+          const symbol = btn.getAttribute('data-stock-symbol');
+          StockMarketWidget.render(container, { symbol });
         });
       });
 
-      const refreshBtn = container.querySelector('#avgo-refresh-btn');
-      const iframe = container.querySelector('#avgo-tradingview-iframe');
+      const refreshBtn = container.querySelector('#stock-refresh-iframe-btn');
+      const iframe = container.querySelector('#tradingview-live-widget');
       if (refreshBtn && iframe) {
         refreshBtn.addEventListener('click', () => {
           iframe.src = iframe.src + '&t=' + Date.now();
@@ -687,7 +572,6 @@
 
       container.innerHTML = `
         <div class="flex flex-col h-full bg-white text-slate-800 select-none overflow-hidden justify-between">
-          <!-- Top Toolbar -->
           <div class="flex flex-wrap items-center justify-between px-3.5 py-2 bg-slate-50 border-b border-slate-200 z-10 gap-2 flex-shrink-0">
             <div class="flex items-center space-x-2">
               <span class="p-1 rounded bg-amber-100 text-amber-800 text-xs font-bold">🏡 樂居實價登錄</span>
@@ -713,7 +597,6 @@
             </div>
           </div>
 
-          <!-- Community Header Info Card -->
           <div class="flex items-center justify-between px-3.5 py-2.5 bg-white border-b border-slate-200">
             <div>
               <div class="flex items-center space-x-2">
@@ -744,7 +627,6 @@
             </div>
           </div>
 
-          <!-- Community Metrics & Key Highlights Grid -->
           <div class="grid grid-cols-4 gap-2 px-3.5 py-2 bg-slate-50 border-b border-slate-200 text-center text-xs">
             <div class="p-1.5 rounded-lg bg-white border border-slate-200 shadow-sm">
               <div class="text-[10px] text-slate-500 font-medium">一年成交均價</div>
@@ -764,12 +646,10 @@
             </div>
           </div>
 
-          <!-- Embedded Leju Community Iframe Viewer -->
           <div class="relative flex-1 w-full h-full min-h-[220px] overflow-hidden bg-slate-100">
             <iframe id="leju-community-iframe" src="${lejuUrl}" class="w-full h-full border-0 bg-white" title="樂居 惠宇雲品 實價登錄與待售物件" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
           </div>
 
-          <!-- Footer Direct Link -->
           <div class="flex items-center justify-between px-3.5 py-1.5 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex-shrink-0">
             <div class="flex items-center space-x-2">
               <span>資料來源：樂居 (LEJU.com.tw)</span>
@@ -814,7 +694,7 @@
       if (notes.length === 0) {
         notes = [
           { id: 'n-1', text: '📌 自由佈局提示：\n點擊右上角「✏️ 自由佈局」開啟編輯模式，按住卡片頂部把手即可拖曳移動位置，拉動卡片邊緣或右下角可縮放寬高！', color: 'blue', date: '重要提醒' },
-          { id: 'n-2', text: '🔔 今日待辦：\n1. 追蹤 AVGO (Broadcom) 與美股大盤走勢\n2. 檢視樂居【惠宇雲品】最新實價登錄\n3. 檢視 Windy 全球氣溫與中央氣象署動態', color: 'amber', date: '今日待辦' }
+          { id: 'n-2', text: '🔔 今日待辦：\n1. 追蹤 AVGO (Broadcom) 官方即時成交量與走勢\n2. 檢視樂居【惠宇雲品】最新實價登錄\n3. 檢視 Windy 全球氣溫與中央氣象署動態', color: 'amber', date: '今日待辦' }
         ];
       }
 
@@ -951,7 +831,7 @@
   const GridManager = {
     grid: null,
     isEditMode: false,
-    STORAGE_KEY: 'bulletin_board_layout_v5',
+    STORAGE_KEY: 'bulletin_board_layout_v6',
 
     widgetRegistry: {
       'windy-weather': WindyWidget,
@@ -1194,7 +1074,7 @@
 
   const App = {
     init() {
-      console.log('🚀 初始化佈告欄應用程式 (中央氣象署 CWA 風格 + Windy 全球氣溫 + Yahoo AVGO + 樂居【惠宇雲品】)...');
+      console.log('🚀 初始化佈告欄應用程式 (中央氣象署 CWA 風格 + Windy 全球氣溫 + Yahoo AVGO 官方連線 + 樂居【惠宇雲品】)...');
       GridManager.init();
       this.bindHeaderControls();
       this.updateTickerText();
@@ -1305,12 +1185,11 @@
       if (!tickerContent) return;
       
       const items = [
+        `📊 <b>AVGO (博通)</b>：交易所官方即時成交量與走勢圖已連線 (Yahoo Finance / NASDAQ)`,
         `🏡 <b>惠宇雲品</b>：一年均價 71.27 萬/坪 (累計 162 筆交易) 樂居實價登錄已同步`,
-        `📊 <b>AVGO (博通)</b>：\$298.45 (<span class="text-red-300 font-bold">+\$4.82 / +1.64%</span> 成交 4.85M 股) Yahoo Finance 即時同步`,
         `🌍 <b>Windy 全球氣象</b>：即時氣溫與動態風場流場 (24.370°N, 125.321°E) 已同步上線`,
         `🌀 <b>颱風消息</b>：中央氣象署官方即時颱風動態與路徑潛勢預報已連線`,
-        `📡 <b>即時雷達</b>：中央氣象署全台雷達合成回波與向日葵9號紅外線雲圖已同步更新`,
-        `📈 <b>加權指數</b>：46,331.45 (<span class="text-red-300 font-bold">+356.23 / +0.77%</span> 成交 4,120 億元)`
+        `📡 <b>即時雷達</b>：中央氣象署全台雷達合成回波與向日葵9號紅外線雲圖已同步更新`
       ];
 
       tickerContent.innerHTML = items.join('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
