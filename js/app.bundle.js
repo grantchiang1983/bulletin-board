@@ -1,6 +1,6 @@
 /**
  * Bulletin Board (佈告欄) - Standalone All-In-One Script
- * Works seamlessly with file:/// protocol and HTTP/HTTPS.
+ * Upgraded with Professional Taiwan Stock Intraday & Candlestick K-Line Engine.
  */
 (function() {
   'use strict';
@@ -99,67 +99,170 @@
 
   const StockService = {
     indices: [
-      { symbol: '^TWII', name: '加權指數 (台股)', price: 23420.50, change: 168.32, changePercent: 0.72, volume: '4,120 億', high: 23480.12, low: 23290.45 },
-      { symbol: '^TWOII', name: '櫃買指數 (OTC)', price: 272.85, change: -1.15, changePercent: -0.42, volume: '980 億', high: 274.60, low: 271.80 },
-      { symbol: '^DJI', name: '道瓊工業指數', price: 41250.80, change: 228.05, changePercent: 0.56, volume: '3.8 億股', high: 41380.00, low: 41100.20 },
-      { symbol: '^IXIC', name: '那斯達克指數', price: 17820.60, change: 185.40, changePercent: 1.05, volume: '45.2 億股', high: 17890.50, low: 17690.30 },
-      { symbol: '^GSPC', name: '標普 500 指數', price: 5630.25, change: 38.60, changePercent: 0.69, volume: '24.1 億股', high: 5645.10, low: 5610.80 }
+      { symbol: '^TWII', name: '加權指數 (台股)', price: 23420.50, prevClose: 23252.18, change: 168.32, changePercent: 0.72, open: 23290.10, high: 23485.60, low: 23265.40, volume: '4,120 億' },
+      { symbol: '^TWOII', name: '櫃買指數 (OTC)', price: 272.85, prevClose: 274.00, change: -1.15, changePercent: -0.42, open: 274.20, high: 274.80, low: 271.80, volume: '980 億' },
+      { symbol: '^DJI', name: '道瓊工業指數', price: 41250.80, prevClose: 41022.75, change: 228.05, changePercent: 0.56, open: 41080.00, high: 41380.00, low: 41050.20, volume: '3.8 億股' },
+      { symbol: '^IXIC', name: '那斯達克指數', price: 17820.60, prevClose: 17635.20, change: 185.40, changePercent: 1.05, open: 17680.00, high: 17890.50, low: 17660.30, volume: '45.2 億股' },
+      { symbol: '^GSPC', name: '標普 500 指數', price: 5630.25, prevClose: 5591.65, change: 38.60, changePercent: 0.69, open: 5605.00, high: 5645.10, low: 5598.80, volume: '24.1 億股' }
     ],
 
     stocks: [
-      { symbol: '2330', name: '台積電', price: 985.0, change: 15.0, changePercent: 1.55, volume: '32,540 張', high: 990.0, low: 975.0, category: '半導體' },
-      { symbol: '2454', name: '聯發科', price: 1250.0, change: 25.0, changePercent: 2.04, volume: '6,820 張', high: 1265.0, low: 1235.0, category: 'IC設計' },
-      { symbol: '2317', name: '鴻海', price: 184.5, change: -2.0, changePercent: -1.07, volume: '48,120 張', high: 188.0, low: 183.5, category: '組裝代工' },
-      { symbol: '2382', name: '廣達', price: 282.0, change: 6.5, changePercent: 2.36, volume: '19,300 張', high: 285.0, low: 276.0, category: 'AI伺服器' },
-      { symbol: '2308', name: '台達電', price: 410.0, change: 8.0, changePercent: 1.99, volume: '8,410 張', high: 415.0, low: 403.0, category: '電源供應' },
-      { symbol: '2881', name: '富邦金', price: 88.6, change: 0.8, changePercent: 0.91, volume: '21,500 張', high: 89.2, low: 88.0, category: '金融保險' },
-      { symbol: 'NVDA', name: 'NVIDIA (輝達)', price: 128.50, change: 3.85, changePercent: 3.09, volume: '58.4M', high: 130.20, low: 125.60, category: '美股AI' },
-      { symbol: 'TSM', name: '台積電 ADR', price: 172.80, change: 3.20, changePercent: 1.89, volume: '12.8M', high: 174.50, low: 170.10, category: '美股ADR' }
+      { symbol: '2330', name: '台積電', price: 985.0, prevClose: 970.0, change: 15.0, changePercent: 1.55, open: 975.0, high: 990.0, low: 972.0, volume: '32,540 張', category: '半導體' },
+      { symbol: '2454', name: '聯發科', price: 1250.0, prevClose: 1225.0, change: 25.0, changePercent: 2.04, open: 1230.0, high: 1265.0, low: 1225.0, volume: '6,820 張', category: 'IC設計' },
+      { symbol: '2317', name: '鴻海', price: 184.5, prevClose: 186.5, change: -2.0, changePercent: -1.07, open: 187.0, high: 188.0, low: 183.5, volume: '48,120 張', category: '組裝代工' },
+      { symbol: '2382', name: '廣達', price: 282.0, prevClose: 275.5, change: 6.5, changePercent: 2.36, open: 276.0, high: 285.0, low: 275.0, volume: '19,300 張', category: 'AI伺服器' },
+      { symbol: '2308', name: '台達電', price: 410.0, prevClose: 402.0, change: 8.0, changePercent: 1.99, open: 404.0, high: 415.0, low: 402.0, volume: '8,410 張', category: '電源供應' },
+      { symbol: '2881', name: '富邦金', price: 88.6, prevClose: 87.8, change: 0.8, changePercent: 0.91, open: 87.9, high: 89.2, low: 87.8, volume: '21,500 張', category: '金融保險' },
+      { symbol: 'NVDA', name: 'NVIDIA (輝達)', price: 128.50, prevClose: 124.65, change: 3.85, changePercent: 3.09, open: 125.00, high: 130.20, low: 124.80, volume: '58.4M', category: '美股AI' },
+      { symbol: 'TSM', name: '台積電 ADR', price: 172.80, prevClose: 169.60, change: 3.20, changePercent: 1.89, open: 170.20, high: 174.50, low: 169.80, volume: '12.8M', category: '美股ADR' }
     ],
 
     getIntradayHistory(symbol) {
       const item = [...this.indices, ...this.stocks].find(s => s.symbol === symbol) || this.indices[0];
-      const basePrice = item.price - item.change;
-      const labels = [];
-      const prices = [];
+      const prevClose = item.prevClose || (item.price - item.change);
+      const openPrice = item.open || prevClose;
+      const targetPrice = item.price;
       
-      let current = basePrice;
+      const points = [];
+      const timeLabels = [];
+      const volumes = [];
+      const vwap = [];
+
+      let currentPrice = openPrice;
+      let totalVolume = 0;
+      let totalAmount = 0;
+
+      let stepCount = 0;
       for (let h = 9; h <= 13; h++) {
-        const maxM = h === 13 ? 30 : 55;
-        for (let m = 0; m <= maxM; m += 10) {
-          const timeLabel = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-          labels.push(timeLabel);
-          const progress = labels.length / 28;
-          const drift = (item.price - basePrice) * progress;
-          const noise = (Math.random() - 0.48) * (basePrice * 0.003);
-          current = basePrice + drift + noise;
-          prices.push(parseFloat(current.toFixed(2)));
+        const maxM = (h === 13) ? 30 : 55;
+        for (let m = 0; m <= maxM; m += 5) {
+          stepCount++;
+          const timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+          timeLabels.push(timeStr);
+
+          const t = stepCount / 55;
+          const trend = openPrice + (targetPrice - openPrice) * t;
+          const wave = Math.sin(t * Math.PI * 3.5) * (prevClose * 0.004) + Math.cos(t * Math.PI * 5) * (prevClose * 0.002);
+          const noise = (Math.sin(stepCount * 17.3) * 0.5 + Math.cos(stepCount * 7.1) * 0.5) * (prevClose * 0.0025);
+          
+          if (stepCount === 55) {
+            currentPrice = targetPrice;
+          } else {
+            currentPrice = trend + wave + noise;
+          }
+          currentPrice = parseFloat(currentPrice.toFixed(2));
+          points.push(currentPrice);
+
+          const uFactor = Math.pow(t - 0.5, 2) * 4;
+          const vol = Math.max(10, Math.round((500 + uFactor * 1200 + Math.random() * 300) * (item.price > 500 ? 0.3 : 1.5)));
+          volumes.push(vol);
+
+          totalVolume += vol;
+          totalAmount += currentPrice * vol;
+          vwap.push(parseFloat((totalAmount / totalVolume).toFixed(2)));
         }
       }
-      prices[prices.length - 1] = item.price;
 
       return {
-        name: item.name,
         symbol: item.symbol,
-        labels,
-        prices,
-        basePrice,
-        isPositive: item.change >= 0
+        name: item.name,
+        prevClose,
+        openPrice,
+        currentPrice: item.price,
+        high: item.high,
+        low: item.low,
+        timeLabels,
+        prices: points,
+        vwap,
+        volumes,
+        isUp: item.change >= 0
       };
+    },
+
+    getDailyKLines(symbol) {
+      const item = [...this.indices, ...this.stocks].find(s => s.symbol === symbol) || this.indices[0];
+      const base = item.price;
+      const klines = [];
+      const days = 30;
+
+      let prevC = base * 0.92;
+      for (let i = 0; i < days; i++) {
+        const date = new Date(Date.now() - (days - i) * 86400000);
+        const dateStr = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
+        
+        const isLast = (i === days - 1);
+        let o, c, h, l, vol;
+        if (isLast) {
+          o = item.open || (item.prevClose * 1.002);
+          c = item.price;
+          h = item.high;
+          l = item.low;
+          vol = 28000;
+        } else {
+          const delta = (Math.sin(i * 0.6) * 0.018 + (Math.random() - 0.48) * 0.015);
+          c = parseFloat((prevC * (1 + delta)).toFixed(2));
+          o = parseFloat((prevC * (1 + (Math.random() - 0.5) * 0.008)).toFixed(2));
+          h = parseFloat((Math.max(o, c) * (1 + Math.random() * 0.012)).toFixed(2));
+          l = parseFloat((Math.min(o, c) * (1 - Math.random() * 0.012)).toFixed(2));
+          vol = Math.round(15000 + Math.random() * 25000);
+          prevC = c;
+        }
+
+        klines.push({
+          date: dateStr,
+          open: o,
+          high: h,
+          low: l,
+          close: c,
+          volume: vol,
+          isUp: c >= o
+        });
+      }
+
+      const ma5 = [];
+      const ma10 = [];
+      const ma20 = [];
+
+      for (let i = 0; i < klines.length; i++) {
+        if (i >= 4) {
+          const sum5 = klines.slice(i - 4, i + 1).reduce((acc, k) => acc + k.close, 0);
+          ma5.push(parseFloat((sum5 / 5).toFixed(2)));
+        } else {
+          ma5.push(null);
+        }
+        if (i >= 9) {
+          const sum10 = klines.slice(i - 9, i + 1).reduce((acc, k) => acc + k.close, 0);
+          ma10.push(parseFloat((sum10 / 10).toFixed(2)));
+        } else {
+          ma10.push(null);
+        }
+        if (i >= 19) {
+          const sum20 = klines.slice(i - 19, i + 1).reduce((acc, k) => acc + k.close, 0);
+          ma20.push(parseFloat((sum20 / 20).toFixed(2)));
+        } else {
+          ma20.push(null);
+        }
+      }
+
+      return { symbol: item.symbol, name: item.name, klines, ma5, ma10, ma20 };
     },
 
     tickLivePrices() {
       this.stocks.forEach(stock => {
         const delta = (Math.random() - 0.49) * (stock.price * 0.001);
         stock.price = parseFloat((stock.price + delta).toFixed(2));
-        stock.change = parseFloat((stock.change + delta).toFixed(2));
-        stock.changePercent = parseFloat(((stock.change / (stock.price - stock.change)) * 100).toFixed(2));
+        stock.change = parseFloat((stock.price - stock.prevClose).toFixed(2));
+        stock.changePercent = parseFloat(((stock.change / stock.prevClose) * 100).toFixed(2));
+        if (stock.price > stock.high) stock.high = stock.price;
+        if (stock.price < stock.low) stock.low = stock.price;
       });
       const twIndex = this.indices[0];
       const indexDelta = (Math.random() - 0.48) * 8;
       twIndex.price = parseFloat((twIndex.price + indexDelta).toFixed(2));
-      twIndex.change = parseFloat((twIndex.change + indexDelta).toFixed(2));
-      twIndex.changePercent = parseFloat(((twIndex.change / (twIndex.price - twIndex.change)) * 100).toFixed(2));
+      twIndex.change = parseFloat((twIndex.price - twIndex.prevClose).toFixed(2));
+      twIndex.changePercent = parseFloat(((twIndex.change / twIndex.prevClose) * 100).toFixed(2));
+      if (twIndex.price > twIndex.high) twIndex.high = twIndex.price;
+      if (twIndex.price < twIndex.low) twIndex.low = twIndex.price;
     }
   };
 
@@ -734,24 +837,24 @@
 
   const StockMarketWidget = {
     id: 'stock-market',
-    title: '股市即時行情與大盤走勢',
+    title: '股市即時行情與專業線型圖',
     defaultWidth: 6,
     defaultHeight: 4,
     minWidth: 4,
     minHeight: 3,
 
-    render(container, state = { selectedSymbol: '^TWII', tab: 'indices' }) {
+    render(container, state = { selectedSymbol: '^TWII', tab: 'indices', chartType: 'intraday' }) {
       const list = state.tab === 'indices' ? StockService.indices : StockService.stocks;
       const currentItem = [...StockService.indices, ...StockService.stocks].find(s => s.symbol === state.selectedSymbol) || StockService.indices[0];
-      const history = StockService.getIntradayHistory(currentItem.symbol);
-
+      
       const isUp = currentItem.change >= 0;
-      const badgeClass = isUp ? 'text-red-400 bg-red-500/10 border-red-500/30' : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30';
       const sign = isUp ? '+' : '';
+      const colorClass = isUp ? 'text-red-400' : 'text-emerald-400';
+      const bgBadgeClass = isUp ? 'text-red-400 bg-red-500/10 border-red-500/30' : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30';
 
       container.innerHTML = `
-        <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-4 select-none justify-between">
-          <div class="flex items-center justify-between pb-2.5 border-b border-slate-800">
+        <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-3 select-none justify-between overflow-hidden">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
             <div class="flex items-center space-x-1 bg-slate-800/90 p-0.5 rounded-lg">
               <button id="stock-tab-indices" class="px-2.5 py-1 text-xs font-semibold rounded-md transition-all ${state.tab === 'indices' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}">
                 主要指數
@@ -761,53 +864,80 @@
               </button>
             </div>
 
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center space-x-1 bg-slate-950 p-0.5 rounded-lg border border-slate-800">
+              <button id="stock-mode-intraday" class="px-2 py-0.5 text-[11px] font-medium rounded transition-all ${state.chartType === 'intraday' ? 'bg-blue-500/30 text-blue-300 font-bold border border-blue-500/40' : 'text-slate-400 hover:text-slate-200'}">
+                分時走勢
+              </button>
+              <button id="stock-mode-kline" class="px-2 py-0.5 text-[11px] font-medium rounded transition-all ${state.chartType === 'kline' ? 'bg-blue-500/30 text-blue-300 font-bold border border-blue-500/40' : 'text-slate-400 hover:text-slate-200'}">
+                日K線圖
+              </button>
+            </div>
+
+            <div class="flex items-center space-x-1">
               <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 live-pulse"></span>
-                即時撮合
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1 live-pulse"></span>
+                撮合中
               </span>
             </div>
           </div>
 
-          <div class="flex items-center justify-between my-2">
+          <div class="flex items-center justify-between my-1.5 px-1">
             <div>
               <div class="flex items-center space-x-2">
-                <h2 class="text-lg font-extrabold text-white">${currentItem.name}</h2>
-                <span class="text-xs px-1.5 py-0.5 font-mono rounded bg-slate-800 text-slate-300">${currentItem.symbol}</span>
+                <h2 class="text-base font-black text-white">${currentItem.name}</h2>
+                <span class="text-xs px-1.5 py-0.2 font-mono rounded bg-slate-800 text-slate-300">${currentItem.symbol}</span>
               </div>
-              <p class="text-[11px] text-slate-400 mt-0.5">成交量：${currentItem.volume} ‧ 最高：${currentItem.high}</p>
+              <div class="text-[10px] text-slate-400 flex items-center space-x-2 mt-0.5">
+                <span>開: <b class="text-slate-200">${currentItem.open?.toLocaleString() || currentItem.price}</b></span>
+                <span>高: <b class="text-red-400">${currentItem.high?.toLocaleString() || currentItem.price}</b></span>
+                <span>低: <b class="text-emerald-400">${currentItem.low?.toLocaleString() || currentItem.price}</b></span>
+                <span>量: <b class="text-slate-200">${currentItem.volume}</b></span>
+              </div>
             </div>
 
             <div class="text-right">
-              <div class="text-2xl font-black font-mono tracking-tight ${isUp ? 'text-red-400' : 'text-emerald-400'}">
+              <div class="text-xl font-black font-mono tracking-tight ${colorClass}">
                 ${currentItem.price.toLocaleString()}
               </div>
-              <div class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold font-mono border ${badgeClass} mt-0.5">
-                ${sign}${currentItem.change} (${sign}${currentItem.changePercent}%)
+              <div class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-bold font-mono border ${bgBadgeClass} mt-0.5">
+                ${sign}${currentItem.change.toFixed(2)} (${sign}${currentItem.changePercent.toFixed(2)}%)
               </div>
             </div>
           </div>
 
-          <div class="relative flex-1 min-h-[90px] bg-slate-950/70 rounded-xl p-2 border border-slate-800/80 mb-2">
-            <canvas id="stock-chart-canvas" class="w-full h-full"></canvas>
-            <div class="absolute top-1.5 left-2.5 text-[9px] text-slate-500 font-mono pointer-events-none">
-              分時走勢 ‧ 平盤: ${history.basePrice.toLocaleString()}
+          <div class="relative flex-1 min-h-[140px] bg-slate-950/90 rounded-xl p-1.5 border border-slate-800/90 flex flex-col justify-between overflow-hidden">
+            <canvas id="stock-chart-canvas" class="w-full h-full cursor-crosshair"></canvas>
+            
+            <div id="chart-legend-overlay" class="absolute top-1.5 left-2 text-[9px] text-slate-400 font-mono pointer-events-none flex items-center space-x-2 bg-slate-900/80 px-1.5 py-0.5 rounded backdrop-blur">
+              ${state.chartType === 'intraday' ? `
+                <span><span class="text-blue-400">●</span> 即時走勢</span>
+                <span><span class="text-yellow-400">●</span> 均價線</span>
+                <span><span class="text-slate-500">┄</span> 昨收平盤 (${(currentItem.prevClose || (currentItem.price - currentItem.change)).toLocaleString()})</span>
+              ` : `
+                <span><span class="text-yellow-400">●</span> MA5</span>
+                <span><span class="text-cyan-400">●</span> MA10</span>
+                <span><span class="text-purple-400">●</span> MA20</span>
+              `}
+            </div>
+
+            <div id="chart-hover-tooltip" class="absolute top-1.5 right-2 text-[10px] font-mono text-cyan-300 bg-slate-900/90 px-2 py-0.5 rounded border border-slate-700 pointer-events-none hidden">
+              --
             </div>
           </div>
 
-          <div class="flex space-x-1.5 overflow-x-auto pb-1 scrollbar-thin">
+          <div class="flex space-x-1.5 overflow-x-auto pt-1.5 pb-0.5 scrollbar-thin">
             ${list.map(item => {
               const itemUp = item.change >= 0;
               const textCol = itemUp ? 'text-red-400' : 'text-emerald-400';
               const isSelected = item.symbol === currentItem.symbol;
               return `
-                <div class="flex-shrink-0 p-1.5 rounded-lg cursor-pointer transition-all border ${isSelected ? 'bg-blue-950/60 border-blue-500/80' : 'bg-slate-800/50 border-slate-700/50 hover:bg-slate-800'}" data-stock-symbol="${item.symbol}">
+                <div class="flex-shrink-0 px-2 py-1 rounded-lg cursor-pointer transition-all border ${isSelected ? 'bg-blue-950/70 border-blue-500 shadow-sm' : 'bg-slate-800/40 border-slate-700/40 hover:bg-slate-800'}" data-stock-symbol="${item.symbol}">
                   <div class="flex items-center justify-between text-[11px] font-semibold space-x-2">
                     <span class="text-slate-200">${item.name}</span>
                     <span class="${textCol} font-mono">${item.price.toLocaleString()}</span>
                   </div>
-                  <div class="text-[9px] ${textCol} font-mono text-right">
-                    ${itemUp ? '+' : ''}${item.changePercent}%
+                  <div class="text-[9px] ${textCol} font-mono text-right mt-0.5">
+                    ${itemUp ? '+' : ''}${item.changePercent.toFixed(2)}%
                   </div>
                 </div>
               `;
@@ -817,66 +947,309 @@
       `;
 
       const canvas = container.querySelector('#stock-chart-canvas');
+      const tooltip = container.querySelector('#chart-hover-tooltip');
+
       if (canvas) {
         const ctx = canvas.getContext('2d');
-        const resize = () => {
-          if (!canvas.parentElement) return;
-          canvas.width = canvas.parentElement.clientWidth;
-          canvas.height = canvas.parentElement.clientHeight;
-          drawChart();
-        };
+        let mouseX = -1;
 
-        const drawChart = () => {
-          const w = canvas.width;
-          const h = canvas.height;
+        const draw = () => {
+          if (!canvas.parentElement) return;
+          const rect = canvas.getBoundingClientRect();
+          const dpr = window.devicePixelRatio || 1;
+          
+          canvas.width = rect.width * dpr;
+          canvas.height = rect.height * dpr;
+          ctx.scale(dpr, dpr);
+
+          const w = rect.width;
+          const h = rect.height;
           ctx.clearRect(0, 0, w, h);
 
-          const prices = history.prices;
-          const min = Math.min(...prices, history.basePrice * 0.995);
-          const max = Math.max(...prices, history.basePrice * 1.005);
-          const range = max - min || 1;
+          if (state.chartType === 'intraday') {
+            drawIntraday(w, h);
+          } else {
+            drawKline(w, h);
+          }
+        };
 
-          const baseY = h - ((history.basePrice - min) / range) * (h - 20) - 10;
-          ctx.strokeStyle = 'rgba(148, 163, 184, 0.3)';
-          ctx.setLineDash([3, 3]);
-          ctx.beginPath(); ctx.moveTo(0, baseY); ctx.lineTo(w, baseY); ctx.stroke();
-          ctx.setLineDash([]);
+        const drawIntraday = (w, h) => {
+          const data = StockService.getIntradayHistory(currentItem.symbol);
+          const prices = data.prices;
+          const vwap = data.vwap;
+          const volumes = data.volumes;
+          const prevClose = data.prevClose;
 
-          const grad = ctx.createLinearGradient(0, 0, 0, h);
+          const priceH = h * 0.70;
+          const volH = h * 0.24;
+          const volTop = h * 0.76;
+          const paddingLeft = 10;
+          const paddingRight = 48;
+          const chartW = w - paddingLeft - paddingRight;
+
+          let maxDiff = Math.max(...prices.map(p => Math.abs(p - prevClose)), prevClose * 0.008);
+          const maxPrice = prevClose + maxDiff * 1.05;
+          const minPrice = prevClose - maxDiff * 1.05;
+          const priceRange = maxPrice - minPrice || 1;
+
+          const getY = (p) => priceH - ((p - minPrice) / priceRange) * (priceH - 12) - 6;
+          const getX = (idx) => paddingLeft + (idx / (prices.length - 1)) * chartW;
+
+          const gridSteps = [-maxDiff, -maxDiff * 0.5, 0, maxDiff * 0.5, maxDiff];
+          gridSteps.forEach(diff => {
+            const p = prevClose + diff;
+            const y = getY(p);
+            const pct = ((diff / prevClose) * 100).toFixed(2);
+            
+            ctx.beginPath();
+            ctx.moveTo(paddingLeft, y);
+            ctx.lineTo(w - paddingRight, y);
+            if (diff === 0) {
+              ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+              ctx.setLineDash([4, 4]);
+            } else {
+              ctx.strokeStyle = 'rgba(51, 65, 85, 0.3)';
+              ctx.setLineDash([2, 2]);
+            }
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.font = '9px monospace';
+            ctx.fillStyle = diff > 0 ? '#f87171' : diff < 0 ? '#34d399' : '#94a3b8';
+            ctx.textAlign = 'left';
+            ctx.fillText(`${diff > 0 ? '+' : ''}${pct}%`, w - paddingRight + 4, y + 3);
+          });
+
+          ctx.textAlign = 'left';
+          ctx.fillStyle = '#f87171';
+          ctx.fillText(maxPrice.toFixed(1), paddingLeft + 2, 10);
+          ctx.fillStyle = '#94a3b8';
+          ctx.fillText(prevClose.toFixed(1), paddingLeft + 2, getY(prevClose) - 3);
+          ctx.fillStyle = '#34d399';
+          ctx.fillText(minPrice.toFixed(1), paddingLeft + 2, priceH - 3);
+
+          const isUp = currentItem.change >= 0;
+          const grad = ctx.createLinearGradient(0, 0, 0, priceH);
           grad.addColorStop(0, isUp ? 'rgba(239, 68, 68, 0.25)' : 'rgba(16, 185, 129, 0.25)');
           grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
           ctx.beginPath();
           prices.forEach((p, idx) => {
-            const x = (idx / (prices.length - 1)) * w;
-            const y = h - ((p - min) / range) * (h - 20) - 10;
+            const x = getX(idx);
+            const y = getY(p);
             if (idx === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
           });
-          ctx.lineTo(w, h);
-          ctx.lineTo(0, h);
+          ctx.lineTo(paddingLeft + chartW, priceH);
+          ctx.lineTo(paddingLeft, priceH);
           ctx.closePath();
           ctx.fillStyle = grad;
           ctx.fill();
 
           ctx.beginPath();
+          vwap.forEach((v, idx) => {
+            const x = getX(idx);
+            const y = getY(v);
+            if (idx === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          });
+          ctx.strokeStyle = '#eab308';
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+
+          ctx.beginPath();
           prices.forEach((p, idx) => {
-            const x = (idx / (prices.length - 1)) * w;
-            const y = h - ((p - min) / range) * (h - 20) - 10;
+            const x = getX(idx);
+            const y = getY(p);
             if (idx === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
           });
           ctx.strokeStyle = isUp ? '#f87171' : '#34d399';
           ctx.lineWidth = 2;
           ctx.stroke();
+
+          const maxVol = Math.max(...volumes) || 1;
+          const volBarW = Math.max(2, (chartW / volumes.length) - 1.5);
+
+          volumes.forEach((vol, idx) => {
+            const x = getX(idx) - volBarW / 2;
+            const barH = (vol / maxVol) * (volH - 6);
+            const y = h - barH;
+            const isBarUp = idx === 0 ? isUp : prices[idx] >= prices[idx - 1];
+
+            ctx.fillStyle = isBarUp ? 'rgba(239, 68, 68, 0.65)' : 'rgba(34, 197, 94, 0.65)';
+            ctx.fillRect(x, y, volBarW, barH);
+          });
+
+          const timeTicks = [
+            { label: '09:00', idx: 0 },
+            { label: '10:30', idx: 18 },
+            { label: '12:00', idx: 36 },
+            { label: '13:30', idx: 54 }
+          ];
+          ctx.fillStyle = '#64748b';
+          ctx.font = '9px monospace';
+          timeTicks.forEach(t => {
+            const x = getX(t.idx);
+            ctx.textAlign = t.idx === 0 ? 'left' : t.idx === 54 ? 'right' : 'center';
+            ctx.fillText(t.label, x, volTop - 3);
+          });
+
+          if (mouseX >= paddingLeft && mouseX <= paddingLeft + chartW) {
+            const hoveredIdx = Math.min(prices.length - 1, Math.max(0, Math.round(((mouseX - paddingLeft) / chartW) * (prices.length - 1))));
+            const hX = getX(hoveredIdx);
+            const hY = getY(prices[hoveredIdx]);
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.setLineDash([2, 2]);
+            ctx.beginPath(); ctx.moveTo(hX, 0); ctx.lineTo(hX, h); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(paddingLeft, hY); ctx.lineTo(w - paddingRight, hY); ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath(); ctx.arc(hX, hY, 3.5, 0, Math.PI * 2); ctx.fill();
+
+            const curP = prices[hoveredIdx];
+            const diffP = curP - prevClose;
+            const diffPct = ((diffP / prevClose) * 100).toFixed(2);
+            tooltip.classList.remove('hidden');
+            tooltip.innerHTML = `🕒 ${data.timeLabels[hoveredIdx]} | <b>${curP.toFixed(2)}</b> (${diffP >= 0 ? '+' : ''}${diffPct}%) | 量: ${volumes[hoveredIdx]}`;
+          } else {
+            tooltip.classList.add('hidden');
+          }
         };
 
-        setTimeout(resize, 30);
-        window.addEventListener('resize', resize);
+        const drawKline = (w, h) => {
+          const data = StockService.getDailyKLines(currentItem.symbol);
+          const klines = data.klines;
+          const ma5 = data.ma5;
+          const ma10 = data.ma10;
+          const ma20 = data.ma20;
+
+          const priceH = h * 0.70;
+          const volH = h * 0.24;
+          const paddingLeft = 10;
+          const paddingRight = 45;
+          const chartW = w - paddingLeft - paddingRight;
+
+          const allL = klines.map(k => k.low);
+          const allH = klines.map(k => k.high);
+          const minPrice = Math.min(...allL) * 0.99;
+          const maxPrice = Math.max(...allH) * 1.01;
+          const priceRange = maxPrice - minPrice || 1;
+
+          const getY = (p) => priceH - ((p - minPrice) / priceRange) * (priceH - 12) - 6;
+          const getX = (idx) => paddingLeft + (idx / (klines.length - 1)) * chartW;
+
+          for (let i = 0; i <= 3; i++) {
+            const y = (priceH / 3) * i;
+            const p = maxPrice - (i / 3) * priceRange;
+            ctx.strokeStyle = 'rgba(51, 65, 85, 0.25)';
+            ctx.beginPath(); ctx.moveTo(paddingLeft, y); ctx.lineTo(w - paddingRight, y); ctx.stroke();
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '9px monospace';
+            ctx.textAlign = 'left';
+            ctx.fillText(p.toFixed(1), w - paddingRight + 4, y + 3);
+          }
+
+          const candleW = Math.max(3, (chartW / klines.length) * 0.65);
+
+          klines.forEach((k, idx) => {
+            const x = getX(idx);
+            const yOpen = getY(k.open);
+            const yClose = getY(k.close);
+            const yHigh = getY(k.high);
+            const yLow = getY(k.low);
+
+            const isUpCandle = k.close >= k.open;
+            const color = isUpCandle ? '#ef4444' : '#22c55e';
+
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.moveTo(x, yHigh);
+            ctx.lineTo(x, yLow);
+            ctx.stroke();
+
+            const topY = Math.min(yOpen, yClose);
+            const bodyH = Math.max(2, Math.abs(yClose - yOpen));
+            ctx.fillStyle = color;
+            ctx.fillRect(x - candleW / 2, topY, candleW, bodyH);
+
+            const maxVol = Math.max(...klines.map(item => item.volume)) || 1;
+            const vH = (k.volume / maxVol) * (volH - 6);
+            ctx.fillStyle = isUpCandle ? 'rgba(239, 68, 68, 0.6)' : 'rgba(34, 197, 94, 0.6)';
+            ctx.fillRect(x - candleW / 2, h - vH, candleW, vH);
+          });
+
+          const drawMALine = (maArray, color) => {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            let started = false;
+            maArray.forEach((val, idx) => {
+              if (val !== null) {
+                const x = getX(idx);
+                const y = getY(val);
+                if (!started) { ctx.moveTo(x, y); started = true; }
+                else ctx.lineTo(x, y);
+              }
+            });
+            ctx.stroke();
+          };
+
+          drawMALine(ma5, '#eab308');
+          drawMALine(ma10, '#06b6d4');
+          drawMALine(ma20, '#a855f7');
+
+          ctx.fillStyle = '#64748b';
+          ctx.font = '9px monospace';
+          [0, 10, 20, 29].forEach(idx => {
+            if (klines[idx]) {
+              const x = getX(idx);
+              ctx.textAlign = idx === 0 ? 'left' : idx === 29 ? 'right' : 'center';
+              ctx.fillText(klines[idx].date, x, priceH + 12);
+            }
+          });
+
+          if (mouseX >= paddingLeft && mouseX <= paddingLeft + chartW) {
+            const hoveredIdx = Math.min(klines.length - 1, Math.max(0, Math.round(((mouseX - paddingLeft) / chartW) * (klines.length - 1))));
+            const k = klines[hoveredIdx];
+            const hX = getX(hoveredIdx);
+            const hY = getY(k.close);
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.setLineDash([2, 2]);
+            ctx.beginPath(); ctx.moveTo(hX, 0); ctx.lineTo(hX, h); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(paddingLeft, hY); ctx.lineTo(w - paddingRight, hY); ctx.stroke();
+            ctx.setLineDash([]);
+
+            tooltip.classList.remove('hidden');
+            tooltip.innerHTML = `📅 ${k.date} | 開:${k.open} 高:${k.high} 低:${k.low} 收:<b>${k.close}</b>`;
+          } else {
+            tooltip.classList.add('hidden');
+          }
+        };
+
+        canvas.addEventListener('mousemove', (e) => {
+          const rect = canvas.getBoundingClientRect();
+          mouseX = e.clientX - rect.left;
+          draw();
+        });
+        canvas.addEventListener('mouseleave', () => {
+          mouseX = -1;
+          draw();
+        });
+
+        setTimeout(draw, 40);
+        window.addEventListener('resize', draw);
       }
 
       const btnIndices = container.querySelector('#stock-tab-indices');
       const btnStocks = container.querySelector('#stock-tab-stocks');
+      const btnIntraday = container.querySelector('#stock-mode-intraday');
+      const btnKline = container.querySelector('#stock-mode-kline');
 
       if (btnIndices) {
         btnIndices.addEventListener('click', () => {
@@ -886,6 +1259,16 @@
       if (btnStocks) {
         btnStocks.addEventListener('click', () => {
           StockMarketWidget.render(container, { ...state, tab: 'stocks', selectedSymbol: StockService.stocks[0].symbol });
+        });
+      }
+      if (btnIntraday) {
+        btnIntraday.addEventListener('click', () => {
+          StockMarketWidget.render(container, { ...state, chartType: 'intraday' });
+        });
+      }
+      if (btnKline) {
+        btnKline.addEventListener('click', () => {
+          StockMarketWidget.render(container, { ...state, chartType: 'kline' });
         });
       }
 
@@ -1032,7 +1415,7 @@
       if (notes.length === 0) {
         notes = [
           { id: 'n-1', text: '📌 自由佈局提示：\n點擊右上角「✏️ 自由佈局」開啟編輯模式，按住卡片頂部把手即可拖曳移動位置，拉動卡片邊緣或右下角可縮放寬高！', color: 'yellow', date: '重要提醒' },
-          { id: 'n-2', text: '🔔 今日待辦：\n1. 追蹤海神颱風路徑\n2. 觀察台股大盤走勢\n3. 預約賞屋行程', color: 'blue', date: '今日待辦' }
+          { id: 'n-2', text: '🔔 今日待辦：\n1. 追蹤海神颱風路徑\n2. 觀察台股大盤走勢與K線支撐\n3. 預約板橋新板特區賞屋', color: 'blue', date: '今日待辦' }
         ];
       }
 
@@ -1218,7 +1601,7 @@
         cellHeight: 105,
         animate: true,
         margin: 12,
-        staticGrid: true, // starts locked
+        staticGrid: true,
         draggable: {
           handle: '.widget-drag-handle',
           scroll: false
@@ -1530,9 +1913,9 @@
       
       const items = [
         `🔔 <b>即時快訊</b>：海神颱風發布海上警報，請東部海面作業船隻嚴加戒備`,
-        `📈 <b>加權指數</b>：${twii.price.toLocaleString()} (<span class="${twii.change >= 0 ? 'text-red-400' : 'text-emerald-400'}">${twii.change >= 0 ? '+' : ''}${twii.change} / ${twii.changePercent}%</span>)`,
-        `💎 <b>台積電</b>：${tsmc.price} (<span class="${tsmc.change >= 0 ? 'text-red-400' : 'text-emerald-400'}">${tsmc.change >= 0 ? '+' : ''}${tsmc.changePercent}%</span>)`,
-        `🚀 <b>NVIDIA</b>：\$${nvda.price} (<span class="${nvda.change >= 0 ? 'text-red-400' : 'text-emerald-400'}">+${nvda.changePercent}%</span>)`,
+        `📈 <b>加權指數</b>：${twii.price.toLocaleString()} (<span class="${twii.change >= 0 ? 'text-red-400' : 'text-emerald-400'}">${twii.change >= 0 ? '+' : ''}${twii.change.toFixed(2)} / ${twii.changePercent.toFixed(2)}%</span>)`,
+        `💎 <b>台積電</b>：${tsmc.price.toFixed(1)} (<span class="${tsmc.change >= 0 ? 'text-red-400' : 'text-emerald-400'}">${tsmc.change >= 0 ? '+' : ''}${tsmc.changePercent.toFixed(2)}%</span>)`,
+        `🚀 <b>NVIDIA</b>：\$${nvda.price.toFixed(2)} (<span class="${nvda.change >= 0 ? 'text-red-400' : 'text-emerald-400'}">+${nvda.changePercent.toFixed(2)}%</span>)`,
         `🏠 <b>房市速報</b>：最新揭露新板特區高樓豪邸每坪78.5萬、大安森林公園景觀戶上架`
       ];
 
