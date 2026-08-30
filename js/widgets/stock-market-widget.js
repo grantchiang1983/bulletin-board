@@ -25,6 +25,18 @@ export const StockMarketWidget = {
     const isIndex = currentItem.symbol.startsWith('^') || currentItem.symbol === 'TAIEX' || currentItem.symbol === 'TWOII';
     const volLabel = isIndex ? '成交金額' : '成交量';
 
+    // Build direct Yahoo Finance URLs
+    let yahooUrl = 'https://tw.stock.yahoo.com/t/idx.php';
+    if (currentItem.symbol === '^TWII' || currentItem.symbol === 'TAIEX') {
+      yahooUrl = 'https://tw.stock.yahoo.com/t/idx.php';
+    } else if (currentItem.symbol === '^TWOII' || currentItem.symbol === 'TWOII') {
+      yahooUrl = 'https://tw.stock.yahoo.com/quote/%5ETWOII/technical-analysis';
+    } else if (/^\d{4}$/.test(currentItem.symbol)) {
+      yahooUrl = `https://tw.stock.yahoo.com/quote/${currentItem.symbol}.TW/technical-analysis`;
+    } else {
+      yahooUrl = `https://tw.stock.yahoo.com/quote/${currentItem.symbol}`;
+    }
+
     container.innerHTML = `
       <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-3 select-none justify-between overflow-hidden">
         <!-- Top Controls -->
@@ -49,10 +61,18 @@ export const StockMarketWidget = {
             </button>
           </div>
 
-          <!-- Refresh Control -->
+          <!-- Direct Link to Yahoo Finance Index Analysis -->
           <div class="flex items-center space-x-1.5">
-            <button id="stock-refresh-api-btn" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors flex items-center space-x-1" title="更新即時行情">
-              <span>🔄 刷新</span>
+            <a href="https://tw.stock.yahoo.com/t/idx.php" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁直接開啟 Yahoo股市 上市指數技術分析 (https://tw.stock.yahoo.com/t/idx.php)">
+              <span>📊</span>
+              <span>上市指數技術分析</span>
+              <svg class="w-3 h-3 text-purple-200 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+
+            <button id="stock-refresh-api-btn" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors flex items-center space-x-1" title="更新即時行情">
+              <span>🔄</span>
             </button>
           </div>
         </div>
@@ -61,7 +81,10 @@ export const StockMarketWidget = {
         <div class="flex items-center justify-between my-1.5 px-1">
           <div>
             <div class="flex items-center space-x-2">
-              <h2 class="text-base font-black text-white">${currentItem.name}</h2>
+              <a href="${yahooUrl}" target="_blank" rel="noopener noreferrer" class="text-base font-black text-white hover:text-blue-400 flex items-center space-x-1 transition-colors" title="前往 Yahoo 股市查看完整技術分析">
+                <span>${currentItem.name}</span>
+                <span class="text-xs text-blue-400 font-normal">↗</span>
+              </a>
               <span class="text-xs px-1.5 py-0.2 font-mono rounded bg-slate-800 text-slate-300">${currentItem.symbol}</span>
             </div>
             <div class="text-[10px] text-slate-400 flex items-center space-x-2 mt-0.5">
@@ -105,25 +128,32 @@ export const StockMarketWidget = {
           </div>
         </div>
 
-        <!-- Stock Selector Carousel -->
-        <div class="flex space-x-1.5 overflow-x-auto pt-1.5 pb-0.5 scrollbar-thin">
-          ${list.map(item => {
-            const itemUp = item.change >= 0;
-            const textCol = itemUp ? 'text-red-400' : 'text-emerald-400';
-            const isSelected = item.symbol === currentItem.symbol;
-            return `
-              <div class="flex-shrink-0 px-2.5 py-1 rounded-lg cursor-pointer transition-all border ${isSelected ? 'bg-blue-950/70 border-blue-500 shadow-sm' : 'bg-slate-800/40 border-slate-700/40 hover:bg-slate-800'}" data-stock-symbol="${item.symbol}">
-                <div class="flex items-center justify-between text-[11px] font-semibold space-x-2">
-                  <span class="text-slate-200">${item.name}</span>
-                  <span class="${textCol} font-mono">${item.price.toLocaleString()}</span>
+        <!-- Stock Selector Carousel with Direct Yahoo Links -->
+        <div class="flex items-center justify-between pt-1 pb-0.5">
+          <div class="flex space-x-1.5 overflow-x-auto flex-1 scrollbar-thin mr-2">
+            ${list.map(item => {
+              const itemUp = item.change >= 0;
+              const textCol = itemUp ? 'text-red-400' : 'text-emerald-400';
+              const isSelected = item.symbol === currentItem.symbol;
+              return `
+                <div class="flex-shrink-0 px-2.5 py-1 rounded-lg cursor-pointer transition-all border ${isSelected ? 'bg-blue-950/70 border-blue-500 shadow-sm' : 'bg-slate-800/40 border-slate-700/40 hover:bg-slate-800'}" data-stock-symbol="${item.symbol}">
+                  <div class="flex items-center justify-between text-[11px] font-semibold space-x-2">
+                    <span class="text-slate-200">${item.name}</span>
+                    <span class="${textCol} font-mono">${item.price.toLocaleString()}</span>
+                  </div>
+                  <div class="flex items-center justify-between text-[9px] mt-0.5">
+                    <span class="text-slate-400 font-mono">${item.volume}</span>
+                    <span class="${textCol} font-mono font-bold">${itemUp ? '+' : ''}${item.changePercent.toFixed(2)}%</span>
+                  </div>
                 </div>
-                <div class="flex items-center justify-between text-[9px] mt-0.5">
-                  <span class="text-slate-400 font-mono">${item.volume}</span>
-                  <span class="${textCol} font-mono font-bold">${itemUp ? '+' : ''}${item.changePercent.toFixed(2)}%</span>
-                </div>
-              </div>
-            `;
-          }).join('')}
+              `;
+            }).join('')}
+          </div>
+
+          <a href="https://tw.stock.yahoo.com/t/idx.php" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-purple-400 hover:text-purple-300 text-[10px] underline flex items-center space-x-0.5 bg-slate-800/80 px-2 py-1 rounded" title="Yahoo 股市上市指數技術分析">
+            <span>Yahoo 股市</span>
+            <span>↗</span>
+          </a>
         </div>
       </div>
     `;
@@ -156,7 +186,7 @@ export const StockMarketWidget = {
         }
       };
 
-      // Draw Deterministic Intraday Chart (走勢線 + 均價線 + 成交量柱)
+      // Draw Deterministic Intraday Chart
       const drawIntraday = (w, h) => {
         const data = StockService.getIntradayHistory(currentItem.symbol);
         const prices = data.prices;
@@ -180,7 +210,6 @@ export const StockMarketWidget = {
         const getY = (p) => priceH - ((p - minPrice) / priceRange) * (priceH - 12) - 6;
         const getX = (idx) => paddingLeft + (idx / (prices.length - 1)) * chartW;
 
-        // Grid lines & percentage axis
         const gridSteps = [-maxDiff, -maxDiff * 0.5, 0, maxDiff * 0.5, maxDiff];
         gridSteps.forEach(diff => {
           const p = prevClose + diff;
@@ -206,7 +235,6 @@ export const StockMarketWidget = {
           ctx.fillText(`${diff > 0 ? '+' : ''}${pct}%`, w - paddingRight + 4, y + 3);
         });
 
-        // Price Labels
         ctx.textAlign = 'left';
         ctx.fillStyle = '#f87171';
         ctx.fillText(maxPrice.toFixed(1), paddingLeft + 2, 10);
@@ -215,7 +243,6 @@ export const StockMarketWidget = {
         ctx.fillStyle = '#34d399';
         ctx.fillText(minPrice.toFixed(1), paddingLeft + 2, priceH - 3);
 
-        // Price Area Gradient
         const isUp = currentItem.change >= 0;
         const grad = ctx.createLinearGradient(0, 0, 0, priceH);
         grad.addColorStop(0, isUp ? 'rgba(239, 68, 68, 0.25)' : 'rgba(16, 185, 129, 0.25)');
@@ -234,7 +261,6 @@ export const StockMarketWidget = {
         ctx.fillStyle = grad;
         ctx.fill();
 
-        // VWAP Yellow Curve
         ctx.beginPath();
         vwap.forEach((v, idx) => {
           const x = getX(idx);
@@ -246,7 +272,6 @@ export const StockMarketWidget = {
         ctx.lineWidth = 1.2;
         ctx.stroke();
 
-        // Main Price Curve
         ctx.beginPath();
         prices.forEach((p, idx) => {
           const x = getX(idx);
@@ -258,7 +283,6 @@ export const StockMarketWidget = {
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Volume Bars (Deterministic Heights & Correct Directional Colors)
         const maxVol = Math.max(...volumes) || 1;
         const volBarW = Math.max(2, (chartW / volumes.length) - 1.2);
 
@@ -272,7 +296,6 @@ export const StockMarketWidget = {
           ctx.fillRect(x, y, volBarW, barH);
         });
 
-        // Time X-Axis Ticks
         const timeTicks = [
           { label: '09:00', idx: 0 },
           { label: '10:30', idx: 18 },
@@ -287,7 +310,6 @@ export const StockMarketWidget = {
           ctx.fillText(t.label, x, volTop - 3);
         });
 
-        // Interactive Crosshair & Tooltip
         if (mouseX >= paddingLeft && mouseX <= paddingLeft + chartW) {
           const hoveredIdx = Math.min(prices.length - 1, Math.max(0, Math.round(((mouseX - paddingLeft) / chartW) * (prices.length - 1))));
           const hX = getX(hoveredIdx);
@@ -312,7 +334,7 @@ export const StockMarketWidget = {
         }
       };
 
-      // Draw Candlestick K-Line Chart (日K棒 + MA5/10/20 + 成交量柱)
+      // Draw Candlestick K-Line Chart
       const drawKline = (w, h) => {
         const data = StockService.getDailyKLines(currentItem.symbol);
         const klines = data.klines;

@@ -1,8 +1,8 @@
 /**
  * Bulletin Board (佈告欄) - Standalone All-In-One Script
  * Upgraded with:
- * 1. 100% Deterministic & Stable Volume Sub-charts (Zero Random Jitter / Jumps)
- * 2. Major Indices (加權指數 ^TWII, 櫃買 ^TWOII) Turnover Volume Measured in 億元
+ * 1. Direct Clickable Link to Yahoo Finance Index Technical Analysis (https://tw.stock.yahoo.com/t/idx.php)
+ * 2. 100% Deterministic & Stable Volume Sub-charts (Zero Random Jitter / Jumps)
  * 3. Direct Clickable Link to Central Weather Administration (https://www.cwa.gov.tw/)
  * 4. 100% Pure Real Central Weather Administration (CWA) Live Radar & Satellite Imagery
  * 5. Real-world TWSE / FinMind Taiwan Market & Global Indices
@@ -151,7 +151,7 @@
     ],
 
     stocks: [
-      { symbol: '2330', name: '台積電', price: 2420.0, prevClose: 2400.0, change: 20.0, changePercent: 0.83, open: 2440.0, high: 2445.0, low: 2410.0, volume: '15,025 張', volUnit: '張', category: '半導體龍手' },
+      { symbol: '2330', name: '台積電', price: 2420.0, prevClose: 2400.0, change: 20.0, changePercent: 0.83, open: 2440.0, high: 2445.0, low: 2410.0, volume: '15,025 張', volUnit: '張', category: '半導體龍頭' },
       { symbol: '2454', name: '聯發科', price: 3985.0, prevClose: 3930.0, change: 55.0, changePercent: 1.40, open: 3935.0, high: 4000.0, low: 3925.0, volume: '5,064 張', volUnit: '張', category: 'IC設計' },
       { symbol: '2317', name: '鴻海', price: 253.0, prevClose: 255.0, change: -2.0, changePercent: -0.78, open: 255.5, high: 256.5, low: 251.0, volume: '31,847 張', volUnit: '張', category: 'AI伺服器代工' },
       { symbol: '2382', name: '廣達', price: 332.5, prevClose: 336.0, change: -3.5, changePercent: -1.04, open: 336.5, high: 338.5, low: 330.0, volume: '10,708 張', volUnit: '張', category: 'AI伺服器' },
@@ -932,6 +932,17 @@
       const isIndex = currentItem.symbol.startsWith('^') || currentItem.symbol === 'TAIEX' || currentItem.symbol === 'TWOII';
       const volLabel = isIndex ? '成交金額' : '成交量';
 
+      let yahooUrl = 'https://tw.stock.yahoo.com/t/idx.php';
+      if (currentItem.symbol === '^TWII' || currentItem.symbol === 'TAIEX') {
+        yahooUrl = 'https://tw.stock.yahoo.com/t/idx.php';
+      } else if (currentItem.symbol === '^TWOII' || currentItem.symbol === 'TWOII') {
+        yahooUrl = 'https://tw.stock.yahoo.com/quote/%5ETWOII/technical-analysis';
+      } else if (/^\d{4}$/.test(currentItem.symbol)) {
+        yahooUrl = `https://tw.stock.yahoo.com/quote/${currentItem.symbol}.TW/technical-analysis`;
+      } else {
+        yahooUrl = `https://tw.stock.yahoo.com/quote/${currentItem.symbol}`;
+      }
+
       container.innerHTML = `
         <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-3 select-none justify-between overflow-hidden">
           <div class="flex items-center justify-between pb-2 border-b border-slate-800">
@@ -954,8 +965,16 @@
             </div>
 
             <div class="flex items-center space-x-1.5">
-              <button id="stock-refresh-api-btn" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors flex items-center space-x-1" title="更新即時行情">
-                <span>🔄 刷新</span>
+              <a href="https://tw.stock.yahoo.com/t/idx.php" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁直接開啟 Yahoo股市 上市指數技術分析 (https://tw.stock.yahoo.com/t/idx.php)">
+                <span>📊</span>
+                <span>上市指數技術分析</span>
+                <svg class="w-3 h-3 text-purple-200 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+
+              <button id="stock-refresh-api-btn" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors flex items-center space-x-1" title="更新即時行情">
+                <span>🔄</span>
               </button>
             </div>
           </div>
@@ -963,7 +982,10 @@
           <div class="flex items-center justify-between my-1.5 px-1">
             <div>
               <div class="flex items-center space-x-2">
-                <h2 class="text-base font-black text-white">${currentItem.name}</h2>
+                <a href="${yahooUrl}" target="_blank" rel="noopener noreferrer" class="text-base font-black text-white hover:text-blue-400 flex items-center space-x-1 transition-colors" title="前往 Yahoo 股市查看完整技術分析">
+                  <span>${currentItem.name}</span>
+                  <span class="text-xs text-blue-400 font-normal">↗</span>
+                </a>
                 <span class="text-xs px-1.5 py-0.2 font-mono rounded bg-slate-800 text-slate-300">${currentItem.symbol}</span>
               </div>
               <div class="text-[10px] text-slate-400 flex items-center space-x-2 mt-0.5">
@@ -1004,24 +1026,31 @@
             </div>
           </div>
 
-          <div class="flex space-x-1.5 overflow-x-auto pt-1.5 pb-0.5 scrollbar-thin">
-            ${list.map(item => {
-              const itemUp = item.change >= 0;
-              const textCol = itemUp ? 'text-red-400' : 'text-emerald-400';
-              const isSelected = item.symbol === currentItem.symbol;
-              return `
-                <div class="flex-shrink-0 px-2.5 py-1 rounded-lg cursor-pointer transition-all border ${isSelected ? 'bg-blue-950/70 border-blue-500 shadow-sm' : 'bg-slate-800/40 border-slate-700/40 hover:bg-slate-800'}" data-stock-symbol="${item.symbol}">
-                  <div class="flex items-center justify-between text-[11px] font-semibold space-x-2">
-                    <span class="text-slate-200">${item.name}</span>
-                    <span class="${textCol} font-mono">${item.price.toLocaleString()}</span>
+          <div class="flex items-center justify-between pt-1 pb-0.5">
+            <div class="flex space-x-1.5 overflow-x-auto flex-1 scrollbar-thin mr-2">
+              ${list.map(item => {
+                const itemUp = item.change >= 0;
+                const textCol = itemUp ? 'text-red-400' : 'text-emerald-400';
+                const isSelected = item.symbol === currentItem.symbol;
+                return `
+                  <div class="flex-shrink-0 px-2.5 py-1 rounded-lg cursor-pointer transition-all border ${isSelected ? 'bg-blue-950/70 border-blue-500 shadow-sm' : 'bg-slate-800/40 border-slate-700/40 hover:bg-slate-800'}" data-stock-symbol="${item.symbol}">
+                    <div class="flex items-center justify-between text-[11px] font-semibold space-x-2">
+                      <span class="text-slate-200">${item.name}</span>
+                      <span class="${textCol} font-mono">${item.price.toLocaleString()}</span>
+                    </div>
+                    <div class="flex items-center justify-between text-[9px] mt-0.5">
+                      <span class="text-slate-400 font-mono">${item.volume}</span>
+                      <span class="${textCol} font-mono font-bold">${itemUp ? '+' : ''}${item.changePercent.toFixed(2)}%</span>
+                    </div>
                   </div>
-                  <div class="flex items-center justify-between text-[9px] mt-0.5">
-                    <span class="text-slate-400 font-mono">${item.volume}</span>
-                    <span class="${textCol} font-mono font-bold">${itemUp ? '+' : ''}${item.changePercent.toFixed(2)}%</span>
-                  </div>
-                </div>
-              `;
-            }).join('')}
+                `;
+              }).join('')}
+            </div>
+
+            <a href="https://tw.stock.yahoo.com/t/idx.php" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-purple-400 hover:text-purple-300 text-[10px] underline flex items-center space-x-0.5 bg-slate-800/80 px-2 py-1 rounded" title="Yahoo 股市上市指數技術分析">
+              <span>Yahoo 股市</span>
+              <span>↗</span>
+            </a>
           </div>
         </div>
       `;
