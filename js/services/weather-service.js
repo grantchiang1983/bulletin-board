@@ -1,6 +1,6 @@
-﻿/**
+/**
  * Weather Service
- * Provides regional temperatures, radar/satellite feeds, and typhoon dynamics.
+ * Direct Live Feeds from Central Weather Administration (CWA / 中央氣象署)
  */
 export const WeatherService = {
   cities: [
@@ -18,17 +18,13 @@ export const WeatherService = {
     { id: 'penghu', name: '澎湖縣', temp: 29, high: 32, low: 26, condition: '晴朗有風', icon: 'wind', humidity: 70, uv: 10, rainProb: '0%', aqi: 30, aqiStatus: '優良' }
   ],
 
-  // Get current weather list for all cities
   getAllCities() {
     return this.cities;
   },
 
-  // Get single city detail + 24h & 7-day forecast
   getCityDetail(cityId) {
     const city = this.cities.find(c => c.id === cityId) || this.cities[0];
     const nowHour = new Date().getHours();
-    
-    // Generate 24h hourly forecast
     const hourly = [];
     for (let i = 0; i < 24; i += 2) {
       const h = (nowHour + i) % 24;
@@ -42,7 +38,6 @@ export const WeatherService = {
       });
     }
 
-    // 7-day forecast
     const days = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
     const currentDayIdx = new Date().getDay();
     const weekly = [];
@@ -56,49 +51,52 @@ export const WeatherService = {
         rainProb: `${(i * 15 + 10) % 80}%`
       });
     }
-
     return { ...city, hourly, weekly };
   },
 
-  // Radar and Satellite imagery data feeds
+  // Central Weather Administration (CWA / 中央氣象署) Direct Image Feeds
   getRadarLayers() {
+    const ts = Date.now();
     return [
       {
-        id: 'radar_echo',
-        name: '雷達回波圖 (即時降雨偵測)',
-        type: 'radar',
-        description: '中央氣象署最新整合雷達回波，反映各區即時降水強度',
-        frames: [
-          { time: '10 分鐘前', url: 'https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0058-001.png' },
-          { time: '即時觀測', url: 'https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0058-003.png' }
-        ],
-        unit: 'dBZ (回波強度)'
+        id: 'cwa_radar_standard',
+        name: '中央氣象署雷達回波 (標準)',
+        type: 'live_image',
+        description: '中央氣象署官方即時雷達合成回波圖 (台灣鄰近區域 1000x1000)',
+        url: `https://www.cwa.gov.tw/Data/radar/CV1_1000.png?t=${ts}`,
+        hdUrl: `https://www.cwa.gov.tw/Data/radar/CV1_3600.png?t=${ts}`,
+        source: '中央氣象署 CWA 官方連線',
+        unit: 'dBZ'
       },
       {
-        id: 'satellite_ir',
-        name: '紅外線衛星雲圖 (色調強化)',
-        type: 'satellite',
-        description: '向日葵9號氣象衛星紅外線雲圖，顯示雲頂高度與對流雲系發展',
-        frames: [
-          { time: '30 分鐘前', url: 'https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0083-001.jpg' },
-          { time: '即時雲圖', url: 'https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0083-002.jpg' }
-        ],
+        id: 'cwa_satellite_ir',
+        name: '向日葵紅外線雲圖 (色調強化)',
+        type: 'live_image',
+        description: '向日葵9號氣象衛星即時紅外線色調強化雲圖 (2750x2750)',
+        url: `https://www.cwa.gov.tw/Data/satellite/LCC_IR1_CR_2750/LCC_IR1_CR_2750.jpg?t=${ts}`,
+        source: '向日葵9號 氣象衛星即時觀測',
         unit: '雲頂溫度 (°C)'
       },
       {
-        id: 'rainfall_accum',
-        name: '日累積雨量分佈圖',
-        type: 'rainfall',
-        description: '全台自動氣象站今日 00:00 至今之累積降水量統計',
-        frames: [
-          { time: '今日即時累積', url: 'https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0083-003.jpg' }
-        ],
-        unit: '毫米 (mm)'
+        id: 'cwa_satellite_mb',
+        name: '黑白紅外線衛星雲圖',
+        type: 'live_image',
+        description: '向日葵9號氣象衛星黑白紅外線雲圖',
+        url: `https://www.cwa.gov.tw/Data/satellite/LCC_IR1_MB_2750/LCC_IR1_MB_2750.jpg?t=${ts}`,
+        source: '向日葵9號 氣象衛星即時觀測',
+        unit: '紅外線波段'
+      },
+      {
+        id: 'radar_canvas_sim',
+        name: '動態雷達掃描模擬 (60fps)',
+        type: 'canvas_sim',
+        description: '即時動態雷達掃描與降雨回波運動模擬',
+        source: '本機即時動態渲染引擎',
+        unit: '即時動態'
       }
     ];
   },
 
-  // Typhoon tracking information
   getTyphoonInfo() {
     return {
       nameZh: '海神 (HAISHEN)',
@@ -106,7 +104,6 @@ export const WeatherService = {
       number: '2026 年第 11 號颱風',
       intensity: '中度颱風 (Moderate Typhoon)',
       status: '海上警報發布中',
-      alertLevel: 'warning', // normal, caution, warning, emergency
       alertAreas: ['巴士海峽', '台灣東南部海面', '台灣東北部海面', '恆春半島'],
       centerLocation: '北緯 21.6 度，東經 124.5 度 (鵝鑾鼻東南方約 380 公里)',
       movementSpeed: '向西北西進行，時速 18 公里',
@@ -115,13 +112,13 @@ export const WeatherService = {
       radius7: '250 公里 (7級風暴風半徑)',
       radius10: '80 公里 (10級風暴風半徑)',
       pathPoints: [
-        { time: '昨 14:00', lat: 19.8, lng: 127.2, status: '輕度', past: true },
-        { time: '昨 20:00', lat: 20.5, lng: 126.0, status: '中度', past: true },
-        { time: '今 08:00', lat: 21.1, lng: 125.1, status: '中度', past: true },
-        { time: '現在位置', lat: 21.6, lng: 124.5, status: '中度 (中心)', current: true },
-        { time: '預估 +12h', lat: 22.8, lng: 123.1, status: '中度', forecast: true },
-        { time: '預估 +24h', lat: 24.1, lng: 121.8, status: '中度 (可能接觸陸地)', forecast: true },
-        { time: '預估 +36h', lat: 25.5, lng: 120.5, status: '輕度', forecast: true }
+        { time: '昨 14:00', status: '輕度', past: true },
+        { time: '昨 20:00', status: '中度', past: true },
+        { time: '今 08:00', status: '中度', past: true },
+        { time: '現在位置', status: '中度 (中心)', current: true },
+        { time: '預估 +12h', status: '中度', forecast: true },
+        { time: '預估 +24h', status: '中度 (逼近陸地)', forecast: true },
+        { time: '預估 +36h', status: '輕度', forecast: true }
       ],
       impactNotice: '受颱風外圍環流影響，東半部及恆春半島有大雨或豪雨發生機率；沿海風浪明顯偏大，請避免前往海邊活動。'
     };

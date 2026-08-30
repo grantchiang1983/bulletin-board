@@ -1,6 +1,9 @@
 /**
  * Bulletin Board (佈告欄) - Standalone All-In-One Script
- * Upgraded with Real-time Online Stock API Integration (FinMind & Yahoo Finance)
+ * Upgraded with:
+ * 1. Direct Central Weather Administration (CWA / 中央氣象署) Live Radar & Satellite Imagery
+ * 2. Real-time Online Stock API Integration (FinMind & Yahoo Finance)
+ * 3. GridStack Drag & Drop + Resize Customization
  */
 (function() {
   'use strict';
@@ -61,11 +64,46 @@
       return { ...city, hourly, weekly };
     },
 
+    // Central Weather Administration (CWA / 中央氣象署) Direct Live Imagery Feeds
     getRadarLayers() {
+      const ts = Date.now();
       return [
-        { id: 'radar_echo', name: '雷達回波圖 (即時降雨)', type: 'radar', unit: 'dBZ (回波強度)' },
-        { id: 'satellite_ir', name: '紅外線衛星雲圖 (色調強化)', type: 'satellite', unit: '雲頂溫度 (°C)' },
-        { id: 'rainfall_accum', name: '日累積雨量分佈圖', type: 'rainfall', unit: '毫米 (mm)' }
+        {
+          id: 'cwa_radar_standard',
+          name: '中央氣象署雷達回波 (標準)',
+          type: 'live_image',
+          description: '中央氣象署官方即時雷達合成回波圖 (台灣鄰近區域 1000x1000)',
+          url: `https://www.cwa.gov.tw/Data/radar/CV1_1000.png?t=${ts}`,
+          hdUrl: `https://www.cwa.gov.tw/Data/radar/CV1_3600.png?t=${ts}`,
+          source: '中央氣象署 CWA 官方連線',
+          unit: 'dBZ'
+        },
+        {
+          id: 'cwa_satellite_ir',
+          name: '向日葵紅外線雲圖 (色調強化)',
+          type: 'live_image',
+          description: '向日葵9號氣象衛星即時紅外線色調強化雲圖 (2750x2750)',
+          url: `https://www.cwa.gov.tw/Data/satellite/LCC_IR1_CR_2750/LCC_IR1_CR_2750.jpg?t=${ts}`,
+          source: '向日葵9號 氣象衛星即時觀測',
+          unit: '雲頂溫度 (°C)'
+        },
+        {
+          id: 'cwa_satellite_mb',
+          name: '黑白紅外線衛星雲圖',
+          type: 'live_image',
+          description: '向日葵9號氣象衛星黑白紅外線雲圖',
+          url: `https://www.cwa.gov.tw/Data/satellite/LCC_IR1_MB_2750/LCC_IR1_MB_2750.jpg?t=${ts}`,
+          source: '向日葵9號 氣象衛星即時觀測',
+          unit: '紅外線波段'
+        },
+        {
+          id: 'radar_canvas_sim',
+          name: '動態雷達掃描模擬 (60fps)',
+          type: 'canvas_sim',
+          description: '即時動態雷達掃描與降雨回波運動模擬',
+          source: '本機即時動態渲染引擎',
+          unit: '即時動態'
+        }
       ];
     },
 
@@ -661,175 +699,197 @@
 
   const WeatherRadarWidget = {
     id: 'weather-radar',
-    title: '天氣雷達雲圖與雨量觀測',
+    title: '中央氣象署即時雷達回波與雲圖',
     defaultWidth: 6,
     defaultHeight: 4,
     minWidth: 4,
     minHeight: 3,
 
-    render(container, state = { activeLayer: 'radar_echo', isPlaying: true }) {
+    render(container, state = { activeLayer: 'cwa_radar_standard', isPlaying: true }) {
       const layers = WeatherService.getRadarLayers();
       const currentLayer = layers.find(l => l.id === state.activeLayer) || layers[0];
+      const isLiveImage = currentLayer.type === 'live_image';
+      const nowTimeStr = new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
       container.innerHTML = `
         <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-3 select-none overflow-hidden relative justify-between">
           <div class="flex items-center justify-between z-10 pb-2 border-b border-slate-800">
-            <div class="flex items-center space-x-1.5 bg-slate-800/80 p-1 rounded-lg">
+            <div class="flex items-center space-x-1 bg-slate-800/90 p-0.5 rounded-lg overflow-x-auto max-w-[70%] scrollbar-thin">
               ${layers.map(l => `
-                <button class="px-2.5 py-1 text-xs font-medium rounded-md transition-all ${l.id === currentLayer.id ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'}" data-layer="${l.id}">
-                  ${l.name.split(' ')[0]}
+                <button class="px-2 py-0.5 text-xs font-medium rounded-md transition-all flex-shrink-0 ${l.id === currentLayer.id ? 'bg-blue-600 text-white shadow-sm font-bold' : 'text-slate-400 hover:text-white'}" data-layer="${l.id}">
+                  ${l.name.replace('中央氣象署', '').replace('向日葵', '')}
                 </button>
               `).join('')}
             </div>
             
-            <div class="flex items-center space-x-2 text-xs">
+            <div class="flex items-center space-x-1.5">
+              <button id="radar-refresh-btn" class="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] transition-colors" title="立即自中央氣象署抓取最新雷達雲圖">
+                🔄 刷新
+              </button>
               <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 live-pulse"></span>
-                即時連線 (CWA)
+                CWA 官方即時連線
               </span>
             </div>
           </div>
 
-          <div class="relative flex-1 my-2 rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center min-h-[140px]">
-            <canvas id="radar-canvas" class="w-full h-full object-cover"></canvas>
-            
-            <div class="absolute inset-0 pointer-events-none flex items-center justify-center">
-              <div class="w-64 h-64 border border-emerald-500/20 rounded-full"></div>
-              <div class="w-44 h-44 border border-emerald-500/25 rounded-full"></div>
-              <div class="w-20 h-20 border border-emerald-500/30 rounded-full"></div>
-              <div class="absolute w-full h-[1px] bg-emerald-500/20"></div>
-              <div class="absolute h-full w-[1px] bg-emerald-500/20"></div>
-            </div>
+          <div class="relative flex-1 my-2 rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center min-h-[140px] group">
+            ${isLiveImage ? `
+              <div class="w-full h-full relative overflow-hidden flex items-center justify-center bg-slate-950">
+                <img id="cwa-live-radar-img" src="${currentLayer.url}" alt="${currentLayer.name}" class="w-full h-full object-contain transition-transform duration-300 transform scale-100 hover:scale-105 cursor-zoom-in" title="點擊在新分頁開啟高解析度原圖">
+                
+                <div class="absolute bottom-2 left-2 bg-slate-900/90 backdrop-blur border border-slate-700 px-2 py-1 rounded text-[10px] flex items-center space-x-1.5 pointer-events-none">
+                  <span class="text-cyan-400 font-bold">📡 中央氣象署 (CWA)</span>
+                  <span class="text-slate-400">‧ ${currentLayer.unit}</span>
+                </div>
 
-            <div class="absolute inset-0 pointer-events-none flex items-center justify-center">
-              <div class="text-center font-bold text-emerald-400/80 text-xs translate-x-2 -translate-y-4">
-                [ 台灣海峽與本島防護區 ]
-                <div class="text-[10px] text-slate-400 font-normal mt-0.5">北部 28°C ‧ 中部 29°C ‧ 南部 31°C</div>
+                <div class="absolute top-2 right-2 flex items-center space-x-1">
+                  <div class="bg-slate-900/90 backdrop-blur border border-slate-700 px-2 py-0.5 rounded text-[10px] font-mono text-cyan-300">
+                    🕒 ${nowTimeStr} 抓取
+                  </div>
+                  ${currentLayer.hdUrl ? `
+                    <a href="${currentLayer.hdUrl}" target="_blank" class="bg-blue-600/80 hover:bg-blue-600 px-1.5 py-0.5 rounded text-[10px] text-white transition-colors" title="開啟 3600x3600 超高解析度大圖">
+                      🔍 3600HD
+                    </a>
+                  ` : ''}
+                </div>
               </div>
-            </div>
-
-            <div class="absolute bottom-2 left-2 bg-slate-900/90 backdrop-blur border border-slate-700 px-2 py-1 rounded text-[10px] flex items-center space-x-1.5 pointer-events-none">
-              <span class="text-slate-400">回波強度:</span>
-              <div class="flex h-2 w-20 rounded overflow-hidden">
-                <span class="flex-1 bg-cyan-400"></span>
-                <span class="flex-1 bg-blue-500"></span>
-                <span class="flex-1 bg-green-500"></span>
-                <span class="flex-1 bg-yellow-400"></span>
-                <span class="flex-1 bg-orange-500"></span>
-                <span class="flex-1 bg-red-600"></span>
+            ` : `
+              <canvas id="radar-canvas" class="w-full h-full object-cover"></canvas>
+              
+              <div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+                <div class="w-64 h-64 border border-emerald-500/20 rounded-full"></div>
+                <div class="w-44 h-44 border border-emerald-500/25 rounded-full"></div>
+                <div class="w-20 h-20 border border-emerald-500/30 rounded-full"></div>
+                <div class="absolute w-full h-[1px] bg-emerald-500/20"></div>
+                <div class="absolute h-full w-[1px] bg-emerald-500/20"></div>
               </div>
-              <span class="text-slate-300 font-mono text-[9px]">dBZ</span>
-            </div>
 
-            <div class="absolute top-2 right-2 bg-slate-900/90 backdrop-blur border border-slate-700 px-2 py-0.5 rounded text-[10px] font-mono text-cyan-300">
-              🕒 22:00 (即時雷達)
-            </div>
+              <div class="absolute bottom-2 left-2 bg-slate-900/90 backdrop-blur border border-slate-700 px-2 py-1 rounded text-[10px] flex items-center space-x-1.5 pointer-events-none">
+                <span class="text-slate-400">回波強度:</span>
+                <div class="flex h-2 w-20 rounded overflow-hidden">
+                  <span class="flex-1 bg-cyan-400"></span>
+                  <span class="flex-1 bg-blue-500"></span>
+                  <span class="flex-1 bg-green-500"></span>
+                  <span class="flex-1 bg-yellow-400"></span>
+                  <span class="flex-1 bg-orange-500"></span>
+                  <span class="flex-1 bg-red-600"></span>
+                </div>
+                <span class="text-slate-300 font-mono text-[9px]">dBZ</span>
+              </div>
+            `}
           </div>
 
           <div class="flex items-center justify-between pt-1 text-xs">
             <div class="flex items-center space-x-2">
-              <button id="radar-play-toggle" class="px-2 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-[11px] transition-colors">
-                <span id="play-icon-label">${state.isPlaying ? '⏸ 暫停' : '▶ 播放'}</span>
-              </button>
-              <span class="text-slate-400 text-[10px]">動態雲圖循環播放 (60fps)</span>
+              <span class="text-slate-300 text-[11px] font-medium">${currentLayer.name}</span>
+              <span class="text-slate-500 text-[10px]">每 10 分鐘自動同步中央氣象署最新觀測</span>
             </div>
 
             <div class="flex items-center space-x-1.5 text-slate-400">
-              <span class="text-[10px]">自動更新中</span>
+              <span class="text-[10px] text-cyan-400">${currentLayer.source}</span>
             </div>
           </div>
         </div>
       `;
 
-      const canvas = container.querySelector('#radar-canvas');
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        let angle = 0;
+      if (!isLiveImage) {
+        const canvas = container.querySelector('#radar-canvas');
+        if (canvas) {
+          const ctx = canvas.getContext('2d');
+          let angle = 0;
+          const echoes = [
+            { x: 0.62, y: 0.35, r: 40, color: 'rgba(34, 197, 94, 0.65)' },
+            { x: 0.65, y: 0.38, r: 25, color: 'rgba(234, 179, 8, 0.75)' },
+            { x: 0.68, y: 0.40, r: 14, color: 'rgba(239, 68, 68, 0.85)' },
+            { x: 0.55, y: 0.72, r: 35, color: 'rgba(59, 130, 246, 0.6)' },
+            { x: 0.48, y: 0.65, r: 28, color: 'rgba(34, 197, 94, 0.5)' }
+          ];
 
-        const echoes = [
-          { x: 0.62, y: 0.35, r: 40, color: 'rgba(34, 197, 94, 0.65)' },
-          { x: 0.65, y: 0.38, r: 25, color: 'rgba(234, 179, 8, 0.75)' },
-          { x: 0.68, y: 0.40, r: 14, color: 'rgba(239, 68, 68, 0.85)' },
-          { x: 0.55, y: 0.72, r: 35, color: 'rgba(59, 130, 246, 0.6)' },
-          { x: 0.48, y: 0.65, r: 28, color: 'rgba(34, 197, 94, 0.5)' }
-        ];
+          const resizeCanvas = () => {
+            if (!canvas.parentElement) return;
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+          };
+          resizeCanvas();
 
-        const resizeCanvas = () => {
-          if (!canvas.parentElement) return;
-          canvas.width = canvas.parentElement.clientWidth;
-          canvas.height = canvas.parentElement.clientHeight;
-        };
-        resizeCanvas();
+          const draw = () => {
+            if (!canvas || !canvas.parentElement) return;
+            const w = canvas.width;
+            const h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
 
-        const draw = () => {
-          if (!canvas || !canvas.parentElement) return;
-          const w = canvas.width;
-          const h = canvas.height;
-          ctx.clearRect(0, 0, w, h);
+            ctx.strokeStyle = 'rgba(30, 58, 138, 0.25)';
+            ctx.lineWidth = 1;
+            for (let x = 0; x < w; x += 40) {
+              ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+            }
+            for (let y = 0; y < h; y += 40) {
+              ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+            }
 
-          ctx.strokeStyle = 'rgba(30, 58, 138, 0.25)';
-          ctx.lineWidth = 1;
-          for (let x = 0; x < w; x += 40) {
-            ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-          }
-          for (let y = 0; y < h; y += 40) {
-            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-          }
-
-          ctx.save();
-          ctx.translate(w * 0.5, h * 0.5);
-          ctx.fillStyle = 'rgba(51, 65, 85, 0.4)';
-          ctx.strokeStyle = 'rgba(148, 163, 184, 0.6)';
-          ctx.lineWidth = 1.5;
-          ctx.beginPath();
-          ctx.ellipse(0, 0, w * 0.12, h * 0.32, -0.3, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-          ctx.restore();
-
-          const pulse = Math.sin(Date.now() * 0.003) * 3;
-          echoes.forEach(e => {
-            ctx.save();
-            const grad = ctx.createRadialGradient(w * e.x, h * e.y, 2, w * e.x, h * e.y, e.r + pulse);
-            grad.addColorStop(0, e.color);
-            grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-            ctx.fillStyle = grad;
-            ctx.beginPath();
-            ctx.arc(w * e.x, h * e.y, e.r + pulse, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-          });
-
-          if (state.isPlaying) {
-            angle += 0.025;
             ctx.save();
             ctx.translate(w * 0.5, h * 0.5);
-            ctx.rotate(angle);
-            
-            const sweepGrad = ctx.createLinearGradient(0, 0, w * 0.5, 0);
-            sweepGrad.addColorStop(0, 'rgba(59, 130, 246, 0.4)');
-            sweepGrad.addColorStop(1, 'rgba(14, 165, 233, 0)');
-            ctx.fillStyle = sweepGrad;
-            ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.arc(0, 0, Math.max(w, h), 0, Math.PI / 4);
-            ctx.closePath();
-            ctx.fill();
-
-            ctx.strokeStyle = '#38bdf8';
+            ctx.fillStyle = 'rgba(51, 65, 85, 0.4)';
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.6)';
             ctx.lineWidth = 1.5;
             ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.lineTo(w * 0.6, 0);
+            ctx.ellipse(0, 0, w * 0.12, h * 0.32, -0.3, 0, Math.PI * 2);
+            ctx.fill();
             ctx.stroke();
             ctx.restore();
-          }
 
-          requestAnimationFrame(draw);
-        };
+            const pulse = Math.sin(Date.now() * 0.003) * 3;
+            echoes.forEach(e => {
+              ctx.save();
+              const grad = ctx.createRadialGradient(w * e.x, h * e.y, 2, w * e.x, h * e.y, e.r + pulse);
+              grad.addColorStop(0, e.color);
+              grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+              ctx.fillStyle = grad;
+              ctx.beginPath();
+              ctx.arc(w * e.x, h * e.y, e.r + pulse, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.restore();
+            });
 
-        draw();
-        window.addEventListener('resize', resizeCanvas);
+            if (state.isPlaying) {
+              angle += 0.025;
+              ctx.save();
+              ctx.translate(w * 0.5, h * 0.5);
+              ctx.rotate(angle);
+              
+              const sweepGrad = ctx.createLinearGradient(0, 0, w * 0.5, 0);
+              sweepGrad.addColorStop(0, 'rgba(59, 130, 246, 0.4)');
+              sweepGrad.addColorStop(1, 'rgba(14, 165, 233, 0)');
+              ctx.fillStyle = sweepGrad;
+              ctx.beginPath();
+              ctx.moveTo(0, 0);
+              ctx.arc(0, 0, Math.max(w, h), 0, Math.PI / 4);
+              ctx.closePath();
+              ctx.fill();
+
+              ctx.strokeStyle = '#38bdf8';
+              ctx.lineWidth = 1.5;
+              ctx.beginPath();
+              ctx.moveTo(0, 0);
+              ctx.lineTo(w * 0.6, 0);
+              ctx.stroke();
+              ctx.restore();
+            }
+
+            requestAnimationFrame(draw);
+          };
+
+          draw();
+          window.addEventListener('resize', resizeCanvas);
+        }
+      }
+
+      const liveImg = container.querySelector('#cwa-live-radar-img');
+      if (liveImg) {
+        liveImg.addEventListener('click', () => {
+          window.open(liveImg.src, '_blank');
+        });
       }
 
       container.querySelectorAll('[data-layer]').forEach(btn => {
@@ -838,12 +898,10 @@
         });
       });
 
-      const playBtn = container.querySelector('#radar-play-toggle');
-      if (playBtn) {
-        playBtn.addEventListener('click', () => {
-          state.isPlaying = !state.isPlaying;
-          const label = container.querySelector('#play-icon-label');
-          if (label) label.textContent = state.isPlaying ? '⏸ 暫停' : '▶ 播放';
+      const refreshBtn = container.querySelector('#radar-refresh-btn');
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+          WeatherRadarWidget.render(container, state);
         });
       }
     }
