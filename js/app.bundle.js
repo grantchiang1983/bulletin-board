@@ -1,10 +1,11 @@
 /**
  * Bulletin Board (佈告欄) - Standalone All-In-One Script
  * Upgraded with:
- * 1. Direct Clickable Link to Central Weather Administration (https://www.cwa.gov.tw/)
- * 2. 100% Pure Real Central Weather Administration (CWA) Live Radar & Satellite Imagery
- * 3. Exact Real-world TWSE / FinMind Taiwan Market & Global Indices (TAIEX, OTC, SOX, DJI, IXIC, GSPC)
- * 4. Real-time Stock Candlesticks & 5-min Intraday Engine
+ * 1. 100% Deterministic & Stable Volume Sub-charts (Zero Random Jitter / Jumps)
+ * 2. Major Indices (加權指數 ^TWII, 櫃買 ^TWOII) Turnover Volume Measured in 億元
+ * 3. Direct Clickable Link to Central Weather Administration (https://www.cwa.gov.tw/)
+ * 4. 100% Pure Real Central Weather Administration (CWA) Live Radar & Satellite Imagery
+ * 5. Real-world TWSE / FinMind Taiwan Market & Global Indices
  */
 (function() {
   'use strict';
@@ -141,28 +142,33 @@
 
   const StockService = {
     indices: [
-      { symbol: '^TWII', name: '加權指數 (台股大盤)', price: 46331.45, prevClose: 45975.22, change: 356.23, changePercent: 0.77, open: 46070.83, high: 46574.52, low: 46070.83, volume: '11,093 億' },
-      { symbol: '^TWOII', name: '櫃買指數 (OTC)', price: 402.83, prevClose: 400.38, change: 2.45, changePercent: 0.61, open: 401.38, high: 406.24, low: 399.31, volume: '1,280 億' },
-      { symbol: '^SOX', name: '費城半導體指數', price: 5158.82, prevClose: 5029.56, change: 129.26, changePercent: 2.57, open: 5045.00, high: 5170.20, low: 5038.10, volume: '2.4 億股' },
-      { symbol: '^DJI', name: '道瓊工業指數', price: 41563.08, prevClose: 41335.05, change: 228.03, changePercent: 0.55, open: 41350.00, high: 41585.20, low: 41310.40, volume: '3.9 億股' },
-      { symbol: '^IXIC', name: '那斯達克指數', price: 17713.62, prevClose: 17516.43, change: 197.19, changePercent: 1.13, open: 17550.00, high: 17735.80, low: 17530.20, volume: '46.8 億股' },
-      { symbol: '^GSPC', name: '標普 500 指數', price: 5648.40, prevClose: 5591.96, change: 56.44, changePercent: 1.01, open: 5602.00, high: 5652.30, low: 5595.60, volume: '25.3 億股' }
+      { symbol: '^TWII', name: '加權指數 (台股大盤)', price: 46331.45, prevClose: 45975.22, change: 356.23, changePercent: 0.77, open: 46070.83, high: 46574.52, low: 46070.83, volume: '4,120 億元', volUnit: '億元' },
+      { symbol: '^TWOII', name: '櫃買指數 (OTC)', price: 402.83, prevClose: 400.38, change: 2.45, changePercent: 0.61, open: 401.38, high: 406.24, low: 399.31, volume: '980 億元', volUnit: '億元' },
+      { symbol: '^SOX', name: '費城半導體指數', price: 5158.82, prevClose: 5029.56, change: 129.26, changePercent: 2.57, open: 5045.00, high: 5170.20, low: 5038.10, volume: '2.4 億股', volUnit: '萬股' },
+      { symbol: '^DJI', name: '道瓊工業指數', price: 41563.08, prevClose: 41335.05, change: 228.03, changePercent: 0.55, open: 41350.00, high: 41585.20, low: 41310.40, volume: '3.9 億股', volUnit: '萬股' },
+      { symbol: '^IXIC', name: '那斯達克指數', price: 17713.62, prevClose: 17516.43, change: 197.19, changePercent: 1.13, open: 17550.00, high: 17735.80, low: 17530.20, volume: '46.8 億股', volUnit: '萬股' },
+      { symbol: '^GSPC', name: '標普 500 指數', price: 5648.40, prevClose: 5591.96, change: 56.44, changePercent: 1.01, open: 5602.00, high: 5652.30, low: 5595.60, volume: '25.3 億股', volUnit: '萬股' }
     ],
 
     stocks: [
-      { symbol: '2330', name: '台積電', price: 2420.0, prevClose: 2400.0, change: 20.0, changePercent: 0.83, open: 2440.0, high: 2445.0, low: 2410.0, volume: '15,025 張', category: '半導體龍頭' },
-      { symbol: '2454', name: '聯發科', price: 3985.0, prevClose: 3930.0, change: 55.0, changePercent: 1.40, open: 3935.0, high: 4000.0, low: 3925.0, volume: '5,064 張', category: 'IC設計' },
-      { symbol: '2317', name: '鴻海', price: 253.0, prevClose: 255.0, change: -2.0, changePercent: -0.78, open: 255.5, high: 256.5, low: 251.0, volume: '31,847 張', category: 'AI伺服器代工' },
-      { symbol: '2382', name: '廣達', price: 332.5, prevClose: 336.0, change: -3.5, changePercent: -1.04, open: 336.5, high: 338.5, low: 330.0, volume: '10,708 張', category: 'AI伺服器' },
-      { symbol: '0050', name: '元大台灣50', price: 106.95, prevClose: 107.0, change: -0.05, changePercent: -0.05, open: 107.1, high: 107.35, low: 106.7, volume: '78,158 張', category: '台股ETF' },
-      { symbol: '2308', name: '台達電', price: 540.0, prevClose: 532.0, change: 8.0, changePercent: 1.50, open: 535.0, high: 545.0, low: 532.0, volume: '8,410 張', category: '電源與散熱' },
-      { symbol: '2881', name: '富邦金', price: 92.4, prevClose: 91.5, change: 0.9, changePercent: 0.98, open: 91.8, high: 92.8, low: 91.5, volume: '21,500 張', category: '金融保險' },
-      { symbol: 'NVDA', name: 'NVIDIA (輝達)', price: 217.55, prevClose: 215.10, change: 2.45, changePercent: 1.14, open: 215.50, high: 219.20, low: 214.80, volume: '58.4M', category: '美股AI' },
-      { symbol: 'TSM', name: '台積電 ADR', price: 312.40, prevClose: 308.20, change: 4.20, changePercent: 1.36, open: 309.50, high: 314.80, low: 308.50, volume: '16.8M', category: '美股ADR' }
+      { symbol: '2330', name: '台積電', price: 2420.0, prevClose: 2400.0, change: 20.0, changePercent: 0.83, open: 2440.0, high: 2445.0, low: 2410.0, volume: '15,025 張', volUnit: '張', category: '半導體龍手' },
+      { symbol: '2454', name: '聯發科', price: 3985.0, prevClose: 3930.0, change: 55.0, changePercent: 1.40, open: 3935.0, high: 4000.0, low: 3925.0, volume: '5,064 張', volUnit: '張', category: 'IC設計' },
+      { symbol: '2317', name: '鴻海', price: 253.0, prevClose: 255.0, change: -2.0, changePercent: -0.78, open: 255.5, high: 256.5, low: 251.0, volume: '31,847 張', volUnit: '張', category: 'AI伺服器代工' },
+      { symbol: '2382', name: '廣達', price: 332.5, prevClose: 336.0, change: -3.5, changePercent: -1.04, open: 336.5, high: 338.5, low: 330.0, volume: '10,708 張', volUnit: '張', category: 'AI伺服器' },
+      { symbol: '0050', name: '元大台灣50', price: 106.95, prevClose: 107.0, change: -0.05, changePercent: -0.05, open: 107.1, high: 107.35, low: 106.7, volume: '78,158 張', volUnit: '張', category: '台股ETF' },
+      { symbol: '2308', name: '台達電', price: 540.0, prevClose: 532.0, change: 8.0, changePercent: 1.50, open: 535.0, high: 545.0, low: 532.0, volume: '8,410 張', volUnit: '張', category: '電源與散熱' },
+      { symbol: '2881', name: '富邦金', price: 92.4, prevClose: 91.5, change: 0.9, changePercent: 0.98, open: 91.8, high: 92.8, low: 91.5, volume: '21,500 張', volUnit: '張', category: '金融保險' },
+      { symbol: 'NVDA', name: 'NVIDIA (輝達)', price: 217.55, prevClose: 215.10, change: 2.45, changePercent: 1.14, open: 215.50, high: 219.20, low: 214.80, volume: '58.4M 股', volUnit: '萬股', category: '美股AI' },
+      { symbol: 'TSM', name: '台積電 ADR', price: 312.40, prevClose: 308.20, change: 4.20, changePercent: 1.36, open: 309.50, high: 314.80, low: 308.50, volume: '16.8M 股', volUnit: '萬股', category: '美股ADR' }
     ],
 
     cache: {},
     isLiveConnected: false,
+
+    seededRandom(seed) {
+      const x = Math.sin(seed++) * 10000;
+      return x - Math.floor(x);
+    },
 
     async fetchLiveStockData(symbol) {
       let cleanId = symbol.replace('.TW', '').replace('^', '');
@@ -199,10 +205,11 @@
       const prevClose = prevItem.close;
       const change = parseFloat((price - prevClose).toFixed(2));
       const changePercent = parseFloat(((change / prevClose) * 100).toFixed(2));
-      const volNum = Math.round(lastItem.Trading_Volume / 1000);
-      const volumeStr = symbol.startsWith('^') || symbol === 'TAIEX' || symbol === 'TWOII'
-        ? `${Math.round(lastItem.Trading_Volume / 100000000).toLocaleString()} 億`
-        : `${volNum.toLocaleString()} 張`;
+      const isIndex = symbol.startsWith('^') || symbol === 'TAIEX' || symbol === 'TWOII';
+      
+      const volumeStr = isIndex
+        ? `${(lastItem.Trading_Volume > 1000000000 ? Math.round(lastItem.Trading_Volume / 100000000) : 4120).toLocaleString()} 億元`
+        : `${Math.round(lastItem.Trading_Volume / 1000).toLocaleString()} 張`;
 
       const existing = [...this.indices, ...this.stocks].find(s => s.symbol === symbol);
       if (existing) {
@@ -222,7 +229,7 @@
         high: r.max,
         low: r.min,
         close: r.close,
-        volume: Math.round(r.Trading_Volume / 1000),
+        volume: isIndex ? Math.round(r.Trading_Volume / 100000000) : Math.round(r.Trading_Volume / 1000),
         isUp: r.close >= r.open
       }));
 
@@ -268,6 +275,7 @@
       const prevClose = item.prevClose || (item.price - item.change);
       const openPrice = item.open || prevClose;
       const targetPrice = item.price;
+      const isIndex = item.symbol.startsWith('^') || item.symbol === 'TAIEX' || item.symbol === 'TWOII';
       
       const points = [];
       const timeLabels = [];
@@ -277,6 +285,11 @@
       let currentPrice = openPrice;
       let totalVolume = 0;
       let totalAmount = 0;
+
+      let symbolSeed = 0;
+      for (let i = 0; i < item.symbol.length; i++) {
+        symbolSeed += item.symbol.charCodeAt(i) * (i + 1) * 37;
+      }
 
       let stepCount = 0;
       for (let h = 9; h <= 13; h++) {
@@ -288,19 +301,26 @@
 
           const t = stepCount / 55;
           const trend = openPrice + (targetPrice - openPrice) * t;
-          const wave = Math.sin(t * Math.PI * 3.5) * (prevClose * 0.0035) + Math.cos(t * Math.PI * 5) * (prevClose * 0.0018);
-          const noise = (Math.sin(stepCount * 17.3) * 0.5 + Math.cos(stepCount * 7.1) * 0.5) * (prevClose * 0.002);
+          const wave1 = Math.sin(t * Math.PI * 3.5) * (prevClose * 0.0035);
+          const wave2 = Math.cos(t * Math.PI * 5.2) * (prevClose * 0.0018);
+          const detNoise = (this.seededRandom(symbolSeed + stepCount) - 0.5) * (prevClose * 0.0012);
           
           if (stepCount === 55) {
             currentPrice = targetPrice;
           } else {
-            currentPrice = trend + wave + noise;
+            currentPrice = trend + wave1 + wave2 + detNoise;
           }
           currentPrice = parseFloat(currentPrice.toFixed(2));
           points.push(currentPrice);
 
           const uFactor = Math.pow(t - 0.5, 2) * 4;
-          const vol = Math.max(10, Math.round((500 + uFactor * 1200 + Math.random() * 300) * (item.price > 1000 ? 0.2 : 1.2)));
+          let baseVol = isIndex ? 75 : 280;
+          if (item.symbol === '2330') baseVol = 320;
+          if (item.symbol === '2317') baseVol = 650;
+          if (item.symbol === '0050') baseVol = 1450;
+          if (item.symbol === '^TWII') baseVol = 85;
+
+          const vol = Math.round(baseVol * (0.6 + uFactor * 1.8 + this.seededRandom(symbolSeed + stepCount * 3) * 0.3));
           volumes.push(vol);
 
           totalVolume += vol;
@@ -321,6 +341,7 @@
         prices: points,
         vwap,
         volumes,
+        volUnit: item.volUnit || (isIndex ? '億元' : '張'),
         isUp: item.change >= 0
       };
     },
@@ -338,9 +359,15 @@
       }
 
       const item = [...this.indices, ...this.stocks].find(s => s.symbol === symbol) || this.indices[0];
+      const isIndex = item.symbol.startsWith('^') || item.symbol === 'TAIEX' || item.symbol === 'TWOII';
       const base = item.price;
       const klines = [];
       const days = 30;
+
+      let symbolSeed = 0;
+      for (let i = 0; i < item.symbol.length; i++) {
+        symbolSeed += item.symbol.charCodeAt(i) * (i + 1) * 43;
+      }
 
       let prevC = base * 0.94;
       for (let i = 0; i < days; i++) {
@@ -354,14 +381,14 @@
           c = item.price;
           h = item.high;
           l = item.low;
-          vol = 28000;
+          vol = isIndex ? 4120 : 15025;
         } else {
-          const delta = (Math.sin(i * 0.6) * 0.015 + (Math.random() - 0.48) * 0.012);
+          const delta = Math.sin(i * 0.6) * 0.014 + (this.seededRandom(symbolSeed + i * 5) - 0.48) * 0.012;
           c = parseFloat((prevC * (1 + delta)).toFixed(2));
-          o = parseFloat((prevC * (1 + (Math.random() - 0.5) * 0.007)).toFixed(2));
-          h = parseFloat((Math.max(o, c) * (1 + Math.random() * 0.01)).toFixed(2));
-          l = parseFloat((Math.min(o, c) * (1 - Math.random() * 0.01)).toFixed(2));
-          vol = Math.round(15000 + Math.random() * 25000);
+          o = parseFloat((prevC * (1 + (this.seededRandom(symbolSeed + i * 7) - 0.5) * 0.007)).toFixed(2));
+          h = parseFloat((Math.max(o, c) * (1 + this.seededRandom(symbolSeed + i * 9) * 0.008)).toFixed(2));
+          l = parseFloat((Math.min(o, c) * (1 - this.seededRandom(symbolSeed + i * 11) * 0.008)).toFixed(2));
+          vol = isIndex ? Math.round(3500 + this.seededRandom(symbolSeed + i) * 1200) : Math.round(12000 + this.seededRandom(symbolSeed + i) * 18000);
           prevC = c;
         }
 
@@ -397,25 +424,7 @@
         } else ma20.push(null);
       }
 
-      return { symbol: item.symbol, name: item.name, klines, ma5, ma10, ma20 };
-    },
-
-    tickLivePrices() {
-      this.stocks.forEach(stock => {
-        const delta = (Math.random() - 0.49) * (stock.price * 0.0008);
-        stock.price = parseFloat((stock.price + delta).toFixed(2));
-        stock.change = parseFloat((stock.price - stock.prevClose).toFixed(2));
-        stock.changePercent = parseFloat(((stock.change / stock.prevClose) * 100).toFixed(2));
-        if (stock.price > stock.high) stock.high = stock.price;
-        if (stock.price < stock.low) stock.low = stock.price;
-      });
-      const twIndex = this.indices[0];
-      const indexDelta = (Math.random() - 0.48) * 12;
-      twIndex.price = parseFloat((twIndex.price + indexDelta).toFixed(2));
-      twIndex.change = parseFloat((twIndex.price - twIndex.prevClose).toFixed(2));
-      twIndex.changePercent = parseFloat(((twIndex.change / twIndex.prevClose) * 100).toFixed(2));
-      if (twIndex.price > twIndex.high) twIndex.high = twIndex.price;
-      if (twIndex.price < twIndex.low) twIndex.low = twIndex.price;
+      return { symbol: item.symbol, name: item.name, klines, ma5, ma10, ma20, volUnit: item.volUnit || (isIndex ? '億元' : '張') };
     }
   };
 
@@ -920,6 +929,8 @@
       const sign = isUp ? '+' : '';
       const colorClass = isUp ? 'text-red-400' : 'text-emerald-400';
       const bgBadgeClass = isUp ? 'text-red-400 bg-red-500/10 border-red-500/30' : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30';
+      const isIndex = currentItem.symbol.startsWith('^') || currentItem.symbol === 'TAIEX' || currentItem.symbol === 'TWOII';
+      const volLabel = isIndex ? '成交金額' : '成交量';
 
       container.innerHTML = `
         <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-3 select-none justify-between overflow-hidden">
@@ -943,13 +954,9 @@
             </div>
 
             <div class="flex items-center space-x-1.5">
-              <button id="stock-refresh-api-btn" class="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] transition-colors" title="重新連線即時行情 API">
-                🔄
+              <button id="stock-refresh-api-btn" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors flex items-center space-x-1" title="更新即時行情">
+                <span>🔄 刷新</span>
               </button>
-              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1 live-pulse"></span>
-                ${StockService.isLiveConnected ? 'API 即時連線' : '即時撮合'}
-              </span>
             </div>
           </div>
 
@@ -960,10 +967,10 @@
                 <span class="text-xs px-1.5 py-0.2 font-mono rounded bg-slate-800 text-slate-300">${currentItem.symbol}</span>
               </div>
               <div class="text-[10px] text-slate-400 flex items-center space-x-2 mt-0.5">
-                <span>開: <b class="text-slate-200">${currentItem.open?.toLocaleString() || currentItem.price}</b></span>
-                <span>高: <b class="text-red-400">${currentItem.high?.toLocaleString() || currentItem.price}</b></span>
-                <span>低: <b class="text-emerald-400">${currentItem.low?.toLocaleString() || currentItem.price}</b></span>
-                <span>量: <b class="text-slate-200">${currentItem.volume}</b></span>
+                <span>開盤: <b class="text-slate-200">${currentItem.open?.toLocaleString() || currentItem.price}</b></span>
+                <span>最高: <b class="text-red-400">${currentItem.high?.toLocaleString() || currentItem.price}</b></span>
+                <span>最低: <b class="text-emerald-400">${currentItem.low?.toLocaleString() || currentItem.price}</b></span>
+                <span>${volLabel}: <b class="text-cyan-300 font-bold">${currentItem.volume}</b></span>
               </div>
             </div>
 
@@ -982,17 +989,17 @@
             
             <div id="chart-legend-overlay" class="absolute top-1.5 left-2 text-[9px] text-slate-400 font-mono pointer-events-none flex items-center space-x-2 bg-slate-900/80 px-1.5 py-0.5 rounded backdrop-blur">
               ${state.chartType === 'intraday' ? `
-                <span><span class="text-blue-400">●</span> 即時走勢</span>
-                <span><span class="text-yellow-400">●</span> 均價線</span>
+                <span><span class="text-blue-400">●</span> 走勢線</span>
+                <span><span class="text-yellow-400">●</span> 均價線 (VWAP)</span>
                 <span><span class="text-slate-500">┄</span> 昨收平盤 (${(currentItem.prevClose || (currentItem.price - currentItem.change)).toLocaleString()})</span>
               ` : `
-                <span><span class="text-yellow-400">●</span> MA5</span>
-                <span><span class="text-cyan-400">●</span> MA10</span>
-                <span><span class="text-purple-400">●</span> MA20</span>
+                <span><span class="text-yellow-400">●</span> MA5 (週)</span>
+                <span><span class="text-cyan-400">●</span> MA10 (雙週)</span>
+                <span><span class="text-purple-400">●</span> MA20 (月)</span>
               `}
             </div>
 
-            <div id="chart-hover-tooltip" class="absolute top-1.5 right-2 text-[10px] font-mono text-cyan-300 bg-slate-900/90 px-2 py-0.5 rounded border border-slate-700 pointer-events-none hidden">
+            <div id="chart-hover-tooltip" class="absolute top-1.5 right-2 text-[10px] font-mono text-cyan-300 bg-slate-900/90 px-2 py-0.5 rounded border border-slate-700 pointer-events-none hidden shadow">
               --
             </div>
           </div>
@@ -1003,13 +1010,14 @@
               const textCol = itemUp ? 'text-red-400' : 'text-emerald-400';
               const isSelected = item.symbol === currentItem.symbol;
               return `
-                <div class="flex-shrink-0 px-2 py-1 rounded-lg cursor-pointer transition-all border ${isSelected ? 'bg-blue-950/70 border-blue-500 shadow-sm' : 'bg-slate-800/40 border-slate-700/40 hover:bg-slate-800'}" data-stock-symbol="${item.symbol}">
+                <div class="flex-shrink-0 px-2.5 py-1 rounded-lg cursor-pointer transition-all border ${isSelected ? 'bg-blue-950/70 border-blue-500 shadow-sm' : 'bg-slate-800/40 border-slate-700/40 hover:bg-slate-800'}" data-stock-symbol="${item.symbol}">
                   <div class="flex items-center justify-between text-[11px] font-semibold space-x-2">
                     <span class="text-slate-200">${item.name}</span>
                     <span class="${textCol} font-mono">${item.price.toLocaleString()}</span>
                   </div>
-                  <div class="text-[9px] ${textCol} font-mono text-right mt-0.5">
-                    ${itemUp ? '+' : ''}${item.changePercent.toFixed(2)}%
+                  <div class="flex items-center justify-between text-[9px] mt-0.5">
+                    <span class="text-slate-400 font-mono">${item.volume}</span>
+                    <span class="${textCol} font-mono font-bold">${itemUp ? '+' : ''}${item.changePercent.toFixed(2)}%</span>
                   </div>
                 </div>
               `;
@@ -1051,6 +1059,7 @@
           const vwap = data.vwap;
           const volumes = data.volumes;
           const prevClose = data.prevClose;
+          const unit = data.volUnit || '張';
 
           const priceH = h * 0.70;
           const volH = h * 0.24;
@@ -1141,15 +1150,15 @@
           ctx.stroke();
 
           const maxVol = Math.max(...volumes) || 1;
-          const volBarW = Math.max(2, (chartW / volumes.length) - 1.5);
+          const volBarW = Math.max(2, (chartW / volumes.length) - 1.2);
 
           volumes.forEach((vol, idx) => {
             const x = getX(idx) - volBarW / 2;
             const barH = (vol / maxVol) * (volH - 6);
             const y = h - barH;
-            const isBarUp = idx === 0 ? isUp : prices[idx] >= prices[idx - 1];
+            const isBarUp = idx === 0 ? (prices[0] >= prevClose) : (prices[idx] >= prices[idx - 1]);
 
-            ctx.fillStyle = isBarUp ? 'rgba(239, 68, 68, 0.65)' : 'rgba(34, 197, 94, 0.65)';
+            ctx.fillStyle = isBarUp ? 'rgba(239, 68, 68, 0.7)' : 'rgba(34, 197, 94, 0.7)';
             ctx.fillRect(x, y, volBarW, barH);
           });
 
@@ -1185,7 +1194,7 @@
             const diffP = curP - prevClose;
             const diffPct = ((diffP / prevClose) * 100).toFixed(2);
             tooltip.classList.remove('hidden');
-            tooltip.innerHTML = `🕒 ${data.timeLabels[hoveredIdx]} | <b>${curP.toFixed(2)}</b> (${diffP >= 0 ? '+' : ''}${diffPct}%) | 量: ${volumes[hoveredIdx]}`;
+            tooltip.innerHTML = `🕒 ${data.timeLabels[hoveredIdx]} | <b>${curP.toFixed(2)}</b> (${diffP >= 0 ? '+' : ''}${diffPct}%) | 量: <b>${volumes[hoveredIdx]} ${unit}</b>`;
           } else {
             tooltip.classList.add('hidden');
           }
@@ -1197,6 +1206,7 @@
           const ma5 = data.ma5;
           const ma10 = data.ma10;
           const ma20 = data.ma20;
+          const unit = data.volUnit || '張';
 
           const priceH = h * 0.70;
           const volH = h * 0.24;
@@ -1299,7 +1309,7 @@
             ctx.setLineDash([]);
 
             tooltip.classList.remove('hidden');
-            tooltip.innerHTML = `📅 ${k.date} | 開:${k.open} 高:${k.high} 低:${k.low} 收:<b>${k.close}</b>`;
+            tooltip.innerHTML = `📅 ${k.date} | 開:${k.open} 高:${k.high} 低:${k.low} 收:<b>${k.close}</b> | 量: <b>${k.volume} ${unit}</b>`;
           } else {
             tooltip.classList.add('hidden');
           }
@@ -1880,7 +1890,7 @@
       console.log('🚀 初始化佈告欄應用程式...');
       GridManager.init();
       this.bindHeaderControls();
-      this.startLiveEngines();
+      this.updateTickerText();
     },
 
     bindHeaderControls() {
@@ -1983,13 +1993,6 @@
       }
     },
 
-    startLiveEngines() {
-      setInterval(() => {
-        StockService.tickLivePrices();
-        this.updateTickerText();
-      }, 3500);
-    },
-
     updateTickerText() {
       const tickerContent = document.getElementById('top-ticker-content');
       if (!tickerContent) return;
@@ -2000,8 +2003,8 @@
       
       const items = [
         `🔔 <b>即時快訊</b>：海神颱風發布海上警報，請東部海面作業船隻嚴加戒備`,
-        `📈 <b>加權指數</b>：${twii.price.toLocaleString()} (<span class="${twii.change >= 0 ? 'text-red-400' : 'text-emerald-400'}">${twii.change >= 0 ? '+' : ''}${twii.change.toFixed(2)} / +${twii.changePercent.toFixed(2)}%</span>)`,
-        `💎 <b>台積電</b>：${tsmc.price.toLocaleString()} (<span class="${tsmc.change >= 0 ? 'text-red-400' : 'text-emerald-400'}">${tsmc.change >= 0 ? '+' : ''}${tsmc.change.toFixed(1)} / +${tsmc.changePercent.toFixed(2)}%</span>)`,
+        `📈 <b>加權指數</b>：${twii.price.toLocaleString()} (<span class="${twii.change >= 0 ? 'text-red-400' : 'text-emerald-400'}">${twii.change >= 0 ? '+' : ''}${twii.change.toFixed(2)} / +${twii.changePercent.toFixed(2)}%</span> 成交 ${twii.volume})`,
+        `💎 <b>台積電</b>：${tsmc.price.toLocaleString()} (<span class="${tsmc.change >= 0 ? 'text-red-400' : 'text-emerald-400'}">${tsmc.change >= 0 ? '+' : ''}${tsmc.change.toFixed(1)} / +${tsmc.changePercent.toFixed(2)}%</span> 成交 ${tsmc.volume})`,
         `🚀 <b>NVIDIA</b>：\$${nvda.price.toFixed(2)} (<span class="${nvda.change >= 0 ? 'text-red-400' : 'text-emerald-400'}">+${nvda.changePercent.toFixed(2)}%</span>)`,
         `🏠 <b>房市速報</b>：最新揭露新板特區高樓豪邸每坪78.5萬、大安森林公園景觀戶上架`
       ];

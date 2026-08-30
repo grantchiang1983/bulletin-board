@@ -13,7 +13,6 @@ export const StockMarketWidget = {
     const list = state.tab === 'indices' ? StockService.indices : StockService.stocks;
     let currentItem = [...StockService.indices, ...StockService.stocks].find(s => s.symbol === state.selectedSymbol) || StockService.indices[0];
     
-    // Check if cached data exists
     if (StockService.cache[state.selectedSymbol]) {
       const c = StockService.cache[state.selectedSymbol];
       currentItem = { ...currentItem, price: c.price, change: c.change, changePercent: c.changePercent, open: c.open, high: c.high, low: c.low, volume: c.volume };
@@ -23,6 +22,8 @@ export const StockMarketWidget = {
     const sign = isUp ? '+' : '';
     const colorClass = isUp ? 'text-red-400' : 'text-emerald-400';
     const bgBadgeClass = isUp ? 'text-red-400 bg-red-500/10 border-red-500/30' : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30';
+    const isIndex = currentItem.symbol.startsWith('^') || currentItem.symbol === 'TAIEX' || currentItem.symbol === 'TWOII';
+    const volLabel = isIndex ? '成交金額' : '成交量';
 
     container.innerHTML = `
       <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-3 select-none justify-between overflow-hidden">
@@ -48,19 +49,15 @@ export const StockMarketWidget = {
             </button>
           </div>
 
-          <!-- Online API Live Indicator & Refresh -->
+          <!-- Refresh Control -->
           <div class="flex items-center space-x-1.5">
-            <button id="stock-refresh-api-btn" class="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] transition-colors" title="重新連線即時行情 API">
-              🔄
+            <button id="stock-refresh-api-btn" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors flex items-center space-x-1" title="更新即時行情">
+              <span>🔄 刷新</span>
             </button>
-            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1 live-pulse"></span>
-              ${StockService.isLiveConnected ? 'API 即時連線' : '即時撮合'}
-            </span>
           </div>
         </div>
 
-        <!-- Stock Price Header Stats & Quick Search -->
+        <!-- Stock Price Header Stats -->
         <div class="flex items-center justify-between my-1.5 px-1">
           <div>
             <div class="flex items-center space-x-2">
@@ -68,10 +65,10 @@ export const StockMarketWidget = {
               <span class="text-xs px-1.5 py-0.2 font-mono rounded bg-slate-800 text-slate-300">${currentItem.symbol}</span>
             </div>
             <div class="text-[10px] text-slate-400 flex items-center space-x-2 mt-0.5">
-              <span>開: <b class="text-slate-200">${currentItem.open?.toLocaleString() || currentItem.price}</b></span>
-              <span>高: <b class="text-red-400">${currentItem.high?.toLocaleString() || currentItem.price}</b></span>
-              <span>低: <b class="text-emerald-400">${currentItem.low?.toLocaleString() || currentItem.price}</b></span>
-              <span>量: <b class="text-slate-200">${currentItem.volume}</b></span>
+              <span>開盤: <b class="text-slate-200">${currentItem.open?.toLocaleString() || currentItem.price}</b></span>
+              <span>最高: <b class="text-red-400">${currentItem.high?.toLocaleString() || currentItem.price}</b></span>
+              <span>最低: <b class="text-emerald-400">${currentItem.low?.toLocaleString() || currentItem.price}</b></span>
+              <span>${volLabel}: <b class="text-cyan-300 font-bold">${currentItem.volume}</b></span>
             </div>
           </div>
 
@@ -92,18 +89,18 @@ export const StockMarketWidget = {
           <!-- Chart Legend Overlay -->
           <div id="chart-legend-overlay" class="absolute top-1.5 left-2 text-[9px] text-slate-400 font-mono pointer-events-none flex items-center space-x-2 bg-slate-900/80 px-1.5 py-0.5 rounded backdrop-blur">
             ${state.chartType === 'intraday' ? `
-              <span><span class="text-blue-400">●</span> 即時走勢</span>
-              <span><span class="text-yellow-400">●</span> 均價線</span>
+              <span><span class="text-blue-400">●</span> 走勢線</span>
+              <span><span class="text-yellow-400">●</span> 均價線 (VWAP)</span>
               <span><span class="text-slate-500">┄</span> 昨收平盤 (${(currentItem.prevClose || (currentItem.price - currentItem.change)).toLocaleString()})</span>
             ` : `
-              <span><span class="text-yellow-400">●</span> MA5</span>
-              <span><span class="text-cyan-400">●</span> MA10</span>
-              <span><span class="text-purple-400">●</span> MA20</span>
+              <span><span class="text-yellow-400">●</span> MA5 (週)</span>
+              <span><span class="text-cyan-400">●</span> MA10 (雙週)</span>
+              <span><span class="text-purple-400">●</span> MA20 (月)</span>
             `}
           </div>
 
           <!-- Interactive Tooltip Overlay -->
-          <div id="chart-hover-tooltip" class="absolute top-1.5 right-2 text-[10px] font-mono text-cyan-300 bg-slate-900/90 px-2 py-0.5 rounded border border-slate-700 pointer-events-none hidden">
+          <div id="chart-hover-tooltip" class="absolute top-1.5 right-2 text-[10px] font-mono text-cyan-300 bg-slate-900/90 px-2 py-0.5 rounded border border-slate-700 pointer-events-none hidden shadow">
             --
           </div>
         </div>
@@ -115,13 +112,14 @@ export const StockMarketWidget = {
             const textCol = itemUp ? 'text-red-400' : 'text-emerald-400';
             const isSelected = item.symbol === currentItem.symbol;
             return `
-              <div class="flex-shrink-0 px-2 py-1 rounded-lg cursor-pointer transition-all border ${isSelected ? 'bg-blue-950/70 border-blue-500 shadow-sm' : 'bg-slate-800/40 border-slate-700/40 hover:bg-slate-800'}" data-stock-symbol="${item.symbol}">
+              <div class="flex-shrink-0 px-2.5 py-1 rounded-lg cursor-pointer transition-all border ${isSelected ? 'bg-blue-950/70 border-blue-500 shadow-sm' : 'bg-slate-800/40 border-slate-700/40 hover:bg-slate-800'}" data-stock-symbol="${item.symbol}">
                 <div class="flex items-center justify-between text-[11px] font-semibold space-x-2">
                   <span class="text-slate-200">${item.name}</span>
                   <span class="${textCol} font-mono">${item.price.toLocaleString()}</span>
                 </div>
-                <div class="text-[9px] ${textCol} font-mono text-right mt-0.5">
-                  ${itemUp ? '+' : ''}${item.changePercent.toFixed(2)}%
+                <div class="flex items-center justify-between text-[9px] mt-0.5">
+                  <span class="text-slate-400 font-mono">${item.volume}</span>
+                  <span class="${textCol} font-mono font-bold">${itemUp ? '+' : ''}${item.changePercent.toFixed(2)}%</span>
                 </div>
               </div>
             `;
@@ -130,7 +128,7 @@ export const StockMarketWidget = {
       </div>
     `;
 
-    // Render Canvas with High DPI & Professional Taiwan Layout
+    // Canvas Chart Rendering
     const canvas = container.querySelector('#stock-chart-canvas');
     const tooltip = container.querySelector('#chart-hover-tooltip');
 
@@ -158,13 +156,14 @@ export const StockMarketWidget = {
         }
       };
 
-      // Draw Professional Taiwan Intraday Chart (走勢圖 + 均價線 + 成交量)
+      // Draw Deterministic Intraday Chart (走勢線 + 均價線 + 成交量柱)
       const drawIntraday = (w, h) => {
         const data = StockService.getIntradayHistory(currentItem.symbol);
         const prices = data.prices;
         const vwap = data.vwap;
         const volumes = data.volumes;
         const prevClose = data.prevClose;
+        const unit = data.volUnit || '張';
 
         const priceH = h * 0.70;
         const volH = h * 0.24;
@@ -173,7 +172,7 @@ export const StockMarketWidget = {
         const paddingRight = 48;
         const chartW = w - paddingLeft - paddingRight;
 
-        let maxDiff = Math.max(...prices.map(p => Math.abs(p - prevClose)), prevClose * 0.008);
+        let maxDiff = Math.max(...prices.map(p => Math.abs(p - prevClose)), prevClose * 0.005);
         const maxPrice = prevClose + maxDiff * 1.05;
         const minPrice = prevClose - maxDiff * 1.05;
         const priceRange = maxPrice - minPrice || 1;
@@ -181,6 +180,7 @@ export const StockMarketWidget = {
         const getY = (p) => priceH - ((p - minPrice) / priceRange) * (priceH - 12) - 6;
         const getX = (idx) => paddingLeft + (idx / (prices.length - 1)) * chartW;
 
+        // Grid lines & percentage axis
         const gridSteps = [-maxDiff, -maxDiff * 0.5, 0, maxDiff * 0.5, maxDiff];
         gridSteps.forEach(diff => {
           const p = prevClose + diff;
@@ -206,6 +206,7 @@ export const StockMarketWidget = {
           ctx.fillText(`${diff > 0 ? '+' : ''}${pct}%`, w - paddingRight + 4, y + 3);
         });
 
+        // Price Labels
         ctx.textAlign = 'left';
         ctx.fillStyle = '#f87171';
         ctx.fillText(maxPrice.toFixed(1), paddingLeft + 2, 10);
@@ -214,6 +215,7 @@ export const StockMarketWidget = {
         ctx.fillStyle = '#34d399';
         ctx.fillText(minPrice.toFixed(1), paddingLeft + 2, priceH - 3);
 
+        // Price Area Gradient
         const isUp = currentItem.change >= 0;
         const grad = ctx.createLinearGradient(0, 0, 0, priceH);
         grad.addColorStop(0, isUp ? 'rgba(239, 68, 68, 0.25)' : 'rgba(16, 185, 129, 0.25)');
@@ -232,6 +234,7 @@ export const StockMarketWidget = {
         ctx.fillStyle = grad;
         ctx.fill();
 
+        // VWAP Yellow Curve
         ctx.beginPath();
         vwap.forEach((v, idx) => {
           const x = getX(idx);
@@ -243,6 +246,7 @@ export const StockMarketWidget = {
         ctx.lineWidth = 1.2;
         ctx.stroke();
 
+        // Main Price Curve
         ctx.beginPath();
         prices.forEach((p, idx) => {
           const x = getX(idx);
@@ -254,19 +258,21 @@ export const StockMarketWidget = {
         ctx.lineWidth = 2;
         ctx.stroke();
 
+        // Volume Bars (Deterministic Heights & Correct Directional Colors)
         const maxVol = Math.max(...volumes) || 1;
-        const volBarW = Math.max(2, (chartW / volumes.length) - 1.5);
+        const volBarW = Math.max(2, (chartW / volumes.length) - 1.2);
 
         volumes.forEach((vol, idx) => {
           const x = getX(idx) - volBarW / 2;
           const barH = (vol / maxVol) * (volH - 6);
           const y = h - barH;
-          const isBarUp = idx === 0 ? isUp : prices[idx] >= prices[idx - 1];
+          const isBarUp = idx === 0 ? (prices[0] >= prevClose) : (prices[idx] >= prices[idx - 1]);
 
-          ctx.fillStyle = isBarUp ? 'rgba(239, 68, 68, 0.65)' : 'rgba(34, 197, 94, 0.65)';
+          ctx.fillStyle = isBarUp ? 'rgba(239, 68, 68, 0.7)' : 'rgba(34, 197, 94, 0.7)';
           ctx.fillRect(x, y, volBarW, barH);
         });
 
+        // Time X-Axis Ticks
         const timeTicks = [
           { label: '09:00', idx: 0 },
           { label: '10:30', idx: 18 },
@@ -281,6 +287,7 @@ export const StockMarketWidget = {
           ctx.fillText(t.label, x, volTop - 3);
         });
 
+        // Interactive Crosshair & Tooltip
         if (mouseX >= paddingLeft && mouseX <= paddingLeft + chartW) {
           const hoveredIdx = Math.min(prices.length - 1, Math.max(0, Math.round(((mouseX - paddingLeft) / chartW) * (prices.length - 1))));
           const hX = getX(hoveredIdx);
@@ -299,19 +306,20 @@ export const StockMarketWidget = {
           const diffP = curP - prevClose;
           const diffPct = ((diffP / prevClose) * 100).toFixed(2);
           tooltip.classList.remove('hidden');
-          tooltip.innerHTML = `🕒 ${data.timeLabels[hoveredIdx]} | <b>${curP.toFixed(2)}</b> (${diffP >= 0 ? '+' : ''}${diffPct}%) | 量: ${volumes[hoveredIdx]}`;
+          tooltip.innerHTML = `🕒 ${data.timeLabels[hoveredIdx]} | <b>${curP.toFixed(2)}</b> (${diffP >= 0 ? '+' : ''}${diffPct}%) | 量: <b>${volumes[hoveredIdx]} ${unit}</b>`;
         } else {
           tooltip.classList.add('hidden');
         }
       };
 
-      // Draw Professional Taiwan Candlestick K-Line Chart (日K棒 + MA5/10/20 + 成交量)
+      // Draw Candlestick K-Line Chart (日K棒 + MA5/10/20 + 成交量柱)
       const drawKline = (w, h) => {
         const data = StockService.getDailyKLines(currentItem.symbol);
         const klines = data.klines;
         const ma5 = data.ma5;
         const ma10 = data.ma10;
         const ma20 = data.ma20;
+        const unit = data.volUnit || '張';
 
         const priceH = h * 0.70;
         const volH = h * 0.24;
@@ -414,7 +422,7 @@ export const StockMarketWidget = {
           ctx.setLineDash([]);
 
           tooltip.classList.remove('hidden');
-          tooltip.innerHTML = `📅 ${k.date} | 開:${k.open} 高:${k.high} 低:${k.low} 收:<b>${k.close}</b>`;
+          tooltip.innerHTML = `📅 ${k.date} | 開:${k.open} 高:${k.high} 低:${k.low} 收:<b>${k.close}</b> | 量: <b>${k.volume} ${unit}</b>`;
         } else {
           tooltip.classList.add('hidden');
         }
@@ -437,7 +445,6 @@ export const StockMarketWidget = {
     // Trigger online fetch in background
     StockService.fetchLiveStockData(state.selectedSymbol).then(res => {
       if (res && canvas) {
-        // Redraw with live fetched data
         window.dispatchEvent(new Event('resize'));
       }
     });
