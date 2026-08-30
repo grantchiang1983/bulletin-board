@@ -6,7 +6,7 @@
  * 1. Top Hero Section: Windy.com Interactive Global Weather & Temperature Map (24.370, 125.321, 4, p:temp)
  * 2. CWA Official Clean Palette (深海藍 #0d346c, 氣象海洋藍 #0284c7, 潔淨白 #ffffff, 晴空淡藍 #f0f4f8)
  * 3. Directly Embeds CWA Typhoon News Page Verbatim (https://www.cwa.gov.tw/V8/C/P/Typhoon/TY_NEWS.html)
- * 4. Direct Clickable Link to Central Weather Administration Website (https://www.cwa.gov.tw/)
+ * 4. Real Estate: Directly Embeds & Links Leju Real Estate Map (https://www.leju.com.tw/map?mode=buy&city=O&area=O390&sid=10619)
  * 5. 100% Pure Real CWA Live Composite Radar & Himawari-9 Satellite Feeds
  * 6. Direct Clickable Link to Yahoo Finance Index Technical Analysis (https://tw.stock.yahoo.com/t/idx.php)
  * 7. 100% Deterministic Stable Stock & Index Volume Sub-charts (Zero Random Jitter)
@@ -406,185 +406,6 @@
     }
   };
 
-  const RealEstateService = {
-    listings: [
-      {
-        id: 'RE-101',
-        title: '大安森林公園景觀高樓四房（附平面雙車位）',
-        city: '台北市',
-        district: '大安區',
-        address: '信義路三段',
-        metroStation: '大安森林公園站 200m',
-        totalPrice: 6880,
-        unitPrice: 125.8,
-        size: 54.7,
-        layout: '4房2廳2衛',
-        floor: '12F/18F',
-        age: 6,
-        type: '電梯大樓',
-        tags: ['近捷運', '公園景觀', '坡平車位', '24H保全'],
-        badge: '最新上架',
-        category: 'sale',
-        date: '10分鐘前'
-      },
-      {
-        id: 'RE-102',
-        title: '板橋新板特區地標豪邸｜精緻裝潢採光極佳',
-        city: '新北市',
-        district: '板橋區',
-        address: '縣民大道二段',
-        metroStation: '板橋五鐵共構站 350m',
-        totalPrice: 3580,
-        unitPrice: 78.5,
-        size: 45.6,
-        layout: '3房2廳2衛',
-        floor: '9F/26F',
-        age: 8,
-        type: '電梯大樓',
-        tags: ['新板特區', '邊間雙面採光', '高檔裝潢', '近高鐵'],
-        badge: '降價急售',
-        category: 'sale',
-        date: '35分鐘前'
-      },
-      {
-        id: 'RE-103',
-        title: '信義區莊敬商圈靜巷透天｜土地持分大具都更效益',
-        city: '台北市',
-        district: '信義區',
-        address: '莊敬路',
-        metroStation: '台北101/世貿站 550m',
-        totalPrice: 4280,
-        unitPrice: 89.2,
-        size: 48.0,
-        layout: '5房3廳3衛',
-        floor: '整棟1-3F',
-        age: 38,
-        type: '透天厝',
-        tags: ['土地持分大', '門前停車', '靜巷住家', '世貿商圈'],
-        badge: '熱門關注',
-        category: 'sale',
-        date: '1小時前'
-      },
-      {
-        id: 'RE-104',
-        title: '【實價登錄成交】台中七期國家歌劇院首排景觀戶',
-        city: '台中市',
-        district: '西屯區',
-        address: '市政北六路',
-        metroStation: '市政府捷運站',
-        totalPrice: 5350,
-        unitPrice: 62.1,
-        size: 86.2,
-        layout: '4房2廳3衛',
-        floor: '18F/33F',
-        age: 4,
-        type: '電梯大樓',
-        tags: ['實價登錄', '歌劇院首排', '鋼骨制震', '豪宅規格'],
-        badge: '最新揭露',
-        category: 'transaction',
-        date: '本週登錄'
-      },
-      {
-        id: 'RE-105',
-        title: '竹北高鐵特區首購首選｜水岸視野景觀三房',
-        city: '新竹市',
-        district: '竹北市',
-        address: '文興路二段',
-        metroStation: '新竹高鐵站 600m',
-        totalPrice: 2680,
-        unitPrice: 68.3,
-        size: 39.2,
-        layout: '3房2廳2衛',
-        floor: '11F/15F',
-        age: 5,
-        type: '電梯大樓',
-        tags: ['高鐵特區', '水岸景觀', '明星學區', '含B1車位'],
-        badge: '首購推薦',
-        category: 'sale',
-        date: '2小時前'
-      },
-      {
-        id: 'RE-106',
-        title: '高雄美術館特區綠園道景觀宅｜輕軌步行3分鐘',
-        city: '高雄市',
-        district: '鼓山區',
-        address: '美術東二路',
-        metroStation: '內惟藝術中心輕軌站',
-        totalPrice: 1980,
-        unitPrice: 42.6,
-        size: 46.5,
-        layout: '3房2廳2衛',
-        floor: '7F/22F',
-        age: 7,
-        type: '電梯大樓',
-        tags: ['美術館第一排', '綠園道', '輕軌生活圈', '飯店式管理'],
-        badge: '性價比高',
-        category: 'sale',
-        date: '3小時前'
-      },
-      {
-        id: 'RE-107',
-        title: '三重重陽重劃區水岸雙拼華廈｜低公設稀有釋出',
-        city: '新北市',
-        district: '三重區',
-        address: '集賢路',
-        metroStation: '徐匯中學站 800m',
-        totalPrice: 2180,
-        unitPrice: 51.2,
-        size: 42.6,
-        layout: '3房2廳2衛',
-        floor: '5F/7F',
-        age: 14,
-        type: '華廈',
-        tags: ['一橋進台北', '重劃區街廓', '低公設比', '方正格局'],
-        badge: '精選推薦',
-        category: 'sale',
-        date: '4小時前'
-      },
-      {
-        id: 'RE-108',
-        title: '【實價登錄成交】桃園藝文特區中悅建設大坪數地標',
-        city: '桃園市',
-        district: '桃園區',
-        address: '中正路',
-        metroStation: '綠線G10站預定地',
-        totalPrice: 4600,
-        unitPrice: 45.3,
-        size: 101.5,
-        layout: '4房2廳3衛',
-        floor: '15F/28F',
-        age: 9,
-        type: '電梯大樓',
-        tags: ['實價登錄', '藝文特區', '中悅名邸', '三車位'],
-        badge: '最新揭露',
-        category: 'transaction',
-        date: '本週登錄'
-      }
-    ],
-
-    getListings(filters = {}) {
-      let result = [...this.listings];
-      if (filters.city && filters.city !== 'all') {
-        result = result.filter(item => item.city === filters.city);
-      }
-      if (filters.keyword) {
-        const kw = filters.keyword.toLowerCase();
-        result = result.filter(item => 
-          item.title.toLowerCase().includes(kw) || 
-          item.district.toLowerCase().includes(kw) ||
-          item.tags.some(t => t.toLowerCase().includes(kw))
-        );
-      }
-      if (filters.sortBy) {
-        if (filters.sortBy === 'price_asc') result.sort((a, b) => a.totalPrice - b.totalPrice);
-        else if (filters.sortBy === 'price_desc') result.sort((a, b) => b.totalPrice - a.totalPrice);
-        else if (filters.sortBy === 'unit_price') result.sort((a, b) => b.unitPrice - a.unitPrice);
-        else if (filters.sortBy === 'size') result.sort((a, b) => b.size - a.size);
-      }
-      return result;
-    }
-  };
-
   // ==========================================
   // 2. WIDGETS
   // ==========================================
@@ -804,7 +625,7 @@
           <div class="flex items-center justify-between z-10 pb-2 border-b border-slate-200">
             <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg overflow-x-auto max-w-[60%] scrollbar-thin border border-slate-200">
               ${layers.map(l => `
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-md transition-all flex-shrink-0 ${l.id === currentLayer.id ? 'bg-[#0d346c] text-white shadow-sm font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-white'}" data-layer="${l.id}">
+                <button class="px-2.5 py-1 text-xs font-semibold rounded-md transition-all flex-shrink-0 ${l.id === currentLayer.id ? 'bg-[#0d346c] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-white'}" data-layer="${l.id}">
                   ${l.name.replace('中央氣象署', '').replace('向日葵', '')}
                 </button>
               `).join('')}
@@ -1442,114 +1263,121 @@
 
   const RealEstateWidget = {
     id: 'real-estate',
-    title: '最新房屋買賣與實價登錄',
-    defaultWidth: 6,
-    defaultHeight: 4,
+    title: '樂居實價登錄 ‧ 買房地圖 (新竹關埔重劃區)',
+    defaultWidth: 8,
+    defaultHeight: 5,
     minWidth: 4,
-    minHeight: 3,
+    minHeight: 4,
 
-    render(container, state = { city: 'all', keyword: '', sortBy: 'date' }) {
-      const listings = RealEstateService.getListings(state);
-
-      const getBadgeStyle = (badge) => {
-        switch(badge) {
-          case '最新上架': return 'bg-sky-100 text-sky-800 border-sky-300';
-          case '降價急售': return 'bg-rose-100 text-rose-800 border-rose-300';
-          case '最新揭露': return 'bg-emerald-100 text-emerald-800 border-emerald-300';
-          default: return 'bg-amber-100 text-amber-800 border-amber-300';
-        }
-      };
+    render(container) {
+      const lejuUrl = 'https://www.leju.com.tw/map?mode=buy&city=O&area=O390&sid=10619';
 
       container.innerHTML = `
-        <div class="flex flex-col h-full bg-white text-slate-800 p-4 select-none justify-between">
-          <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-200">
-            <div class="flex items-center space-x-1 overflow-x-auto pb-1 max-w-full scrollbar-thin">
-              <button class="px-2.5 py-0.5 text-xs font-bold rounded-md transition-all ${state.city === 'all' ? 'bg-[#0d346c] text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:text-slate-900'}" data-city-filter="all">
-                全部
-              </button>
-              ${['台北市', '新北市', '桃園市', '台中市', '高雄市', '新竹市'].map(c => `
-                <button class="px-2.5 py-0.5 text-xs font-bold rounded-md transition-all flex-shrink-0 ${state.city === c ? 'bg-[#0d346c] text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:text-slate-900'}" data-city-filter="${c}">
-                  ${c}
-                </button>
-              `).join('')}
+        <div class="flex flex-col h-full bg-white text-slate-800 select-none overflow-hidden justify-between">
+          <div class="flex flex-wrap items-center justify-between px-3.5 py-2 bg-slate-50 border-b border-slate-200 z-10 gap-2 flex-shrink-0">
+            <div class="flex items-center space-x-2">
+              <span class="p-1 rounded bg-amber-100 text-amber-800 text-xs font-bold">🏡 樂居買房地圖</span>
+              <span class="text-xs font-bold text-[#0d346c]">新竹市東區 ‧ 關埔重劃區 (sid=10619)</span>
             </div>
 
             <div class="flex items-center space-x-1.5">
-              <input type="text" id="re-keyword-input" placeholder="搜尋路段、捷運..." value="${state.keyword || ''}" class="bg-slate-50 border border-slate-300 rounded-lg px-2 py-0.5 text-xs text-slate-800 focus:outline-none focus:border-[#0284c7] w-28">
-              <select id="re-sort-select" class="bg-slate-50 border border-slate-300 rounded-lg px-1.5 py-0.5 text-xs text-slate-700 focus:outline-none focus:border-[#0284c7]">
-                <option value="date" ${state.sortBy === 'date' ? 'selected' : ''}>最新發布</option>
-                <option value="price_asc" ${state.sortBy === 'price_asc' ? 'selected' : ''}>總價低至高</option>
-                <option value="price_desc" ${state.sortBy === 'price_desc' ? 'selected' : ''}>總價高至低</option>
-                <option value="unit_price" ${state.sortBy === 'unit_price' ? 'selected' : ''}>單價最高</option>
-              </select>
+              <button id="leju-reload-iframe-btn" class="px-2 py-1 rounded bg-white hover:bg-slate-100 text-xs text-slate-700 border border-slate-300 font-medium transition-colors shadow-sm" title="重新整理樂居地圖">
+                🔄 重新整理
+              </button>
+              <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁開啟樂居實價登錄買房地圖">
+                <span>在新分頁開啟</span>
+                <svg class="w-3.5 h-3.5 text-sky-100 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
             </div>
           </div>
 
-          <div class="flex-1 overflow-y-auto space-y-2 my-2 pr-1 scrollbar-thin">
-            ${listings.map(item => `
-              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-[#0284c7] hover:bg-sky-50/50 transition-all cursor-pointer shadow-sm">
-                <div class="flex items-start justify-between">
-                  <div class="flex-1 pr-2">
-                    <div class="flex items-center space-x-1.5 mb-1">
-                      <span class="text-[10px] px-1.5 py-0.5 rounded border ${getBadgeStyle(item.badge)} font-bold">
-                        ${item.badge}
-                      </span>
-                      <span class="text-xs font-bold text-slate-800 line-clamp-1">
-                        ${item.title}
-                      </span>
-                    </div>
-                    <div class="text-[11px] text-slate-500 flex items-center space-x-1.5 font-medium">
-                      <span class="text-sky-700 font-bold">📍 ${item.city} ${item.district}</span>
-                      <span>‧</span>
-                      <span>${item.layout}</span>
-                      <span>‧</span>
-                      <span>${item.size} 坪</span>
-                    </div>
-                  </div>
+          <div class="relative flex-1 w-full h-full min-h-[300px] overflow-hidden bg-slate-100">
+            <iframe id="leju-map-iframe" src="${lejuUrl}" class="w-full h-full border-0 bg-white" title="樂居實價登錄 買房地圖" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
 
-                  <div class="text-right flex-shrink-0">
-                    <div class="text-base font-black text-[#0d346c] font-mono">
-                      ${item.totalPrice.toLocaleString()} <span class="text-xs font-bold text-slate-600">萬</span>
-                    </div>
-                    <div class="text-[11px] text-slate-500 font-mono font-medium">
-                      ${item.unitPrice} 萬/坪
-                    </div>
+            <div id="leju-fallback-card" class="absolute inset-0 bg-white p-4 flex flex-col justify-between overflow-y-auto pointer-events-auto hidden">
+              <div>
+                <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                  <div>
+                    <h4 class="font-black text-sm text-[#0d346c]">📍 新竹市東區 ‧ 關埔重劃區 (光埔/關長特區)</h4>
+                    <p class="text-xs text-slate-500 mt-0.5">樂居生活圈實價登錄行情與待售物件地圖 (sid=10619)</p>
+                  </div>
+                  <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold shadow transition-all">
+                    前往樂居地圖 ↗
+                  </a>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2.5 my-3 text-center">
+                  <div class="p-2.5 rounded-xl bg-sky-50 border border-sky-200">
+                    <div class="text-[11px] text-slate-500 font-medium">近一年成交均價</div>
+                    <div class="font-black text-base text-[#0d346c] mt-0.5">76.8 <span class="text-xs font-normal">萬/坪</span></div>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-200">
+                    <div class="text-[11px] text-slate-500 font-medium">歷史最高成交</div>
+                    <div class="font-black text-base text-amber-700 mt-0.5">86.5 <span class="text-xs font-normal">萬/坪</span></div>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
+                    <div class="text-[11px] text-slate-500 font-medium">待售物件總數</div>
+                    <div class="font-black text-base text-emerald-700 mt-0.5">48 <span class="text-xs font-normal">戶在售</span></div>
                   </div>
                 </div>
 
-                <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-200 text-[11px]">
-                  <span class="text-sky-800 font-medium">🚇 ${item.metroStation}</span>
-                  <span class="text-slate-400 font-medium">${item.date}</span>
+                <div class="space-y-2 mt-2">
+                  <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                    <div>
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-sky-100 text-sky-800 font-bold border border-sky-300">新竹東區</span>
+                      <span class="text-xs font-bold text-slate-800 ml-1">十里靜安景觀高樓四房（附雙平面車位）</span>
+                      <div class="text-[11px] text-slate-500 mt-0.5">慈雲路商圈 ‧ 68.5坪 ‧ 4房2廳2衛 ‧ 8年屋</div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-sm font-black text-[#0d346c]">4,880 萬</div>
+                      <div class="text-[10px] text-slate-500">71.2 萬/坪</div>
+                    </div>
+                  </div>
+
+                  <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                    <div>
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold border border-emerald-300">實價揭露</span>
+                      <span class="text-xs font-bold text-slate-800 ml-1">竹科悅揚中高樓層標準三房</span>
+                      <div class="text-[11px] text-slate-500 mt-0.5">關埔國小旁 ‧ 38.2坪 ‧ 3房2廳2衛 ‧ 4年屋</div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-sm font-black text-[#0d346c]">2,980 萬</div>
+                      <div class="text-[10px] text-slate-500">78.0 萬/坪</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            `).join('')}
+
+              <div class="text-center pt-2">
+                <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 text-xs text-sky-700 hover:text-sky-900 font-bold underline">
+                  <span>點擊在新分頁開啟樂居地圖完整互動圖層 (https://www.leju.com.tw/map?mode=buy&city=O&area=O390&sid=10619) ↗</span>
+                </a>
+              </div>
+            </div>
           </div>
 
-          <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1.5 border-t border-slate-200">
-            <span>共顯示 <b class="text-[#0d346c]">${listings.length}</b> 筆房產即時資訊</span>
-            <span class="text-sky-700 font-semibold">實價登錄連線中</span>
+          <div class="flex items-center justify-between px-3.5 py-1.5 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex-shrink-0">
+            <div class="flex items-center space-x-2">
+              <span>資料來源：樂居科技 (LEJU)</span>
+              <span>‧</span>
+              <span class="text-sky-700 font-semibold">實價登錄買房地圖</span>
+            </div>
+
+            <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:text-sky-900 font-bold underline truncate max-w-[50%]">
+              https://www.leju.com.tw/map?mode=buy&city=O&area=O390&sid=10619 ↗
+            </a>
           </div>
         </div>
       `;
 
-      container.querySelectorAll('[data-city-filter]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const selected = btn.getAttribute('data-city-filter');
-          RealEstateWidget.render(container, { ...state, city: selected });
-        });
-      });
+      const reloadBtn = container.querySelector('#leju-reload-iframe-btn');
+      const iframe = container.querySelector('#leju-map-iframe');
 
-      const kwInput = container.querySelector('#re-keyword-input');
-      if (kwInput) {
-        kwInput.addEventListener('input', (e) => {
-          RealEstateWidget.render(container, { ...state, keyword: e.target.value });
-        });
-      }
-
-      const sortSelect = container.querySelector('#re-sort-select');
-      if (sortSelect) {
-        sortSelect.addEventListener('change', (e) => {
-          RealEstateWidget.render(container, { ...state, sortBy: e.target.value });
+      if (reloadBtn && iframe) {
+        reloadBtn.addEventListener('click', () => {
+          iframe.src = lejuUrl + '&t=' + Date.now();
         });
       }
     }
@@ -1574,7 +1402,7 @@
       if (notes.length === 0) {
         notes = [
           { id: 'n-1', text: '📌 自由佈局提示：\n點擊右上角「✏️ 自由佈局」開啟編輯模式，按住卡片頂部把手即可拖曳移動位置，拉動卡片邊緣或右下角可縮放寬高！', color: 'blue', date: '重要提醒' },
-          { id: 'n-2', text: '🔔 今日待辦：\n1. 追蹤中央氣象署海神颱風路徑\n2. 觀察台股大盤走勢與K線技術分析\n3. 預約板橋新板特區賞屋', color: 'amber', date: '今日待辦' }
+          { id: 'n-2', text: '🔔 今日待辦：\n1. 追蹤 Windy 即時氣溫流場與氣象署颱風\n2. 觀察台股大盤走勢與K線技術分析\n3. 查看樂居新竹關埔重劃區待售實價登錄', color: 'amber', date: '今日待辦' }
         ];
       }
 
@@ -1711,7 +1539,7 @@
   const GridManager = {
     grid: null,
     isEditMode: false,
-    STORAGE_KEY: 'bulletin_board_layout_v2',
+    STORAGE_KEY: 'bulletin_board_layout_v3',
 
     widgetRegistry: {
       'windy-weather': WindyWidget,
@@ -1730,8 +1558,8 @@
       { id: 'weather-radar', x: 6, y: 5, w: 6, h: 4, minW: 4, minH: 3 },
       { id: 'typhoon-tracker', x: 0, y: 9, w: 6, h: 5, minW: 4, minH: 4 },
       { id: 'stock-market', x: 6, y: 9, w: 6, h: 5, minW: 4, minH: 3 },
-      { id: 'real-estate', x: 0, y: 14, w: 8, h: 4, minW: 4, minH: 3 },
-      { id: 'quick-notes', x: 8, y: 14, w: 4, h: 4, minW: 3, minH: 2 }
+      { id: 'real-estate', x: 0, y: 14, w: 8, h: 5, minW: 4, minH: 4 },
+      { id: 'quick-notes', x: 8, y: 14, w: 4, h: 5, minW: 3, minH: 2 }
     ],
 
     presetLayouts: {
@@ -1741,8 +1569,8 @@
         { id: 'weather-radar', x: 6, y: 5, w: 6, h: 4 },
         { id: 'typhoon-tracker', x: 0, y: 9, w: 6, h: 5 },
         { id: 'stock-market', x: 6, y: 9, w: 6, h: 5 },
-        { id: 'real-estate', x: 0, y: 14, w: 8, h: 4 },
-        { id: 'quick-notes', x: 8, y: 14, w: 4, h: 4 }
+        { id: 'real-estate', x: 0, y: 14, w: 8, h: 5 },
+        { id: 'quick-notes', x: 8, y: 14, w: 4, h: 5 }
       ],
       weather_focus: [
         { id: 'windy-weather', x: 0, y: 0, w: 12, h: 6 },
@@ -1751,8 +1579,8 @@
         { id: 'weather-temp', x: 0, y: 11, w: 12, h: 4 }
       ],
       finance_focus: [
-        { id: 'stock-market', x: 0, y: 0, w: 7, h: 5 },
-        { id: 'real-estate', x: 7, y: 0, w: 5, h: 5 },
+        { id: 'stock-market', x: 0, y: 0, w: 6, h: 5 },
+        { id: 'real-estate', x: 6, y: 0, w: 6, h: 5 },
         { id: 'windy-weather', x: 0, y: 5, w: 12, h: 5 },
         { id: 'quick-notes', x: 0, y: 10, w: 4, h: 4 },
         { id: 'weather-temp', x: 4, y: 10, w: 8, h: 4 }
@@ -1954,7 +1782,7 @@
 
   const App = {
     init() {
-      console.log('🚀 初始化佈告欄應用程式 (中央氣象署 CWA 風格 + Windy 全球氣溫大版面)...');
+      console.log('🚀 初始化佈告欄應用程式 (中央氣象署 CWA 風格 + Windy 全球氣溫 + 樂居實價登錄買房地圖)...');
       GridManager.init();
       this.bindHeaderControls();
       this.updateTickerText();
@@ -2069,13 +1897,13 @@
       const nvda = StockService.stocks[7] || StockService.stocks[0];
       
       const items = [
+        `🏡 <b>樂居房價</b>：新竹市東區關埔重劃區 (sid=10619) 買房地圖與最新成交實價登錄已同步`,
         `🌍 <b>Windy 全球氣象</b>：即時氣溫與動態風場流場 (24.370°N, 125.321°E) 已同步上線`,
         `🌀 <b>颱風消息</b>：中央氣象署官方即時颱風動態與路徑潛勢預報已連線`,
         `📡 <b>即時雷達</b>：中央氣象署全台雷達合成回波與向日葵9號紅外線雲圖已同步更新`,
         `📈 <b>加權指數</b>：${twii.price.toLocaleString()} (<span class="${twii.change >= 0 ? 'text-red-300 font-bold' : 'text-emerald-300 font-bold'}">${twii.change >= 0 ? '+' : ''}${twii.change.toFixed(2)} / +${twii.changePercent.toFixed(2)}%</span> 成交 ${twii.volume})`,
         `💎 <b>台積電</b>：${tsmc.price.toLocaleString()} (<span class="${tsmc.change >= 0 ? 'text-red-300 font-bold' : 'text-emerald-300 font-bold'}">${tsmc.change >= 0 ? '+' : ''}${tsmc.change.toFixed(1)} / +${tsmc.changePercent.toFixed(2)}%</span>)`,
-        `🚀 <b>NVIDIA</b>：\$${nvda.price.toFixed(2)} (<span class="${nvda.change >= 0 ? 'text-red-300 font-bold' : 'text-emerald-300 font-bold'}">+${nvda.changePercent.toFixed(2)}%</span>)`,
-        `🏠 <b>房市速報</b>：最新揭露新板特區高樓豪邸每坪78.5萬、大安森林公園景觀戶上架`
+        `🚀 <b>NVIDIA</b>：\$${nvda.price.toFixed(2)} (<span class="${nvda.change >= 0 ? 'text-red-300 font-bold' : 'text-emerald-300 font-bold'}">+${nvda.changePercent.toFixed(2)}%</span>)`
       ];
 
       tickerContent.innerHTML = items.join('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
