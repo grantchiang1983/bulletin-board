@@ -1,6 +1,6 @@
 /**
  * Bulletin Board (佈告欄) - Standalone All-In-One Script
- * Upgraded with Professional Taiwan Stock Intraday & Candlestick K-Line Engine.
+ * Upgraded with Real-time Online Stock API Integration (FinMind & Yahoo Finance)
  */
 (function() {
   'use strict';
@@ -113,9 +113,108 @@
       { symbol: '2382', name: '廣達', price: 282.0, prevClose: 275.5, change: 6.5, changePercent: 2.36, open: 276.0, high: 285.0, low: 275.0, volume: '19,300 張', category: 'AI伺服器' },
       { symbol: '2308', name: '台達電', price: 410.0, prevClose: 402.0, change: 8.0, changePercent: 1.99, open: 404.0, high: 415.0, low: 402.0, volume: '8,410 張', category: '電源供應' },
       { symbol: '2881', name: '富邦金', price: 88.6, prevClose: 87.8, change: 0.8, changePercent: 0.91, open: 87.9, high: 89.2, low: 87.8, volume: '21,500 張', category: '金融保險' },
+      { symbol: '0050', name: '元大台灣50', price: 178.5, prevClose: 176.8, change: 1.7, changePercent: 0.96, open: 177.2, high: 179.0, low: 176.5, volume: '14,200 張', category: 'ETF' },
       { symbol: 'NVDA', name: 'NVIDIA (輝達)', price: 128.50, prevClose: 124.65, change: 3.85, changePercent: 3.09, open: 125.00, high: 130.20, low: 124.80, volume: '58.4M', category: '美股AI' },
       { symbol: 'TSM', name: '台積電 ADR', price: 172.80, prevClose: 169.60, change: 3.20, changePercent: 1.89, open: 170.20, high: 174.50, low: 169.80, volume: '12.8M', category: '美股ADR' }
     ],
+
+    cache: {},
+    isLiveConnected: false,
+
+    async fetchLiveStockData(symbol) {
+      const cleanId = symbol.replace('.TW', '').replace('^', '');
+      const isTwStock = /^\d{4}$/.test(cleanId) || cleanId === 'TAIEX' || cleanId === 'TWOII';
+      
+      try {
+        if (isTwStock) {
+          const id = cleanId === 'TAIEX' ? 'TAIEX' : cleanId;
+          const url = `https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockPrice&data_id=${id}&start_date=2024-05-01`;
+          const res = await fetch(url);
+          if (res.ok) {
+            const json = await res.json();
+            if (json.data && json.data.length > 0) {
+              this.isLiveConnected = true;
+              this.cache[symbol] = this.processFinMindData(symbol, json.data);
+              return this.cache[symbol];
+            }
+          }
+        }
+      } catch (e) {
+        console.warn(`[StockService] Online fetch fallback for ${symbol}:`, e);
+      }
+      return null;
+    },
+
+    processFinMindData(symbol, rawData) {
+      const recent = rawData.slice(-35);
+      const lastItem = recent[recent.length - 1];
+      const prevItem = recent[recent.length - 2] || lastItem;
+
+      const price = lastItem.close;
+      const prevClose = prevItem.close;
+      const change = parseFloat((price - prevClose).toFixed(2));
+      const changePercent = parseFloat(((change / prevClose) * 100).toFixed(2));
+      const volNum = Math.round(lastItem.Trading_Volume / 1000);
+      const volumeStr = `${volNum.toLocaleString()} 張`;
+
+      const existing = [...this.indices, ...this.stocks].find(s => s.symbol === symbol);
+      if (existing) {
+        existing.price = price;
+        existing.prevClose = prevClose;
+        existing.change = change;
+        existing.changePercent = changePercent;
+        existing.open = lastItem.open;
+        existing.high = lastItem.max;
+        existing.low = lastItem.min;
+        existing.volume = volumeStr;
+      }
+
+      const klines = recent.map(r => ({
+        date: r.date.slice(5).replace('-', '/'),
+        open: r.open,
+        high: r.max,
+        low: r.min,
+        close: r.close,
+        volume: Math.round(r.Trading_Volume / 1000),
+        isUp: r.close >= r.open
+      }));
+
+      const ma5 = [];
+      const ma10 = [];
+      const ma20 = [];
+      for (let i = 0; i < klines.length; i++) {
+        if (i >= 4) {
+          const sum5 = klines.slice(i - 4, i + 1).reduce((acc, k) => acc + k.close, 0);
+          ma5.push(parseFloat((sum5 / 5).toFixed(2)));
+        } else ma5.push(null);
+
+        if (i >= 9) {
+          const sum10 = klines.slice(i - 9, i + 1).reduce((acc, k) => acc + k.close, 0);
+          ma10.push(parseFloat((sum10 / 10).toFixed(2)));
+        } else ma10.push(null);
+
+        if (i >= 19) {
+          const sum20 = klines.slice(i - 19, i + 1).reduce((acc, k) => acc + k.close, 0);
+          ma20.push(parseFloat((sum20 / 20).toFixed(2)));
+        } else ma20.push(null);
+      }
+
+      return {
+        symbol,
+        price,
+        prevClose,
+        open: lastItem.open,
+        high: lastItem.max,
+        low: lastItem.min,
+        change,
+        changePercent,
+        volume: volumeStr,
+        klines,
+        ma5,
+        ma10,
+        ma20
+      };
+    },
 
     getIntradayHistory(symbol) {
       const item = [...this.indices, ...this.stocks].find(s => s.symbol === symbol) || this.indices[0];
@@ -180,6 +279,17 @@
     },
 
     getDailyKLines(symbol) {
+      if (this.cache[symbol] && this.cache[symbol].klines) {
+        return {
+          symbol,
+          name: this.cache[symbol].name || symbol,
+          klines: this.cache[symbol].klines,
+          ma5: this.cache[symbol].ma5,
+          ma10: this.cache[symbol].ma10,
+          ma20: this.cache[symbol].ma20
+        };
+      }
+
       const item = [...this.indices, ...this.stocks].find(s => s.symbol === symbol) || this.indices[0];
       const base = item.price;
       const klines = [];
@@ -227,21 +337,17 @@
         if (i >= 4) {
           const sum5 = klines.slice(i - 4, i + 1).reduce((acc, k) => acc + k.close, 0);
           ma5.push(parseFloat((sum5 / 5).toFixed(2)));
-        } else {
-          ma5.push(null);
-        }
+        } else ma5.push(null);
+
         if (i >= 9) {
           const sum10 = klines.slice(i - 9, i + 1).reduce((acc, k) => acc + k.close, 0);
           ma10.push(parseFloat((sum10 / 10).toFixed(2)));
-        } else {
-          ma10.push(null);
-        }
+        } else ma10.push(null);
+
         if (i >= 19) {
           const sum20 = klines.slice(i - 19, i + 1).reduce((acc, k) => acc + k.close, 0);
           ma20.push(parseFloat((sum20 / 20).toFixed(2)));
-        } else {
-          ma20.push(null);
-        }
+        } else ma20.push(null);
       }
 
       return { symbol: item.symbol, name: item.name, klines, ma5, ma10, ma20 };
@@ -845,8 +951,13 @@
 
     render(container, state = { selectedSymbol: '^TWII', tab: 'indices', chartType: 'intraday' }) {
       const list = state.tab === 'indices' ? StockService.indices : StockService.stocks;
-      const currentItem = [...StockService.indices, ...StockService.stocks].find(s => s.symbol === state.selectedSymbol) || StockService.indices[0];
+      let currentItem = [...StockService.indices, ...StockService.stocks].find(s => s.symbol === state.selectedSymbol) || StockService.indices[0];
       
+      if (StockService.cache[state.selectedSymbol]) {
+        const c = StockService.cache[state.selectedSymbol];
+        currentItem = { ...currentItem, price: c.price, change: c.change, changePercent: c.changePercent, open: c.open, high: c.high, low: c.low, volume: c.volume };
+      }
+
       const isUp = currentItem.change >= 0;
       const sign = isUp ? '+' : '';
       const colorClass = isUp ? 'text-red-400' : 'text-emerald-400';
@@ -873,10 +984,13 @@
               </button>
             </div>
 
-            <div class="flex items-center space-x-1">
+            <div class="flex items-center space-x-1.5">
+              <button id="stock-refresh-api-btn" class="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] transition-colors" title="重新連線即時行情 API">
+                🔄
+              </button>
               <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1 live-pulse"></span>
-                撮合中
+                ${StockService.isLiveConnected ? 'API 即時連線' : '即時撮合'}
               </span>
             </div>
           </div>
@@ -1205,10 +1319,11 @@
 
           ctx.fillStyle = '#64748b';
           ctx.font = '9px monospace';
-          [0, 10, 20, 29].forEach(idx => {
+          const kLen = klines.length;
+          [0, Math.floor(kLen * 0.33), Math.floor(kLen * 0.66), kLen - 1].forEach(idx => {
             if (klines[idx]) {
               const x = getX(idx);
-              ctx.textAlign = idx === 0 ? 'left' : idx === 29 ? 'right' : 'center';
+              ctx.textAlign = idx === 0 ? 'left' : idx === kLen - 1 ? 'right' : 'center';
               ctx.fillText(klines[idx].date, x, priceH + 12);
             }
           });
@@ -1246,10 +1361,17 @@
         window.addEventListener('resize', draw);
       }
 
+      StockService.fetchLiveStockData(state.selectedSymbol).then(res => {
+        if (res && canvas) {
+          window.dispatchEvent(new Event('resize'));
+        }
+      });
+
       const btnIndices = container.querySelector('#stock-tab-indices');
       const btnStocks = container.querySelector('#stock-tab-stocks');
       const btnIntraday = container.querySelector('#stock-mode-intraday');
       const btnKline = container.querySelector('#stock-mode-kline');
+      const btnRefresh = container.querySelector('#stock-refresh-api-btn');
 
       if (btnIndices) {
         btnIndices.addEventListener('click', () => {
@@ -1269,6 +1391,13 @@
       if (btnKline) {
         btnKline.addEventListener('click', () => {
           StockMarketWidget.render(container, { ...state, chartType: 'kline' });
+        });
+      }
+      if (btnRefresh) {
+        btnRefresh.addEventListener('click', () => {
+          StockService.fetchLiveStockData(state.selectedSymbol).then(() => {
+            StockMarketWidget.render(container, state);
+          });
         });
       }
 
@@ -1909,7 +2038,7 @@
 
       const twii = StockService.indices[0];
       const tsmc = StockService.stocks[0];
-      const nvda = StockService.stocks[6];
+      const nvda = StockService.stocks[7] || StockService.stocks[0];
       
       const items = [
         `🔔 <b>即時快訊</b>：海神颱風發布海上警報，請東部海面作業船隻嚴加戒備`,

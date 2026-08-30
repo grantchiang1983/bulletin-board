@@ -11,8 +11,14 @@ export const StockMarketWidget = {
 
   render(container, state = { selectedSymbol: '^TWII', tab: 'indices', chartType: 'intraday' }) {
     const list = state.tab === 'indices' ? StockService.indices : StockService.stocks;
-    const currentItem = [...StockService.indices, ...StockService.stocks].find(s => s.symbol === state.selectedSymbol) || StockService.indices[0];
+    let currentItem = [...StockService.indices, ...StockService.stocks].find(s => s.symbol === state.selectedSymbol) || StockService.indices[0];
     
+    // Check if cached data exists
+    if (StockService.cache[state.selectedSymbol]) {
+      const c = StockService.cache[state.selectedSymbol];
+      currentItem = { ...currentItem, price: c.price, change: c.change, changePercent: c.changePercent, open: c.open, high: c.high, low: c.low, volume: c.volume };
+    }
+
     const isUp = currentItem.change >= 0;
     const sign = isUp ? '+' : '';
     const colorClass = isUp ? 'text-red-400' : 'text-emerald-400';
@@ -42,16 +48,19 @@ export const StockMarketWidget = {
             </button>
           </div>
 
-          <!-- Live Indicator -->
-          <div class="flex items-center space-x-1">
+          <!-- Online API Live Indicator & Refresh -->
+          <div class="flex items-center space-x-1.5">
+            <button id="stock-refresh-api-btn" class="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] transition-colors" title="重新連線即時行情 API">
+              🔄
+            </button>
             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1 live-pulse"></span>
-              撮合中
+              ${StockService.isLiveConnected ? 'API 即時連線' : '即時撮合'}
             </span>
           </div>
         </div>
 
-        <!-- Stock Price Header Stats -->
+        <!-- Stock Price Header Stats & Quick Search -->
         <div class="flex items-center justify-between my-1.5 px-1">
           <div>
             <div class="flex items-center space-x-2">
@@ -157,15 +166,13 @@ export const StockMarketWidget = {
         const volumes = data.volumes;
         const prevClose = data.prevClose;
 
-        // Split height: Price Chart (72%), Volume Chart (28%)
         const priceH = h * 0.70;
         const volH = h * 0.24;
         const volTop = h * 0.76;
         const paddingLeft = 10;
-        const paddingRight = 48; // For Y-axis price/percent labels
+        const paddingRight = 48;
         const chartW = w - paddingLeft - paddingRight;
 
-        // Symmetrical price scale centered on prevClose
         let maxDiff = Math.max(...prices.map(p => Math.abs(p - prevClose)), prevClose * 0.008);
         const maxPrice = prevClose + maxDiff * 1.05;
         const minPrice = prevClose - maxDiff * 1.05;
@@ -174,7 +181,6 @@ export const StockMarketWidget = {
         const getY = (p) => priceH - ((p - minPrice) / priceRange) * (priceH - 12) - 6;
         const getX = (idx) => paddingLeft + (idx / (prices.length - 1)) * chartW;
 
-        // Draw horizontal grid lines & Y-axis labels
         const gridSteps = [-maxDiff, -maxDiff * 0.5, 0, maxDiff * 0.5, maxDiff];
         gridSteps.forEach(diff => {
           const p = prevClose + diff;
@@ -186,7 +192,7 @@ export const StockMarketWidget = {
           ctx.lineTo(w - paddingRight, y);
           if (diff === 0) {
             ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
-            ctx.setLineDash([4, 4]); // Flat baseline dotted
+            ctx.setLineDash([4, 4]);
           } else {
             ctx.strokeStyle = 'rgba(51, 65, 85, 0.3)';
             ctx.setLineDash([2, 2]);
@@ -194,14 +200,12 @@ export const StockMarketWidget = {
           ctx.stroke();
           ctx.setLineDash([]);
 
-          // Right Y-axis text labels
           ctx.font = '9px monospace';
           ctx.fillStyle = diff > 0 ? '#f87171' : diff < 0 ? '#34d399' : '#94a3b8';
           ctx.textAlign = 'left';
           ctx.fillText(`${diff > 0 ? '+' : ''}${pct}%`, w - paddingRight + 4, y + 3);
         });
 
-        // Left Y-axis Price Labels (High, Prev, Low)
         ctx.textAlign = 'left';
         ctx.fillStyle = '#f87171';
         ctx.fillText(maxPrice.toFixed(1), paddingLeft + 2, 10);
@@ -210,7 +214,6 @@ export const StockMarketWidget = {
         ctx.fillStyle = '#34d399';
         ctx.fillText(minPrice.toFixed(1), paddingLeft + 2, priceH - 3);
 
-        // Draw Intraday Gradient Fill
         const isUp = currentItem.change >= 0;
         const grad = ctx.createLinearGradient(0, 0, 0, priceH);
         grad.addColorStop(0, isUp ? 'rgba(239, 68, 68, 0.25)' : 'rgba(16, 185, 129, 0.25)');
@@ -229,7 +232,6 @@ export const StockMarketWidget = {
         ctx.fillStyle = grad;
         ctx.fill();
 
-        // Draw VWAP (均價線 - Yellow Line)
         ctx.beginPath();
         vwap.forEach((v, idx) => {
           const x = getX(idx);
@@ -241,7 +243,6 @@ export const StockMarketWidget = {
         ctx.lineWidth = 1.2;
         ctx.stroke();
 
-        // Draw Main Price Line (Red / Green)
         ctx.beginPath();
         prices.forEach((p, idx) => {
           const x = getX(idx);
@@ -253,7 +254,6 @@ export const StockMarketWidget = {
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Draw Volume Sub-chart (成交量柱狀圖)
         const maxVol = Math.max(...volumes) || 1;
         const volBarW = Math.max(2, (chartW / volumes.length) - 1.5);
 
@@ -267,7 +267,6 @@ export const StockMarketWidget = {
           ctx.fillRect(x, y, volBarW, barH);
         });
 
-        // Time X-Axis Ticks (09:00, 10:00, 11:00, 12:00, 13:00, 13:30)
         const timeTicks = [
           { label: '09:00', idx: 0 },
           { label: '10:30', idx: 18 },
@@ -282,25 +281,20 @@ export const StockMarketWidget = {
           ctx.fillText(t.label, x, volTop - 3);
         });
 
-        // Draw Interactive Hover Crosshair
         if (mouseX >= paddingLeft && mouseX <= paddingLeft + chartW) {
           const hoveredIdx = Math.min(prices.length - 1, Math.max(0, Math.round(((mouseX - paddingLeft) / chartW) * (prices.length - 1))));
           const hX = getX(hoveredIdx);
           const hY = getY(prices[hoveredIdx]);
 
-          // Vertical crosshair
           ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
           ctx.setLineDash([2, 2]);
           ctx.beginPath(); ctx.moveTo(hX, 0); ctx.lineTo(hX, h); ctx.stroke();
-          // Horizontal crosshair
           ctx.beginPath(); ctx.moveTo(paddingLeft, hY); ctx.lineTo(w - paddingRight, hY); ctx.stroke();
           ctx.setLineDash([]);
 
-          // Hover Dot
           ctx.fillStyle = '#ffffff';
           ctx.beginPath(); ctx.arc(hX, hY, 3.5, 0, Math.PI * 2); ctx.fill();
 
-          // Tooltip update
           const curP = prices[hoveredIdx];
           const diffP = curP - prevClose;
           const diffPct = ((diffP / prevClose) * 100).toFixed(2);
@@ -334,7 +328,6 @@ export const StockMarketWidget = {
         const getY = (p) => priceH - ((p - minPrice) / priceRange) * (priceH - 12) - 6;
         const getX = (idx) => paddingLeft + (idx / (klines.length - 1)) * chartW;
 
-        // Grid lines
         for (let i = 0; i <= 3; i++) {
           const y = (priceH / 3) * i;
           const p = maxPrice - (i / 3) * priceRange;
@@ -349,7 +342,6 @@ export const StockMarketWidget = {
 
         const candleW = Math.max(3, (chartW / klines.length) * 0.65);
 
-        // Draw Candlesticks
         klines.forEach((k, idx) => {
           const x = getX(idx);
           const yOpen = getY(k.open);
@@ -360,7 +352,6 @@ export const StockMarketWidget = {
           const isUpCandle = k.close >= k.open;
           const color = isUpCandle ? '#ef4444' : '#22c55e';
 
-          // Wick (影線)
           ctx.strokeStyle = color;
           ctx.lineWidth = 1.2;
           ctx.beginPath();
@@ -368,20 +359,17 @@ export const StockMarketWidget = {
           ctx.lineTo(x, yLow);
           ctx.stroke();
 
-          // Body (K棒實體)
           const topY = Math.min(yOpen, yClose);
           const bodyH = Math.max(2, Math.abs(yClose - yOpen));
           ctx.fillStyle = color;
           ctx.fillRect(x - candleW / 2, topY, candleW, bodyH);
 
-          // Volume Bar
           const maxVol = Math.max(...klines.map(item => item.volume)) || 1;
           const vH = (k.volume / maxVol) * (volH - 6);
           ctx.fillStyle = isUpCandle ? 'rgba(239, 68, 68, 0.6)' : 'rgba(34, 197, 94, 0.6)';
           ctx.fillRect(x - candleW / 2, h - vH, candleW, vH);
         });
 
-        // Draw MA Lines (MA5: Yellow, MA10: Cyan, MA20: Purple)
         const drawMALine = (maArray, color) => {
           ctx.strokeStyle = color;
           ctx.lineWidth = 1.5;
@@ -402,18 +390,17 @@ export const StockMarketWidget = {
         drawMALine(ma10, '#06b6d4');
         drawMALine(ma20, '#a855f7');
 
-        // Date X-axis labels
         ctx.fillStyle = '#64748b';
         ctx.font = '9px monospace';
-        [0, 10, 20, 29].forEach(idx => {
+        const kLen = klines.length;
+        [0, Math.floor(kLen * 0.33), Math.floor(kLen * 0.66), kLen - 1].forEach(idx => {
           if (klines[idx]) {
             const x = getX(idx);
-            ctx.textAlign = idx === 0 ? 'left' : idx === 29 ? 'right' : 'center';
+            ctx.textAlign = idx === 0 ? 'left' : idx === kLen - 1 ? 'right' : 'center';
             ctx.fillText(klines[idx].date, x, priceH + 12);
           }
         });
 
-        // Tooltip Crosshair
         if (mouseX >= paddingLeft && mouseX <= paddingLeft + chartW) {
           const hoveredIdx = Math.min(klines.length - 1, Math.max(0, Math.round(((mouseX - paddingLeft) / chartW) * (klines.length - 1))));
           const k = klines[hoveredIdx];
@@ -433,7 +420,6 @@ export const StockMarketWidget = {
         }
       };
 
-      // Mouse interactive crosshair
       canvas.addEventListener('mousemove', (e) => {
         const rect = canvas.getBoundingClientRect();
         mouseX = e.clientX - rect.left;
@@ -448,11 +434,20 @@ export const StockMarketWidget = {
       window.addEventListener('resize', draw);
     }
 
+    // Trigger online fetch in background
+    StockService.fetchLiveStockData(state.selectedSymbol).then(res => {
+      if (res && canvas) {
+        // Redraw with live fetched data
+        window.dispatchEvent(new Event('resize'));
+      }
+    });
+
     // Event Handlers
     const btnIndices = container.querySelector('#stock-tab-indices');
     const btnStocks = container.querySelector('#stock-tab-stocks');
     const btnIntraday = container.querySelector('#stock-mode-intraday');
     const btnKline = container.querySelector('#stock-mode-kline');
+    const btnRefresh = container.querySelector('#stock-refresh-api-btn');
 
     if (btnIndices) {
       btnIndices.addEventListener('click', () => {
@@ -472,6 +467,13 @@ export const StockMarketWidget = {
     if (btnKline) {
       btnKline.addEventListener('click', () => {
         StockMarketWidget.render(container, { ...state, chartType: 'kline' });
+      });
+    }
+    if (btnRefresh) {
+      btnRefresh.addEventListener('click', () => {
+        StockService.fetchLiveStockData(state.selectedSymbol).then(() => {
+          StockMarketWidget.render(container, state);
+        });
       });
     }
 
