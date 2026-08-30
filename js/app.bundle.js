@@ -3,13 +3,14 @@
  * Central Weather Administration (中央氣象署 CWA) Official Meteorological Style
  * 
  * Features:
- * 1. CWA Official Clean Palette (深海藍 #0d346c, 氣象海洋藍 #0284c7, 潔淨白 #ffffff, 晴空淡藍 #f0f4f8)
- * 2. Directly Embeds CWA Typhoon News Page Verbatim (https://www.cwa.gov.tw/V8/C/P/Typhoon/TY_NEWS.html)
- * 3. Direct Clickable Link to Central Weather Administration Website (https://www.cwa.gov.tw/)
- * 4. 100% Pure Real CWA Live Composite Radar & Himawari-9 Satellite Feeds
- * 5. Direct Clickable Link to Yahoo Finance Index Technical Analysis (https://tw.stock.yahoo.com/t/idx.php)
- * 6. 100% Deterministic Stable Stock & Index Volume Sub-charts (Zero Random Jitter)
- * 7. Full Drag-and-Drop Customizable Grid Layout with LocalStorage persistence
+ * 1. Top Hero Section: Windy.com Interactive Global Weather & Temperature Map (24.370, 125.321, 4, p:temp)
+ * 2. CWA Official Clean Palette (深海藍 #0d346c, 氣象海洋藍 #0284c7, 潔淨白 #ffffff, 晴空淡藍 #f0f4f8)
+ * 3. Directly Embeds CWA Typhoon News Page Verbatim (https://www.cwa.gov.tw/V8/C/P/Typhoon/TY_NEWS.html)
+ * 4. Direct Clickable Link to Central Weather Administration Website (https://www.cwa.gov.tw/)
+ * 5. 100% Pure Real CWA Live Composite Radar & Himawari-9 Satellite Feeds
+ * 6. Direct Clickable Link to Yahoo Finance Index Technical Analysis (https://tw.stock.yahoo.com/t/idx.php)
+ * 7. 100% Deterministic Stable Stock & Index Volume Sub-charts (Zero Random Jitter)
+ * 8. Full Drag-and-Drop Customizable Grid Layout with LocalStorage persistence
  */
 (function() {
   'use strict';
@@ -585,8 +586,98 @@
   };
 
   // ==========================================
-  // 2. WIDGETS (CWA Clean Style)
+  // 2. WIDGETS
   // ==========================================
+
+  const WindyWidget = {
+    id: 'windy-weather',
+    title: 'Windy 全球即時氣溫與動態氣象圖 (24.370, 125.321)',
+    icon: 'globe',
+    defaultWidth: 12,
+    defaultHeight: 5,
+    minWidth: 6,
+    minHeight: 4,
+
+    render(container, state = { overlay: 'temp', zoom: 4 }) {
+      const lat = '24.370';
+      const lon = '125.321';
+      const zoom = state.zoom || 4;
+      const overlay = state.overlay || 'temp';
+
+      const windyDirectUrl = `https://www.windy.com/?${lat},${lon},${zoom},p:${overlay}`;
+      const embedUrl = `https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&detailLat=${lat}&detailLon=${lon}&width=650&height=450&zoom=${zoom}&level=surface&overlay=${overlay}&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=%C2%B0C&radarRange=-1`;
+
+      const layers = [
+        { id: 'temp', name: '🌡️ 氣溫分佈 (Temp)' },
+        { id: 'wind', name: '💨 風速流場 (Wind)' },
+        { id: 'rain', name: '🌧️ 降雨累積 (Rain)' },
+        { id: 'radar', name: '📡 氣象雷達 (Radar)' },
+        { id: 'clouds', name: '☁️ 雲層分佈 (Clouds)' },
+        { id: 'waves', name: '🌊 浪高海象 (Waves)' }
+      ];
+
+      container.innerHTML = `
+        <div class="flex flex-col h-full bg-white text-slate-800 select-none overflow-hidden justify-between">
+          <div class="flex flex-wrap items-center justify-between px-3.5 py-2 bg-slate-50 border-b border-slate-200 z-10 gap-2 flex-shrink-0">
+            <div class="flex items-center space-x-1 overflow-x-auto scrollbar-thin">
+              ${layers.map(l => `
+                <button class="px-2.5 py-1 text-xs font-bold rounded-lg transition-all flex-shrink-0 ${l.id === overlay ? 'bg-[#0d346c] text-white shadow-sm' : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'}" data-windy-overlay="${l.id}">
+                  ${l.name}
+                </button>
+              `).join('')}
+            </div>
+
+            <div class="flex items-center space-x-2">
+              <span class="text-xs text-slate-500 font-mono hidden sm:inline">📍 24.370°N, 125.321°E (Zoom 4)</span>
+              
+              <button id="windy-refresh-btn" class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-100 text-[#0d346c] text-xs font-bold border border-slate-300 shadow-sm transition-colors" title="重新載入 Windy 氣象圖">
+                🔄 刷新
+              </button>
+
+              <a href="${windyDirectUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁開啟 Windy.com 完整全螢幕氣象圖">
+                <span>🌍</span>
+                <span>Windy.com 官網</span>
+                <svg class="w-3.5 h-3.5 text-sky-100 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="relative flex-1 w-full h-full min-h-[300px] overflow-hidden bg-slate-900">
+            <iframe id="windy-embed-iframe" src="${embedUrl}" class="w-full h-full border-0 bg-slate-900" title="Windy 即時氣象與氣溫圖" loading="lazy" allowfullscreen></iframe>
+          </div>
+
+          <div class="flex items-center justify-between px-3.5 py-1.5 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex-shrink-0">
+            <div class="flex items-center space-x-2">
+              <span class="font-bold text-[#0d346c]">ECMWF 歐洲中期天氣預報數值模式</span>
+              <span>‧</span>
+              <span>即時溫度流場視覺化</span>
+            </div>
+
+            <a href="${windyDirectUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:text-sky-900 font-bold underline flex items-center space-x-0.5">
+              <span>https://www.windy.com/?24.370,125.321,4,p:temp ↗</span>
+            </a>
+          </div>
+        </div>
+      `;
+
+      container.querySelectorAll('[data-windy-overlay]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const selected = btn.getAttribute('data-windy-overlay');
+          WindyWidget.render(container, { ...state, overlay: selected });
+        });
+      });
+
+      const refreshBtn = container.querySelector('#windy-refresh-btn');
+      const iframe = container.querySelector('#windy-embed-iframe');
+      if (refreshBtn && iframe) {
+        refreshBtn.addEventListener('click', () => {
+          iframe.src = embedUrl + '&t=' + Date.now();
+        });
+      }
+    }
+  };
 
   const WeatherTempWidget = {
     id: 'weather-temp',
@@ -853,7 +944,7 @@
     id: 'stock-market',
     title: '股市即時行情與專業線型圖',
     defaultWidth: 6,
-    defaultHeight: 4,
+    defaultHeight: 5,
     minWidth: 4,
     minHeight: 3,
 
@@ -1614,15 +1705,16 @@
   };
 
   // ==========================================
-  // 3. GRID MANAGER (GridStack Integration - CWA Clean Theme)
+  // 3. GRID MANAGER (GridStack Integration)
   // ==========================================
 
   const GridManager = {
     grid: null,
     isEditMode: false,
-    STORAGE_KEY: 'bulletin_board_layout_v1',
+    STORAGE_KEY: 'bulletin_board_layout_v2',
 
     widgetRegistry: {
+      'windy-weather': WindyWidget,
       'weather-temp': WeatherTempWidget,
       'weather-radar': WeatherRadarWidget,
       'typhoon-tracker': TyphoonWidget,
@@ -1633,33 +1725,37 @@
     },
 
     defaultLayout: [
-      { id: 'weather-temp', x: 0, y: 0, w: 6, h: 4, minW: 3, minH: 3 },
-      { id: 'weather-radar', x: 6, y: 0, w: 6, h: 4, minW: 4, minH: 3 },
-      { id: 'typhoon-tracker', x: 0, y: 4, w: 6, h: 5, minW: 4, minH: 4 },
-      { id: 'stock-market', x: 6, y: 4, w: 6, h: 5, minW: 4, minH: 3 },
-      { id: 'real-estate', x: 0, y: 9, w: 8, h: 4, minW: 4, minH: 3 },
-      { id: 'quick-notes', x: 8, y: 9, w: 4, h: 4, minW: 3, minH: 2 }
+      { id: 'windy-weather', x: 0, y: 0, w: 12, h: 5, minW: 6, minH: 4 },
+      { id: 'weather-temp', x: 0, y: 5, w: 6, h: 4, minW: 3, minH: 3 },
+      { id: 'weather-radar', x: 6, y: 5, w: 6, h: 4, minW: 4, minH: 3 },
+      { id: 'typhoon-tracker', x: 0, y: 9, w: 6, h: 5, minW: 4, minH: 4 },
+      { id: 'stock-market', x: 6, y: 9, w: 6, h: 5, minW: 4, minH: 3 },
+      { id: 'real-estate', x: 0, y: 14, w: 8, h: 4, minW: 4, minH: 3 },
+      { id: 'quick-notes', x: 8, y: 14, w: 4, h: 4, minW: 3, minH: 2 }
     ],
 
     presetLayouts: {
       overview: [
-        { id: 'weather-temp', x: 0, y: 0, w: 6, h: 4 },
-        { id: 'weather-radar', x: 6, y: 0, w: 6, h: 4 },
-        { id: 'typhoon-tracker', x: 0, y: 4, w: 6, h: 5 },
-        { id: 'stock-market', x: 6, y: 4, w: 6, h: 5 },
-        { id: 'real-estate', x: 0, y: 9, w: 8, h: 4 },
-        { id: 'quick-notes', x: 8, y: 9, w: 4, h: 4 }
+        { id: 'windy-weather', x: 0, y: 0, w: 12, h: 5 },
+        { id: 'weather-temp', x: 0, y: 5, w: 6, h: 4 },
+        { id: 'weather-radar', x: 6, y: 5, w: 6, h: 4 },
+        { id: 'typhoon-tracker', x: 0, y: 9, w: 6, h: 5 },
+        { id: 'stock-market', x: 6, y: 9, w: 6, h: 5 },
+        { id: 'real-estate', x: 0, y: 14, w: 8, h: 4 },
+        { id: 'quick-notes', x: 8, y: 14, w: 4, h: 4 }
       ],
       weather_focus: [
-        { id: 'weather-radar', x: 0, y: 0, w: 6, h: 5 },
-        { id: 'typhoon-tracker', x: 6, y: 0, w: 6, h: 5 },
-        { id: 'weather-temp', x: 0, y: 5, w: 12, h: 4 }
+        { id: 'windy-weather', x: 0, y: 0, w: 12, h: 6 },
+        { id: 'weather-radar', x: 0, y: 6, w: 6, h: 5 },
+        { id: 'typhoon-tracker', x: 6, y: 6, w: 6, h: 5 },
+        { id: 'weather-temp', x: 0, y: 11, w: 12, h: 4 }
       ],
       finance_focus: [
         { id: 'stock-market', x: 0, y: 0, w: 7, h: 5 },
         { id: 'real-estate', x: 7, y: 0, w: 5, h: 5 },
-        { id: 'quick-notes', x: 0, y: 5, w: 4, h: 4 },
-        { id: 'weather-temp', x: 4, y: 5, w: 8, h: 4 }
+        { id: 'windy-weather', x: 0, y: 5, w: 12, h: 5 },
+        { id: 'quick-notes', x: 0, y: 10, w: 4, h: 4 },
+        { id: 'weather-temp', x: 4, y: 10, w: 8, h: 4 }
       ]
     },
 
@@ -1858,7 +1954,7 @@
 
   const App = {
     init() {
-      console.log('🚀 初始化佈告欄應用程式 (中央氣象署 CWA 官方清新風格)...');
+      console.log('🚀 初始化佈告欄應用程式 (中央氣象署 CWA 風格 + Windy 全球氣溫大版面)...');
       GridManager.init();
       this.bindHeaderControls();
       this.updateTickerText();
@@ -1973,6 +2069,7 @@
       const nvda = StockService.stocks[7] || StockService.stocks[0];
       
       const items = [
+        `🌍 <b>Windy 全球氣象</b>：即時氣溫與動態風場流場 (24.370°N, 125.321°E) 已同步上線`,
         `🌀 <b>颱風消息</b>：中央氣象署官方即時颱風動態與路徑潛勢預報已連線`,
         `📡 <b>即時雷達</b>：中央氣象署全台雷達合成回波與向日葵9號紅外線雲圖已同步更新`,
         `📈 <b>加權指數</b>：${twii.price.toLocaleString()} (<span class="${twii.change >= 0 ? 'text-red-300 font-bold' : 'text-emerald-300 font-bold'}">${twii.change >= 0 ? '+' : ''}${twii.change.toFixed(2)} / +${twii.changePercent.toFixed(2)}%</span> 成交 ${twii.volume})`,
