@@ -5,7 +5,7 @@ echo   正在推送 佈告欄 (Bulletin Board) 至 GitHub...
 echo ========================================================
 echo.
 
-git push -u origin master
+git push -u origin main
 
 if %ERRORLEVEL% equ 0 (
     echo.
