@@ -1,4 +1,4 @@
-/* GridStack Custom Styles - Warm Palette (暖色調) */
+/* GridStack Custom Styles - Central Weather Administration (中央氣象署 CWA) Theme */
 .grid-stack {
   min-height: 80vh;
   margin-bottom: 2rem;
@@ -14,29 +14,32 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
-  border-radius: 1rem;
+  border-radius: 0.875rem;
   overflow: hidden;
-  box-shadow: 0 4px 20px -2px rgba(24, 20, 18, 0.6), 0 2px 6px -1px rgba(24, 20, 18, 0.4);
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 4px 16px -2px rgba(15, 50, 96, 0.08), 0 2px 6px -1px rgba(15, 50, 96, 0.04);
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-/* Edit Mode Styles - Warm Amber Highlights */
+/* Edit Mode Styles - CWA Ocean Blue */
 body.edit-mode .grid-stack-item-content {
-  border: 2px dashed #f59e0b !important;
-  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.25) !important;
+  border: 2px dashed #0284c7 !important;
+  box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.2) !important;
 }
 
 body.edit-mode .widget-drag-handle {
   cursor: move !important;
-  background: rgba(217, 119, 6, 0.35) !important;
-  border-bottom: 1px solid #f59e0b !important;
+  background: #e0f2fe !important;
+  border-bottom: 1px solid #0284c7 !important;
+  color: #0369a1 !important;
   touch-action: none !important;
   user-select: none !important;
   -webkit-user-select: none !important;
 }
 
 body.edit-mode .widget-drag-handle:hover {
-  background: rgba(217, 119, 6, 0.5) !important;
+  background: #bae6fd !important;
 }
 
 body.edit-mode .widget-edit-controls {
@@ -58,14 +61,14 @@ body:not(.edit-mode) .ui-resizable-handle {
   display: none !important;
 }
 
-/* Custom Resize Corner - Warm Amber Corner */
+/* Custom Resize Corner - CWA Ocean Blue Corner */
 .ui-resizable-se {
   width: 18px !important;
   height: 18px !important;
   right: 4px !important;
   bottom: 4px !important;
-  border-right: 4px solid #f59e0b !important;
-  border-bottom: 4px solid #f59e0b !important;
+  border-right: 4px solid #0284c7 !important;
+  border-bottom: 4px solid #0284c7 !important;
   border-bottom-right-radius: 4px;
   background: transparent !important;
   cursor: se-resize !important;
@@ -74,7 +77,7 @@ body:not(.edit-mode) .ui-resizable-handle {
 
 /* Placeholder during drag */
 .grid-stack > .grid-stack-placeholder > .placeholder-content {
-  background-color: rgba(245, 158, 11, 0.2) !important;
-  border: 2px dashed #fbbf24 !important;
-  border-radius: 1rem !important;
+  background-color: rgba(2, 132, 199, 0.12) !important;
+  border: 2px dashed #0284c7 !important;
+  border-radius: 0.875rem !important;
 }
