@@ -15,13 +15,13 @@ export const WeatherRadarWidget = {
     const nowTimeStr = new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
     container.innerHTML = `
-      <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-3 select-none overflow-hidden relative justify-between">
+      <div class="flex flex-col h-full bg-stone-900 text-stone-100 p-3 select-none overflow-hidden relative justify-between">
         <!-- Top Toolbar -->
-        <div class="flex items-center justify-between z-10 pb-2 border-b border-slate-800">
+        <div class="flex items-center justify-between z-10 pb-2 border-b border-stone-800">
           <!-- Layer Selectors -->
-          <div class="flex items-center space-x-1 bg-slate-800/90 p-0.5 rounded-lg overflow-x-auto max-w-[60%] scrollbar-thin">
+          <div class="flex items-center space-x-1 bg-stone-800/90 p-0.5 rounded-lg overflow-x-auto max-w-[60%] scrollbar-thin">
             ${layers.map(l => `
-              <button class="px-2.5 py-1 text-xs font-medium rounded-md transition-all flex-shrink-0 ${l.id === currentLayer.id ? 'bg-blue-600 text-white shadow-sm font-bold' : 'text-slate-400 hover:text-white'}" data-layer="${l.id}">
+              <button class="px-2.5 py-1 text-xs font-medium rounded-md transition-all flex-shrink-0 ${l.id === currentLayer.id ? 'bg-amber-600 text-white shadow-sm font-bold' : 'text-stone-400 hover:text-stone-200'}" data-layer="${l.id}">
                 ${l.name.replace('中央氣象署', '').replace('向日葵', '')}
               </button>
             `).join('')}
@@ -29,16 +29,16 @@ export const WeatherRadarWidget = {
           
           <!-- Actions: Direct CWA Link & Refresh -->
           <div class="flex items-center space-x-1.5">
-            <button id="radar-refresh-btn" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors flex items-center space-x-1" title="重新載入最新雷達圖">
+            <button id="radar-refresh-btn" class="px-2 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-amber-200 text-xs font-medium transition-colors flex items-center space-x-1 border border-stone-700/60" title="重新載入最新雷達圖">
               <span>🔄</span>
               <span>刷新</span>
             </button>
 
             <!-- Direct Link to Central Weather Administration Website -->
-            <a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1 transition-all shadow-sm group/btn" title="在新分頁開啟交通部中央氣象署官方網站 (https://www.cwa.gov.tw/)">
+            <a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-xs font-semibold flex items-center space-x-1 transition-all shadow-sm group/btn" title="在新分頁開啟交通部中央氣象署官方網站 (https://www.cwa.gov.tw/)">
               <span>🌐</span>
               <span>中央氣象署官網</span>
-              <svg class="w-3 h-3 text-blue-200 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-3 h-3 text-amber-100 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
             </a>
@@ -46,24 +46,24 @@ export const WeatherRadarWidget = {
         </div>
 
         <!-- Main Real CWA Image Container -->
-        <div class="relative flex-1 my-2 rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center min-h-[140px] group">
-          <div class="w-full h-full relative overflow-hidden flex items-center justify-center bg-slate-950">
+        <div class="relative flex-1 my-2 rounded-xl overflow-hidden bg-stone-950 border border-stone-800 flex items-center justify-center min-h-[140px] group">
+          <div class="w-full h-full relative overflow-hidden flex items-center justify-center bg-stone-950">
             <img id="cwa-live-radar-img" src="${currentLayer.url}" alt="${currentLayer.name}" class="w-full h-full object-contain transition-transform duration-300 transform scale-100 hover:scale-105 cursor-zoom-in" title="點擊在新分頁開啟全解析度圖檔">
             
             <!-- Source Tag Link -->
-            <a href="https://www.cwa.gov.tw/V8/C/W/OBS_Radar.html" target="_blank" rel="noopener noreferrer" class="absolute bottom-2 left-2 bg-slate-900/90 hover:bg-blue-900/80 backdrop-blur border border-slate-700 px-2 py-1 rounded text-[10px] flex items-center space-x-1.5 shadow transition-colors" title="前往氣象署雷達觀測專頁">
-              <span class="text-cyan-400 font-bold">📡 中央氣象署 (cwa.gov.tw)</span>
-              <span class="text-slate-400">‧ ${currentLayer.unit}</span>
-              <span class="text-blue-400">↗</span>
+            <a href="https://www.cwa.gov.tw/V8/C/W/OBS_Radar.html" target="_blank" rel="noopener noreferrer" class="absolute bottom-2 left-2 bg-stone-900/90 hover:bg-amber-950/80 backdrop-blur border border-stone-700 px-2 py-1 rounded text-[10px] flex items-center space-x-1.5 shadow transition-colors" title="前往氣象署雷達觀測專頁">
+              <span class="text-amber-400 font-bold">📡 中央氣象署 (cwa.gov.tw)</span>
+              <span class="text-stone-400">‧ ${currentLayer.unit}</span>
+              <span class="text-orange-400">↗</span>
             </a>
 
             <!-- Timestamp & HD Button -->
             <div class="absolute top-2 right-2 flex items-center space-x-1">
-              <div class="bg-slate-900/90 backdrop-blur border border-slate-700 px-2 py-0.5 rounded text-[10px] font-mono text-cyan-300 shadow">
+              <div class="bg-stone-900/90 backdrop-blur border border-stone-700 px-2 py-0.5 rounded text-[10px] font-mono text-amber-300 shadow">
                 🕒 ${nowTimeStr} 同步
               </div>
               ${currentLayer.hdUrl ? `
-                <a href="${currentLayer.hdUrl}" target="_blank" class="bg-blue-600 hover:bg-blue-500 px-2 py-0.5 rounded text-[10px] text-white font-bold transition-colors shadow" title="開啟 3600x3600 超高清大圖">
+                <a href="${currentLayer.hdUrl}" target="_blank" class="bg-amber-600 hover:bg-amber-500 px-2 py-0.5 rounded text-[10px] text-white font-bold transition-colors shadow" title="開啟 3600x3600 超高清大圖">
                   🔍 3600HD
                 </a>
               ` : ''}
@@ -74,12 +74,12 @@ export const WeatherRadarWidget = {
         <!-- Footer Info & Direct Official Portal Links -->
         <div class="flex items-center justify-between pt-1 text-xs">
           <div class="flex items-center space-x-2">
-            <span class="text-slate-300 text-[11px] font-medium">${currentLayer.name}</span>
-            <span class="text-slate-500 text-[10px]">資料來源：交通部中央氣象署</span>
+            <span class="text-stone-300 text-[11px] font-medium">${currentLayer.name}</span>
+            <span class="text-stone-500 text-[10px]">資料來源：交通部中央氣象署</span>
           </div>
 
-          <div class="flex items-center space-x-2 text-slate-400">
-            <a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 text-[11px] flex items-center space-x-0.5 underline">
+          <div class="flex items-center space-x-2 text-stone-400">
+            <a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 text-[11px] flex items-center space-x-0.5 underline">
               <span>https://www.cwa.gov.tw/</span>
               <span>↗</span>
             </a>
@@ -88,7 +88,6 @@ export const WeatherRadarWidget = {
       </div>
     `;
 
-    // Click on image opens official full view
     const liveImg = container.querySelector('#cwa-live-radar-img');
     if (liveImg) {
       liveImg.addEventListener('click', () => {
@@ -96,14 +95,12 @@ export const WeatherRadarWidget = {
       });
     }
 
-    // Layer selection
     container.querySelectorAll('[data-layer]').forEach(btn => {
       btn.addEventListener('click', () => {
         WeatherRadarWidget.render(container, { ...state, activeLayer: btn.getAttribute('data-layer') });
       });
     });
 
-    // Refresh button
     const refreshBtn = container.querySelector('#radar-refresh-btn');
     if (refreshBtn) {
       refreshBtn.addEventListener('click', () => {

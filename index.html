@@ -14,10 +14,10 @@
         extend: {
           colors: {
             brand: {
-              50: '#eff6ff',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
+              50: '#fffbeb',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
             }
           }
         }
@@ -33,35 +33,35 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/gridstack-custom.css">
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-blue-500 selection:text-white">
+<body class="bg-stone-950 text-stone-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-white">
 
-  <!-- Top Breaking News & Ticker Marquee -->
-  <div class="bg-slate-900 border-b border-slate-800 text-xs py-1.5 px-4 flex items-center shadow-inner">
-    <div class="flex items-center space-x-2 flex-shrink-0 mr-4 border-r border-slate-700 pr-3">
-      <span class="w-2 h-2 rounded-full bg-rose-500 live-pulse"></span>
-      <span class="font-bold text-slate-200 tracking-wider">即時焦點</span>
+  <!-- Top Breaking News & Ticker Marquee (Warm Tone) -->
+  <div class="bg-stone-900 border-b border-stone-800 text-xs py-1.5 px-4 flex items-center shadow-inner">
+    <div class="flex items-center space-x-2 flex-shrink-0 mr-4 border-r border-stone-700 pr-3">
+      <span class="w-2 h-2 rounded-full bg-orange-500 live-pulse"></span>
+      <span class="font-bold text-amber-300 tracking-wider">即時焦點</span>
     </div>
     <div class="ticker-wrap flex-1">
-      <div id="top-ticker-content" class="ticker-move text-slate-300 font-medium">
-        🔔 <b>即時快訊</b>：海神颱風發布海上警報，請東部海面作業船隻嚴加戒備&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📈 <b>加權指數</b>：23,420.50 (<span class="text-red-400">+168.32 / +0.72%</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💎 <b>台積電</b>：985.0 (<span class="text-red-400">+15.0 / +1.55%</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🏠 <b>房市速報</b>：最新揭露新板特區高樓豪邸每坪78.5萬、大安森林公園景觀戶上架
+      <div id="top-ticker-content" class="ticker-move text-stone-300 font-medium">
+        🔔 <b>即時快訊</b>：海神颱風發布海上警報，請東部海面作業船隻嚴加戒備&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📈 <b>加權指數</b>：46,331.45 (<span class="text-red-400">+356.23 / +0.77%</span> 成交 4,120 億元)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💎 <b>台積電</b>：2,420.0 (<span class="text-red-400">+20.0 / +0.83%</span> 成交 15,025 張)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🏠 <b>房市速報</b>：最新揭露新板特區高樓豪邸每坪78.5萬、大安森林公園景觀戶上架
       </div>
     </div>
   </div>
 
-  <!-- Header Navigation Bar -->
-  <header class="sticky top-0 z-40 glass-nav border-b border-slate-800/80 px-4 lg:px-8 py-3">
+  <!-- Header Navigation Bar (Warm Glass) -->
+  <header class="sticky top-0 z-40 glass-nav border-b border-stone-800/80 px-4 lg:px-8 py-3">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
       <!-- Title & Branding -->
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/20">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-400 flex items-center justify-center shadow-lg shadow-amber-600/20">
           <span class="text-xl">📋</span>
         </div>
         <div>
           <div class="flex items-center space-x-2">
             <h1 class="text-lg font-black tracking-tight text-white">佈告欄</h1>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-mono">v1.0</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">v1.0 暖色版</span>
           </div>
-          <p class="text-xs text-slate-400">自定義動態儀表板 ‧ 自由縮放與拖曳排版</p>
+          <p class="text-xs text-stone-400">自定義動態儀表板 ‧ 自由縮放與拖曳排版</p>
         </div>
       </div>
 
@@ -73,18 +73,18 @@
       <!-- Action Toolbar -->
       <div class="flex items-center flex-wrap gap-2">
         <!-- Edit Mode Toggle Button -->
-        <button id="edit-mode-toggle" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center space-x-1.5 transition-all shadow-md">
+        <button id="edit-mode-toggle" class="px-4 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-amber-200 border border-stone-700/80 text-xs font-bold flex items-center space-x-1.5 transition-all shadow-md">
           <span>✏️ 自由佈局</span>
         </button>
 
         <!-- Add Widget Button -->
-        <button id="add-widget-btn" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center space-x-1.5 transition-all shadow-md shadow-blue-600/20">
+        <button id="add-widget-btn" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-xs font-bold flex items-center space-x-1.5 transition-all shadow-md shadow-amber-600/20">
           <span>+ 新增區塊</span>
         </button>
 
         <!-- Preset Layout Selector -->
         <div class="relative">
-          <select id="preset-select" class="px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-xs font-medium focus:outline-none focus:border-blue-500 cursor-pointer">
+          <select id="preset-select" class="px-3 py-2 rounded-xl bg-stone-800 border border-stone-700 text-stone-200 text-xs font-medium focus:outline-none focus:border-amber-500 cursor-pointer">
             <option value="" disabled selected>📐 版型範本...</option>
             <option value="overview">預設綜合全覽 (Default)</option>
             <option value="weather_focus">氣象與防災焦點 (Weather)</option>
@@ -94,14 +94,14 @@
 
         <!-- More Actions Dropdown Menu -->
         <div class="flex items-center space-x-1">
-          <button id="export-layout-btn" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition-colors" title="匯出當前佈局 JSON">
+          <button id="export-layout-btn" class="p-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs transition-colors border border-stone-700/60" title="匯出當前佈局 JSON">
             💾 匯出
           </button>
-          <label class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs cursor-pointer transition-colors" title="匯入佈局 JSON">
+          <label class="p-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs cursor-pointer transition-colors border border-stone-700/60" title="匯入佈局 JSON">
             📂 匯入
             <input type="file" id="import-layout-file" accept=".json" class="hidden">
           </label>
-          <button id="reset-layout-btn" class="p-2 rounded-xl bg-slate-800 hover:bg-rose-900/40 hover:text-rose-300 text-slate-400 text-xs transition-colors" title="重設為預設版型">
+          <button id="reset-layout-btn" class="p-2 rounded-xl bg-stone-800 hover:bg-rose-900/40 hover:text-rose-300 text-stone-400 text-xs transition-colors border border-stone-700/60" title="重設為預設版型">
             🔄 重設
           </button>
         </div>
@@ -115,113 +115,113 @@
   </main>
 
   <!-- Footer -->
-  <footer class="bg-slate-900/60 border-t border-slate-800/80 py-4 px-6 text-center text-xs text-slate-500">
-    佈告欄 (Bulletin Board) ‧ 現代化自由佈局儀表板 ‧ 支援氣象、雷達雲圖、颱風、股市行情與房屋買賣即時資訊
+  <footer class="bg-stone-900/60 border-t border-stone-800/80 py-4 px-6 text-center text-xs text-stone-500">
+    佈告欄 (Bulletin Board) ‧ 暖色調動態儀表板 ‧ 支援氣象、雷達雲圖、颱風、股市行情與房屋買賣即時資訊
   </footer>
 
   <!-- Add Widget Modal Dialog -->
-  <div id="add-widget-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+  <div id="add-widget-modal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-stone-900 border border-stone-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-4 border-b border-stone-800">
         <div>
-          <h2 class="text-lg font-bold text-white">新增功能區塊到佈告欄</h2>
-          <p class="text-xs text-slate-400">選擇你想擺放至畫布上的資訊小工具</p>
+          <h2 class="text-lg font-bold text-amber-200">新增功能區塊到佈告欄</h2>
+          <p class="text-xs text-stone-400">選擇你想擺放至畫布上的資訊小工具</p>
         </div>
-        <button id="close-widget-modal" class="p-2 text-slate-400 hover:text-white rounded-lg transition-colors">
+        <button id="close-widget-modal" class="p-2 text-stone-400 hover:text-white rounded-lg transition-colors">
           ✕
         </button>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-4 max-h-[60vh] overflow-y-auto pr-1">
         <!-- Weather Temp -->
-        <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-blue-500 hover:bg-slate-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="weather-temp">
+        <div class="p-4 rounded-xl bg-stone-800/60 border border-stone-700/60 hover:border-amber-500 hover:bg-stone-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="weather-temp">
           <div class="flex items-center space-x-3">
-            <span class="text-2xl p-2.5 rounded-lg bg-blue-500/20 text-blue-400">🌤️</span>
+            <span class="text-2xl p-2.5 rounded-lg bg-amber-500/20 text-amber-400">🌤️</span>
             <div>
-              <h3 class="font-bold text-sm text-slate-100 group-hover:text-blue-400 transition-colors">各地氣溫與天氣概況</h3>
-              <p class="text-xs text-slate-400 mt-0.5">全台縣市即時氣溫、體感、濕度、紫外線與未來預報</p>
+              <h3 class="font-bold text-sm text-stone-100 group-hover:text-amber-400 transition-colors">各地氣溫與天氣概況</h3>
+              <p class="text-xs text-stone-400 mt-0.5">全台縣市即時氣溫、體感、濕度、紫外線與未來預報</p>
             </div>
           </div>
-          <button class="mt-3 w-full py-1.5 rounded-lg bg-blue-600/80 group-hover:bg-blue-600 text-white text-xs font-semibold">加入畫布</button>
+          <button class="mt-3 w-full py-1.5 rounded-lg bg-amber-600/80 group-hover:bg-amber-600 text-white text-xs font-semibold">加入畫布</button>
         </div>
 
         <!-- Weather Radar -->
-        <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-blue-500 hover:bg-slate-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="weather-radar">
+        <div class="p-4 rounded-xl bg-stone-800/60 border border-stone-700/60 hover:border-amber-500 hover:bg-stone-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="weather-radar">
           <div class="flex items-center space-x-3">
-            <span class="text-2xl p-2.5 rounded-lg bg-cyan-500/20 text-cyan-400">🛰️</span>
+            <span class="text-2xl p-2.5 rounded-lg bg-orange-500/20 text-orange-400">🛰️</span>
             <div>
-              <h3 class="font-bold text-sm text-slate-100 group-hover:text-blue-400 transition-colors">雷達回波與衛星雲圖</h3>
-              <p class="text-xs text-slate-400 mt-0.5">中央氣象署即時雷達降雨回波、紅外線雲圖動態播放</p>
+              <h3 class="font-bold text-sm text-stone-100 group-hover:text-amber-400 transition-colors">雷達回波與衛星雲圖</h3>
+              <p class="text-xs text-stone-400 mt-0.5">中央氣象署即時雷達降雨回波、紅外線雲圖與官網直達</p>
             </div>
           </div>
-          <button class="mt-3 w-full py-1.5 rounded-lg bg-blue-600/80 group-hover:bg-blue-600 text-white text-xs font-semibold">加入畫布</button>
+          <button class="mt-3 w-full py-1.5 rounded-lg bg-amber-600/80 group-hover:bg-amber-600 text-white text-xs font-semibold">加入畫布</button>
         </div>
 
         <!-- Typhoon Tracker -->
-        <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-blue-500 hover:bg-slate-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="typhoon-tracker">
+        <div class="p-4 rounded-xl bg-stone-800/60 border border-stone-700/60 hover:border-amber-500 hover:bg-stone-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="typhoon-tracker">
           <div class="flex items-center space-x-3">
             <span class="text-2xl p-2.5 rounded-lg bg-amber-500/20 text-amber-400">🌀</span>
             <div>
-              <h3 class="font-bold text-sm text-slate-100 group-hover:text-blue-400 transition-colors">颱風動態與路徑資訊</h3>
-              <p class="text-xs text-slate-400 mt-0.5">暴風圈半徑、預測路徑時間軸、中心氣壓與風速警報</p>
+              <h3 class="font-bold text-sm text-stone-100 group-hover:text-amber-400 transition-colors">颱風動態與路徑資訊</h3>
+              <p class="text-xs text-stone-400 mt-0.5">暴風圈半徑、預測路徑時間軸、中心氣壓與風速警報</p>
             </div>
           </div>
-          <button class="mt-3 w-full py-1.5 rounded-lg bg-blue-600/80 group-hover:bg-blue-600 text-white text-xs font-semibold">加入畫布</button>
+          <button class="mt-3 w-full py-1.5 rounded-lg bg-amber-600/80 group-hover:bg-amber-600 text-white text-xs font-semibold">加入畫布</button>
         </div>
 
         <!-- Stock Market -->
-        <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-blue-500 hover:bg-slate-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="stock-market">
+        <div class="p-4 rounded-xl bg-stone-800/60 border border-stone-700/60 hover:border-amber-500 hover:bg-stone-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="stock-market">
           <div class="flex items-center space-x-3">
             <span class="text-2xl p-2.5 rounded-lg bg-red-500/20 text-red-400">📈</span>
             <div>
-              <h3 class="font-bold text-sm text-slate-100 group-hover:text-blue-400 transition-colors">股市行情與分時走勢</h3>
-              <p class="text-xs text-slate-400 mt-0.5">台股大盤、櫃買、權值股即時行情、分時走勢圖表</p>
+              <h3 class="font-bold text-sm text-stone-100 group-hover:text-amber-400 transition-colors">股市行情與技術分析</h3>
+              <p class="text-xs text-stone-400 mt-0.5">台股大盤、櫃買、Yahoo 股市上市指數技術分析直達</p>
             </div>
           </div>
-          <button class="mt-3 w-full py-1.5 rounded-lg bg-blue-600/80 group-hover:bg-blue-600 text-white text-xs font-semibold">加入畫布</button>
+          <button class="mt-3 w-full py-1.5 rounded-lg bg-amber-600/80 group-hover:bg-amber-600 text-white text-xs font-semibold">加入畫布</button>
         </div>
 
         <!-- Real Estate -->
-        <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-blue-500 hover:bg-slate-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="real-estate">
+        <div class="p-4 rounded-xl bg-stone-800/60 border border-stone-700/60 hover:border-amber-500 hover:bg-stone-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="real-estate">
           <div class="flex items-center space-x-3">
             <span class="text-2xl p-2.5 rounded-lg bg-emerald-500/20 text-emerald-400">🏠</span>
             <div>
-              <h3 class="font-bold text-sm text-slate-100 group-hover:text-blue-400 transition-colors">最新房屋買賣與實價登錄</h3>
-              <p class="text-xs text-slate-400 mt-0.5">全台各區最新刊登、捷運周邊物件、實價成交單價</p>
+              <h3 class="font-bold text-sm text-stone-100 group-hover:text-amber-400 transition-colors">最新房屋買賣與實價登錄</h3>
+              <p class="text-xs text-stone-400 mt-0.5">全台各區最新刊登、捷運周邊物件、實價成交單價</p>
             </div>
           </div>
-          <button class="mt-3 w-full py-1.5 rounded-lg bg-blue-600/80 group-hover:bg-blue-600 text-white text-xs font-semibold">加入畫布</button>
+          <button class="mt-3 w-full py-1.5 rounded-lg bg-amber-600/80 group-hover:bg-amber-600 text-white text-xs font-semibold">加入畫布</button>
         </div>
 
         <!-- Quick Notes -->
-        <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-blue-500 hover:bg-slate-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="quick-notes">
+        <div class="p-4 rounded-xl bg-stone-800/60 border border-stone-700/60 hover:border-amber-500 hover:bg-stone-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="quick-notes">
           <div class="flex items-center space-x-3">
-            <span class="text-2xl p-2.5 rounded-lg bg-purple-500/20 text-purple-400">📝</span>
+            <span class="text-2xl p-2.5 rounded-lg bg-amber-500/20 text-amber-400">📝</span>
             <div>
-              <h3 class="font-bold text-sm text-slate-100 group-hover:text-blue-400 transition-colors">佈告欄便簽與備忘錄</h3>
-              <p class="text-xs text-slate-400 mt-0.5">自訂彩色便利貼、即時編輯紀錄事項，自動儲存</p>
+              <h3 class="font-bold text-sm text-stone-100 group-hover:text-amber-400 transition-colors">佈告欄便簽與備忘錄</h3>
+              <p class="text-xs text-stone-400 mt-0.5">自訂彩色便利貼、即時編輯紀錄事項，自動儲存</p>
             </div>
           </div>
-          <button class="mt-3 w-full py-1.5 rounded-lg bg-blue-600/80 group-hover:bg-blue-600 text-white text-xs font-semibold">加入畫布</button>
+          <button class="mt-3 w-full py-1.5 rounded-lg bg-amber-600/80 group-hover:bg-amber-600 text-white text-xs font-semibold">加入畫布</button>
         </div>
 
         <!-- Clock & Calendar -->
-        <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-blue-500 hover:bg-slate-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="clock-calendar">
+        <div class="p-4 rounded-xl bg-stone-800/60 border border-stone-700/60 hover:border-amber-500 hover:bg-stone-800 transition-all cursor-pointer group flex flex-col justify-between" data-add-widget-type="clock-calendar">
           <div class="flex items-center space-x-3">
-            <span class="text-2xl p-2.5 rounded-lg bg-indigo-500/20 text-indigo-400">🕒</span>
+            <span class="text-2xl p-2.5 rounded-lg bg-orange-500/20 text-orange-400">🕒</span>
             <div>
-              <h3 class="font-bold text-sm text-slate-100 group-hover:text-blue-400 transition-colors">實時時鐘與日曆</h3>
-              <p class="text-xs text-slate-400 mt-0.5">大字體數位時鐘、秒數即時跳動、農曆與節氣資訊</p>
+              <h3 class="font-bold text-sm text-stone-100 group-hover:text-amber-400 transition-colors">實時時鐘與日曆</h3>
+              <p class="text-xs text-stone-400 mt-0.5">大字體數位時鐘、秒數即時跳動、農曆與節氣資訊</p>
             </div>
           </div>
-          <button class="mt-3 w-full py-1.5 rounded-lg bg-blue-600/80 group-hover:bg-blue-600 text-white text-xs font-semibold">加入畫布</button>
+          <button class="mt-3 w-full py-1.5 rounded-lg bg-amber-600/80 group-hover:bg-amber-600 text-white text-xs font-semibold">加入畫布</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Toast Notification Message -->
-  <div id="app-toast" class="fixed bottom-6 right-6 z-50 px-4 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold shadow-xl opacity-0 translate-y-4 transition-all duration-300 pointer-events-none flex items-center space-x-2">
+  <!-- Toast Notification Message (Warm Amber) -->
+  <div id="app-toast" class="fixed bottom-6 right-6 z-50 px-4 py-2.5 rounded-xl bg-amber-600 text-white text-xs font-bold shadow-xl opacity-0 translate-y-4 transition-all duration-300 pointer-events-none flex items-center space-x-2">
     <span>✓ 佈局設定已儲存</span>
   </div>
 

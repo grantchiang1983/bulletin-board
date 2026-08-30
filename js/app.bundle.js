@@ -1,11 +1,12 @@
 /**
  * Bulletin Board (佈告欄) - Standalone All-In-One Script
  * Upgraded with:
- * 1. Direct Clickable Link to Yahoo Finance Index Technical Analysis (https://tw.stock.yahoo.com/t/idx.php)
- * 2. 100% Deterministic & Stable Volume Sub-charts (Zero Random Jitter / Jumps)
- * 3. Direct Clickable Link to Central Weather Administration (https://www.cwa.gov.tw/)
- * 4. 100% Pure Real Central Weather Administration (CWA) Live Radar & Satellite Imagery
- * 5. Real-world TWSE / FinMind Taiwan Market & Global Indices
+ * 1. Complete Warm Tone Theme (暖色調：琥珀暖金、摩卡深木、暖石暖陶色系)
+ * 2. Direct Clickable Link to Yahoo Finance Index Technical Analysis (https://tw.stock.yahoo.com/t/idx.php)
+ * 3. 100% Deterministic & Stable Volume Sub-charts (Zero Random Jitter / Jumps)
+ * 4. Direct Clickable Link to Central Weather Administration (https://www.cwa.gov.tw/)
+ * 5. 100% Pure Real Central Weather Administration (CWA) Live Radar & Satellite Imagery
+ * 6. Real-world TWSE / FinMind Taiwan Market & Global Indices
  */
 (function() {
   'use strict';
@@ -608,7 +609,7 @@
   };
 
   // ==========================================
-  // 2. WIDGETS
+  // 2. WIDGETS (Warm Palette)
   // ==========================================
 
   const WeatherTempWidget = {
@@ -625,73 +626,73 @@
 
       const getIconSvg = (iconName) => {
         switch(iconName) {
-          case 'sun': return `<svg class="w-7 h-7 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`;
+          case 'sun': return `<svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`;
           case 'sun-medium': return `<svg class="w-7 h-7 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v1M12 20v1M4.22 4.22l.71.71M18.36 18.36l.71.71M1 12h1M22 12h1M5.64 18.36l-.71.71M19.78 4.22l-.71.71"/></svg>`;
-          case 'cloud-rain': return `<svg class="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242M8 19v2M8 13v2M12 21v2M12 15v2M16 19v2M16 13v2"/></svg>`;
-          case 'cloud-lightning': return `<svg class="w-7 h-7 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"/><path d="m13 11-4 6h6l-4 6"/></svg>`;
-          default: return `<svg class="w-7 h-7 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>`;
+          case 'cloud-rain': return `<svg class="w-7 h-7 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242M8 19v2M8 13v2M12 21v2M12 15v2M16 19v2M16 13v2"/></svg>`;
+          case 'cloud-lightning': return `<svg class="w-7 h-7 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"/><path d="m13 11-4 6h6l-4 6"/></svg>`;
+          default: return `<svg class="w-7 h-7 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>`;
         }
       };
 
       container.innerHTML = `
-        <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-4 select-none justify-between">
-          <div class="flex items-center justify-between pb-2.5 border-b border-slate-800">
+        <div class="flex flex-col h-full bg-stone-900 text-stone-100 p-4 select-none justify-between">
+          <div class="flex items-center justify-between pb-2.5 border-b border-stone-800">
             <div class="flex items-center space-x-2.5">
-              <span class="p-2 rounded-xl bg-blue-950/70 border border-blue-800/40 text-blue-400">
+              <span class="p-2 rounded-xl bg-amber-950/60 border border-amber-800/40 text-amber-400">
                 ${getIconSvg(cityData.icon)}
               </span>
               <div>
                 <div class="flex items-center space-x-2">
-                  <select id="weather-city-select" class="font-bold text-base bg-slate-800 border border-slate-700 text-white rounded px-2 py-0.5 focus:outline-none cursor-pointer">
+                  <select id="weather-city-select" class="font-bold text-base bg-stone-800 border border-stone-700 text-amber-100 rounded px-2 py-0.5 focus:outline-none focus:border-amber-500 cursor-pointer">
                     ${cities.map(c => `<option value="${c.id}" ${c.id === cityData.id ? 'selected' : ''}>${c.name}</option>`).join('')}
                   </select>
                   <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800/50">
                     AQI ${cityData.aqi} ${cityData.aqiStatus}
                   </span>
                 </div>
-                <p class="text-xs text-slate-400 mt-0.5">${cityData.condition} ‧ 降雨機率 ${cityData.rainProb}</p>
+                <p class="text-xs text-stone-400 mt-0.5">${cityData.condition} ‧ 降雨機率 ${cityData.rainProb}</p>
               </div>
             </div>
             
             <div class="text-right">
-              <span class="text-3xl font-extrabold tracking-tight text-white">${cityData.temp}°C</span>
-              <div class="text-[11px] text-slate-400">最高 ${cityData.high}° ‧ 最低 ${cityData.low}°</div>
+              <span class="text-3xl font-extrabold tracking-tight text-amber-200">${cityData.temp}°C</span>
+              <div class="text-[11px] text-stone-400">最高 ${cityData.high}° ‧ 最低 ${cityData.low}°</div>
             </div>
           </div>
 
           <div class="grid grid-cols-3 gap-2 my-2 text-center">
-            <div class="p-2 rounded-lg bg-slate-800/60 border border-slate-700/50">
-              <div class="text-[10px] text-slate-400">體感溫度</div>
-              <div class="font-bold text-xs mt-0.5 text-slate-200">${cityData.temp + 2}°C</div>
+            <div class="p-2 rounded-lg bg-stone-800/60 border border-stone-700/50">
+              <div class="text-[10px] text-stone-400">體感溫度</div>
+              <div class="font-bold text-xs mt-0.5 text-stone-200">${cityData.temp + 2}°C</div>
             </div>
-            <div class="p-2 rounded-lg bg-slate-800/60 border border-slate-700/50">
-              <div class="text-[10px] text-slate-400">相對濕度</div>
-              <div class="font-bold text-xs mt-0.5 text-slate-200">${cityData.humidity}%</div>
+            <div class="p-2 rounded-lg bg-stone-800/60 border border-stone-700/50">
+              <div class="text-[10px] text-stone-400">相對濕度</div>
+              <div class="font-bold text-xs mt-0.5 text-stone-200">${cityData.humidity}%</div>
             </div>
-            <div class="p-2 rounded-lg bg-slate-800/60 border border-slate-700/50">
-              <div class="text-[10px] text-slate-400">紫外線指數</div>
+            <div class="p-2 rounded-lg bg-stone-800/60 border border-stone-700/50">
+              <div class="text-[10px] text-stone-400">紫外線指數</div>
               <div class="font-bold text-xs mt-0.5 text-amber-400">${cityData.uv} (中高)</div>
             </div>
           </div>
 
-          <div class="text-[11px] font-medium text-slate-400 mb-1">未來 24 小時氣溫與降雨趨勢</div>
+          <div class="text-[11px] font-medium text-stone-400 mb-1">未來 24 小時氣溫與降雨趨勢</div>
           <div class="flex space-x-2 overflow-x-auto pb-1.5 scrollbar-thin">
             ${cityData.hourly.map(h => `
-              <div class="flex flex-col items-center flex-shrink-0 p-1.5 rounded-lg bg-slate-800/40 border border-slate-700/40 min-w-[50px] text-center">
-                <span class="text-[10px] text-slate-400">${h.time}</span>
+              <div class="flex flex-col items-center flex-shrink-0 p-1.5 rounded-lg bg-stone-800/40 border border-stone-700/40 min-w-[50px] text-center">
+                <span class="text-[10px] text-stone-400">${h.time}</span>
                 <div class="my-0.5 scale-75">${getIconSvg(h.icon)}</div>
-                <span class="font-bold text-xs text-white">${h.temp}°</span>
-                <span class="text-[9px] text-blue-400 mt-0.5">${h.rainProb}</span>
+                <span class="font-bold text-xs text-amber-100">${h.temp}°</span>
+                <span class="text-[9px] text-sky-400 mt-0.5">${h.rainProb}</span>
               </div>
             `).join('')}
           </div>
 
-          <div class="pt-2 border-t border-slate-800/80">
+          <div class="pt-2 border-t border-stone-800/80">
             <div class="grid grid-cols-4 gap-1.5 text-xs">
               ${cities.slice(0, 8).map(c => `
-                <div class="p-1 rounded bg-slate-800/70 border border-slate-700/40 flex items-center justify-between cursor-pointer hover:bg-blue-900/40 transition-colors" data-city="${c.id}">
-                  <span class="font-medium text-slate-300 text-[11px]">${c.name.slice(0,2)}</span>
-                  <span class="font-bold text-slate-100 text-[11px]">${c.temp}°</span>
+                <div class="p-1 rounded bg-stone-800/70 border border-stone-700/40 flex items-center justify-between cursor-pointer hover:bg-amber-950/40 hover:border-amber-700/60 transition-colors" data-city="${c.id}">
+                  <span class="font-medium text-stone-300 text-[11px]">${c.name.slice(0,2)}</span>
+                  <span class="font-bold text-amber-200 text-[11px]">${c.temp}°</span>
                 </div>
               `).join('')}
             </div>
@@ -729,48 +730,48 @@
       const nowTimeStr = new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
       container.innerHTML = `
-        <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-3 select-none overflow-hidden relative justify-between">
-          <div class="flex items-center justify-between z-10 pb-2 border-b border-slate-800">
-            <div class="flex items-center space-x-1 bg-slate-800/90 p-0.5 rounded-lg overflow-x-auto max-w-[60%] scrollbar-thin">
+        <div class="flex flex-col h-full bg-stone-900 text-stone-100 p-3 select-none overflow-hidden relative justify-between">
+          <div class="flex items-center justify-between z-10 pb-2 border-b border-stone-800">
+            <div class="flex items-center space-x-1 bg-stone-800/90 p-0.5 rounded-lg overflow-x-auto max-w-[60%] scrollbar-thin">
               ${layers.map(l => `
-                <button class="px-2.5 py-1 text-xs font-medium rounded-md transition-all flex-shrink-0 ${l.id === currentLayer.id ? 'bg-blue-600 text-white shadow-sm font-bold' : 'text-slate-400 hover:text-white'}" data-layer="${l.id}">
+                <button class="px-2.5 py-1 text-xs font-medium rounded-md transition-all flex-shrink-0 ${l.id === currentLayer.id ? 'bg-amber-600 text-white shadow-sm font-bold' : 'text-stone-400 hover:text-stone-200'}" data-layer="${l.id}">
                   ${l.name.replace('中央氣象署', '').replace('向日葵', '')}
                 </button>
               `).join('')}
             </div>
             
             <div class="flex items-center space-x-1.5">
-              <button id="radar-refresh-btn" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors flex items-center space-x-1" title="重新載入最新雷達圖">
+              <button id="radar-refresh-btn" class="px-2 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-amber-200 text-xs font-medium transition-colors flex items-center space-x-1 border border-stone-700/60" title="重新載入最新雷達圖">
                 <span>🔄</span>
                 <span>刷新</span>
               </button>
 
-              <a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1 transition-all shadow-sm group/btn" title="在新分頁開啟交通部中央氣象署官方網站 (https://www.cwa.gov.tw/)">
+              <a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-xs font-semibold flex items-center space-x-1 transition-all shadow-sm group/btn" title="在新分頁開啟交通部中央氣象署官方網站 (https://www.cwa.gov.tw/)">
                 <span>🌐</span>
                 <span>中央氣象署官網</span>
-                <svg class="w-3 h-3 text-blue-200 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-3 h-3 text-amber-100 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               </a>
             </div>
           </div>
 
-          <div class="relative flex-1 my-2 rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center min-h-[140px] group">
-            <div class="w-full h-full relative overflow-hidden flex items-center justify-center bg-slate-950">
+          <div class="relative flex-1 my-2 rounded-xl overflow-hidden bg-stone-950 border border-stone-800 flex items-center justify-center min-h-[140px] group">
+            <div class="w-full h-full relative overflow-hidden flex items-center justify-center bg-stone-950">
               <img id="cwa-live-radar-img" src="${currentLayer.url}" alt="${currentLayer.name}" class="w-full h-full object-contain transition-transform duration-300 transform scale-100 hover:scale-105 cursor-zoom-in" title="點擊在新分頁開啟全解析度圖檔">
               
-              <a href="https://www.cwa.gov.tw/V8/C/W/OBS_Radar.html" target="_blank" rel="noopener noreferrer" class="absolute bottom-2 left-2 bg-slate-900/90 hover:bg-blue-900/80 backdrop-blur border border-slate-700 px-2 py-1 rounded text-[10px] flex items-center space-x-1.5 shadow transition-colors" title="前往氣象署雷達觀測專頁">
-                <span class="text-cyan-400 font-bold">📡 中央氣象署 (cwa.gov.tw)</span>
-                <span class="text-slate-400">‧ ${currentLayer.unit}</span>
-                <span class="text-blue-400">↗</span>
+              <a href="https://www.cwa.gov.tw/V8/C/W/OBS_Radar.html" target="_blank" rel="noopener noreferrer" class="absolute bottom-2 left-2 bg-stone-900/90 hover:bg-amber-950/80 backdrop-blur border border-stone-700 px-2 py-1 rounded text-[10px] flex items-center space-x-1.5 shadow transition-colors" title="前往氣象署雷達觀測專頁">
+                <span class="text-amber-400 font-bold">📡 中央氣象署 (cwa.gov.tw)</span>
+                <span class="text-stone-400">‧ ${currentLayer.unit}</span>
+                <span class="text-orange-400">↗</span>
               </a>
 
               <div class="absolute top-2 right-2 flex items-center space-x-1">
-                <div class="bg-slate-900/90 backdrop-blur border border-slate-700 px-2 py-0.5 rounded text-[10px] font-mono text-cyan-300 shadow">
+                <div class="bg-stone-900/90 backdrop-blur border border-stone-700 px-2 py-0.5 rounded text-[10px] font-mono text-amber-300 shadow">
                   🕒 ${nowTimeStr} 同步
                 </div>
                 ${currentLayer.hdUrl ? `
-                  <a href="${currentLayer.hdUrl}" target="_blank" class="bg-blue-600 hover:bg-blue-500 px-2 py-0.5 rounded text-[10px] text-white font-bold transition-colors shadow" title="開啟 3600x3600 超高清大圖">
+                  <a href="${currentLayer.hdUrl}" target="_blank" class="bg-amber-600 hover:bg-amber-500 px-2 py-0.5 rounded text-[10px] text-white font-bold transition-colors shadow" title="開啟 3600x3600 超高清大圖">
                     🔍 3600HD
                   </a>
                 ` : ''}
@@ -780,12 +781,12 @@
 
           <div class="flex items-center justify-between pt-1 text-xs">
             <div class="flex items-center space-x-2">
-              <span class="text-slate-300 text-[11px] font-medium">${currentLayer.name}</span>
-              <span class="text-slate-500 text-[10px]">資料來源：交通部中央氣象署</span>
+              <span class="text-stone-300 text-[11px] font-medium">${currentLayer.name}</span>
+              <span class="text-stone-500 text-[10px]">資料來源：交通部中央氣象署</span>
             </div>
 
-            <div class="flex items-center space-x-2 text-slate-400">
-              <a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 text-[11px] flex items-center space-x-0.5 underline">
+            <div class="flex items-center space-x-2 text-stone-400">
+              <a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 text-[11px] flex items-center space-x-0.5 underline">
                 <span>https://www.cwa.gov.tw/</span>
                 <span>↗</span>
               </a>
@@ -828,60 +829,60 @@
       const typhoon = WeatherService.getTyphoonInfo();
 
       container.innerHTML = `
-        <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-4 select-none justify-between">
-          <div class="flex items-center justify-between pb-2.5 border-b border-slate-800">
+        <div class="flex flex-col h-full bg-stone-900 text-stone-100 p-4 select-none justify-between">
+          <div class="flex items-center justify-between pb-2.5 border-b border-stone-800">
             <div class="flex items-center space-x-2">
-              <div class="p-2 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
+              <div class="p-2 rounded-xl bg-orange-500/20 text-orange-400 border border-orange-500/30">
                 <svg class="w-5 h-5 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               </div>
               <div>
                 <div class="flex items-center space-x-2">
-                  <h3 class="font-bold text-base text-white">${typhoon.nameZh}</h3>
+                  <h3 class="font-bold text-base text-amber-200">${typhoon.nameZh}</h3>
                   <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
                     ${typhoon.intensity}
                   </span>
                 </div>
-                <p class="text-xs text-slate-400 font-mono">${typhoon.number}</p>
+                <p class="text-xs text-stone-400 font-mono">${typhoon.number}</p>
               </div>
             </div>
 
             <div class="text-right">
-              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-400 border border-rose-500/40 animate-pulse">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/40 animate-pulse">
                 ⚠️ ${typhoon.status}
               </span>
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-2 my-2">
-            <div class="p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
-              <span class="text-[10px] text-slate-400">目前中心位置</span>
-              <div class="font-semibold text-xs text-cyan-300 mt-0.5 truncate">${typhoon.centerLocation}</div>
+            <div class="p-2 rounded-xl bg-stone-800/80 border border-stone-700/60">
+              <span class="text-[10px] text-stone-400">目前中心位置</span>
+              <div class="font-semibold text-xs text-amber-300 mt-0.5 truncate">${typhoon.centerLocation}</div>
             </div>
-            <div class="p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
-              <span class="text-[10px] text-slate-400">進行方向與速度</span>
-              <div class="font-semibold text-xs text-emerald-300 mt-0.5">${typhoon.movementSpeed}</div>
+            <div class="p-2 rounded-xl bg-stone-800/80 border border-stone-700/60">
+              <span class="text-[10px] text-stone-400">進行方向與速度</span>
+              <div class="font-semibold text-xs text-orange-300 mt-0.5">${typhoon.movementSpeed}</div>
             </div>
           </div>
 
           <div class="grid grid-cols-3 gap-2 text-center mb-2">
-            <div class="p-1.5 rounded-lg bg-slate-800/50 border border-slate-700/40">
-              <div class="text-[9px] text-slate-400">中心氣壓</div>
-              <div class="font-bold text-xs text-white mt-0.5">${typhoon.centralPressure}</div>
+            <div class="p-1.5 rounded-lg bg-stone-800/50 border border-stone-700/40">
+              <div class="text-[9px] text-stone-400">中心氣壓</div>
+              <div class="font-bold text-xs text-stone-100 mt-0.5">${typhoon.centralPressure}</div>
             </div>
-            <div class="p-1.5 rounded-lg bg-slate-800/50 border border-slate-700/40">
-              <div class="text-[9px] text-slate-400">最大風速</div>
+            <div class="p-1.5 rounded-lg bg-stone-800/50 border border-stone-700/40">
+              <div class="text-[9px] text-stone-400">最大風速</div>
               <div class="font-bold text-xs text-amber-400 mt-0.5">${typhoon.maxWindSpeed.split('(')[0]}</div>
             </div>
-            <div class="p-1.5 rounded-lg bg-slate-800/50 border border-slate-700/40">
-              <div class="text-[9px] text-slate-400">7級風半徑</div>
-              <div class="font-bold text-xs text-cyan-400 mt-0.5">${typhoon.radius7.split('(')[0]}</div>
+            <div class="p-1.5 rounded-lg bg-stone-800/50 border border-stone-700/40">
+              <div class="text-[9px] text-stone-400">7級風半徑</div>
+              <div class="font-bold text-xs text-orange-400 mt-0.5">${typhoon.radius7.split('(')[0]}</div>
             </div>
           </div>
 
-          <div class="bg-slate-950/80 rounded-xl p-2 border border-slate-800 flex flex-col justify-between">
-            <div class="flex items-center justify-between text-[10px] text-slate-400 mb-1">
+          <div class="bg-stone-950/80 rounded-xl p-2 border border-stone-800 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-[10px] text-stone-400 mb-1">
               <span>預測路徑時間軸</span>
               <span class="text-amber-400">警戒海域：${typhoon.alertAreas.join('、')}</span>
             </div>
@@ -889,16 +890,16 @@
             <div class="flex items-center justify-between px-1 py-1 overflow-x-auto scrollbar-thin">
               ${typhoon.pathPoints.map((pt) => `
                 <div class="flex flex-col items-center flex-shrink-0 min-w-[52px]">
-                  <span class="text-[9px] text-slate-400 mb-0.5">${pt.time}</span>
-                  <div class="w-3.5 h-3.5 rounded-full flex items-center justify-center ${pt.current ? 'bg-rose-500 text-white ring-2 ring-rose-500/30' : pt.past ? 'bg-slate-600' : 'bg-amber-500'}"></div>
-                  <span class="text-[9px] font-medium mt-0.5 ${pt.current ? 'text-rose-400 font-bold' : pt.forecast ? 'text-amber-300' : 'text-slate-500'}">
+                  <span class="text-[9px] text-stone-400 mb-0.5">${pt.time}</span>
+                  <div class="w-3.5 h-3.5 rounded-full flex items-center justify-center ${pt.current ? 'bg-rose-500 text-white ring-2 ring-rose-500/30' : pt.past ? 'bg-stone-600' : 'bg-amber-500'}"></div>
+                  <span class="text-[9px] font-medium mt-0.5 ${pt.current ? 'text-rose-400 font-bold' : pt.forecast ? 'text-amber-300' : 'text-stone-500'}">
                     ${pt.status.split(' ')[0]}
                   </span>
                 </div>
-              `).join('<div class="h-0.5 w-4 bg-slate-700 flex-shrink-0 -mt-2"></div>')}
+              `).join('<div class="h-0.5 w-4 bg-stone-700 flex-shrink-0 -mt-2"></div>')}
             </div>
 
-            <div class="text-[10px] text-rose-300 bg-rose-950/40 border border-rose-800/40 rounded p-1 mt-1.5 flex items-start space-x-1">
+            <div class="text-[10px] text-amber-200 bg-amber-950/40 border border-amber-800/40 rounded p-1 mt-1.5 flex items-start space-x-1">
               <span>📢</span>
               <span class="leading-tight">${typhoon.impactNotice}</span>
             </div>
@@ -944,36 +945,36 @@
       }
 
       container.innerHTML = `
-        <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-3 select-none justify-between overflow-hidden">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-            <div class="flex items-center space-x-1 bg-slate-800/90 p-0.5 rounded-lg">
-              <button id="stock-tab-indices" class="px-2.5 py-1 text-xs font-semibold rounded-md transition-all ${state.tab === 'indices' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}">
+        <div class="flex flex-col h-full bg-stone-900 text-stone-100 p-3 select-none justify-between overflow-hidden">
+          <div class="flex items-center justify-between pb-2 border-b border-stone-800">
+            <div class="flex items-center space-x-1 bg-stone-800/90 p-0.5 rounded-lg border border-stone-700/60">
+              <button id="stock-tab-indices" class="px-2.5 py-1 text-xs font-semibold rounded-md transition-all ${state.tab === 'indices' ? 'bg-amber-600 text-white shadow' : 'text-stone-400 hover:text-stone-200'}">
                 主要指數
               </button>
-              <button id="stock-tab-stocks" class="px-2.5 py-1 text-xs font-semibold rounded-md transition-all ${state.tab === 'stocks' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}">
+              <button id="stock-tab-stocks" class="px-2.5 py-1 text-xs font-semibold rounded-md transition-all ${state.tab === 'stocks' ? 'bg-amber-600 text-white shadow' : 'text-stone-400 hover:text-stone-200'}">
                 熱門個股
               </button>
             </div>
 
-            <div class="flex items-center space-x-1 bg-slate-950 p-0.5 rounded-lg border border-slate-800">
-              <button id="stock-mode-intraday" class="px-2 py-0.5 text-[11px] font-medium rounded transition-all ${state.chartType === 'intraday' ? 'bg-blue-500/30 text-blue-300 font-bold border border-blue-500/40' : 'text-slate-400 hover:text-slate-200'}">
+            <div class="flex items-center space-x-1 bg-stone-950 p-0.5 rounded-lg border border-stone-800">
+              <button id="stock-mode-intraday" class="px-2 py-0.5 text-[11px] font-medium rounded transition-all ${state.chartType === 'intraday' ? 'bg-amber-500/30 text-amber-300 font-bold border border-amber-500/40' : 'text-stone-400 hover:text-stone-200'}">
                 分時走勢
               </button>
-              <button id="stock-mode-kline" class="px-2 py-0.5 text-[11px] font-medium rounded transition-all ${state.chartType === 'kline' ? 'bg-blue-500/30 text-blue-300 font-bold border border-blue-500/40' : 'text-slate-400 hover:text-slate-200'}">
+              <button id="stock-mode-kline" class="px-2 py-0.5 text-[11px] font-medium rounded transition-all ${state.chartType === 'kline' ? 'bg-amber-500/30 text-amber-300 font-bold border border-amber-500/40' : 'text-stone-400 hover:text-stone-200'}">
                 日K線圖
               </button>
             </div>
 
             <div class="flex items-center space-x-1.5">
-              <a href="https://tw.stock.yahoo.com/t/idx.php" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁直接開啟 Yahoo股市 上市指數技術分析 (https://tw.stock.yahoo.com/t/idx.php)">
+              <a href="https://tw.stock.yahoo.com/t/idx.php" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white text-xs font-semibold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁直接開啟 Yahoo股市 上市指數技術分析 (https://tw.stock.yahoo.com/t/idx.php)">
                 <span>📊</span>
                 <span>上市指數技術分析</span>
-                <svg class="w-3 h-3 text-purple-200 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-3 h-3 text-amber-100 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               </a>
 
-              <button id="stock-refresh-api-btn" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors flex items-center space-x-1" title="更新即時行情">
+              <button id="stock-refresh-api-btn" class="px-2 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-amber-200 text-xs font-medium transition-colors flex items-center space-x-1 border border-stone-700/60" title="更新即時行情">
                 <span>🔄</span>
               </button>
             </div>
@@ -982,17 +983,17 @@
           <div class="flex items-center justify-between my-1.5 px-1">
             <div>
               <div class="flex items-center space-x-2">
-                <a href="${yahooUrl}" target="_blank" rel="noopener noreferrer" class="text-base font-black text-white hover:text-blue-400 flex items-center space-x-1 transition-colors" title="前往 Yahoo 股市查看完整技術分析">
+                <a href="${yahooUrl}" target="_blank" rel="noopener noreferrer" class="text-base font-black text-white hover:text-amber-300 flex items-center space-x-1 transition-colors" title="前往 Yahoo 股市查看完整技術分析">
                   <span>${currentItem.name}</span>
-                  <span class="text-xs text-blue-400 font-normal">↗</span>
+                  <span class="text-xs text-amber-400 font-normal">↗</span>
                 </a>
-                <span class="text-xs px-1.5 py-0.2 font-mono rounded bg-slate-800 text-slate-300">${currentItem.symbol}</span>
+                <span class="text-xs px-1.5 py-0.2 font-mono rounded bg-stone-800 text-stone-300 border border-stone-700/50">${currentItem.symbol}</span>
               </div>
-              <div class="text-[10px] text-slate-400 flex items-center space-x-2 mt-0.5">
-                <span>開盤: <b class="text-slate-200">${currentItem.open?.toLocaleString() || currentItem.price}</b></span>
+              <div class="text-[10px] text-stone-400 flex items-center space-x-2 mt-0.5">
+                <span>開盤: <b class="text-stone-200">${currentItem.open?.toLocaleString() || currentItem.price}</b></span>
                 <span>最高: <b class="text-red-400">${currentItem.high?.toLocaleString() || currentItem.price}</b></span>
                 <span>最低: <b class="text-emerald-400">${currentItem.low?.toLocaleString() || currentItem.price}</b></span>
-                <span>${volLabel}: <b class="text-cyan-300 font-bold">${currentItem.volume}</b></span>
+                <span>${volLabel}: <b class="text-amber-300 font-bold">${currentItem.volume}</b></span>
               </div>
             </div>
 
@@ -1006,22 +1007,22 @@
             </div>
           </div>
 
-          <div class="relative flex-1 min-h-[140px] bg-slate-950/90 rounded-xl p-1.5 border border-slate-800/90 flex flex-col justify-between overflow-hidden">
+          <div class="relative flex-1 min-h-[140px] bg-stone-950 rounded-xl p-1.5 border border-stone-800 flex flex-col justify-between overflow-hidden">
             <canvas id="stock-chart-canvas" class="w-full h-full cursor-crosshair"></canvas>
             
-            <div id="chart-legend-overlay" class="absolute top-1.5 left-2 text-[9px] text-slate-400 font-mono pointer-events-none flex items-center space-x-2 bg-slate-900/80 px-1.5 py-0.5 rounded backdrop-blur">
+            <div id="chart-legend-overlay" class="absolute top-1.5 left-2 text-[9px] text-stone-400 font-mono pointer-events-none flex items-center space-x-2 bg-stone-900/90 px-1.5 py-0.5 rounded backdrop-blur border border-stone-800">
               ${state.chartType === 'intraday' ? `
-                <span><span class="text-blue-400">●</span> 走勢線</span>
+                <span><span class="text-amber-400">●</span> 走勢線</span>
                 <span><span class="text-yellow-400">●</span> 均價線 (VWAP)</span>
-                <span><span class="text-slate-500">┄</span> 昨收平盤 (${(currentItem.prevClose || (currentItem.price - currentItem.change)).toLocaleString()})</span>
+                <span><span class="text-stone-500">┄</span> 昨收平盤 (${(currentItem.prevClose || (currentItem.price - currentItem.change)).toLocaleString()})</span>
               ` : `
                 <span><span class="text-yellow-400">●</span> MA5 (週)</span>
-                <span><span class="text-cyan-400">●</span> MA10 (雙週)</span>
-                <span><span class="text-purple-400">●</span> MA20 (月)</span>
+                <span><span class="text-amber-400">●</span> MA10 (雙週)</span>
+                <span><span class="text-orange-400">●</span> MA20 (月)</span>
               `}
             </div>
 
-            <div id="chart-hover-tooltip" class="absolute top-1.5 right-2 text-[10px] font-mono text-cyan-300 bg-slate-900/90 px-2 py-0.5 rounded border border-slate-700 pointer-events-none hidden shadow">
+            <div id="chart-hover-tooltip" class="absolute top-1.5 right-2 text-[10px] font-mono text-amber-200 bg-stone-900/95 px-2 py-0.5 rounded border border-stone-700 pointer-events-none hidden shadow-lg">
               --
             </div>
           </div>
@@ -1033,13 +1034,13 @@
                 const textCol = itemUp ? 'text-red-400' : 'text-emerald-400';
                 const isSelected = item.symbol === currentItem.symbol;
                 return `
-                  <div class="flex-shrink-0 px-2.5 py-1 rounded-lg cursor-pointer transition-all border ${isSelected ? 'bg-blue-950/70 border-blue-500 shadow-sm' : 'bg-slate-800/40 border-slate-700/40 hover:bg-slate-800'}" data-stock-symbol="${item.symbol}">
+                  <div class="flex-shrink-0 px-2.5 py-1 rounded-lg cursor-pointer transition-all border ${isSelected ? 'bg-amber-950/70 border-amber-500 shadow-sm' : 'bg-stone-800/40 border-stone-700/40 hover:bg-stone-800'}" data-stock-symbol="${item.symbol}">
                     <div class="flex items-center justify-between text-[11px] font-semibold space-x-2">
-                      <span class="text-slate-200">${item.name}</span>
+                      <span class="text-stone-200">${item.name}</span>
                       <span class="${textCol} font-mono">${item.price.toLocaleString()}</span>
                     </div>
                     <div class="flex items-center justify-between text-[9px] mt-0.5">
-                      <span class="text-slate-400 font-mono">${item.volume}</span>
+                      <span class="text-stone-400 font-mono">${item.volume}</span>
                       <span class="${textCol} font-mono font-bold">${itemUp ? '+' : ''}${item.changePercent.toFixed(2)}%</span>
                     </div>
                   </div>
@@ -1047,7 +1048,7 @@
               }).join('')}
             </div>
 
-            <a href="https://tw.stock.yahoo.com/t/idx.php" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-purple-400 hover:text-purple-300 text-[10px] underline flex items-center space-x-0.5 bg-slate-800/80 px-2 py-1 rounded" title="Yahoo 股市上市指數技術分析">
+            <a href="https://tw.stock.yahoo.com/t/idx.php" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-amber-400 hover:text-amber-300 text-[10px] underline flex items-center space-x-0.5 bg-stone-800/80 border border-stone-700/60 px-2 py-1 rounded" title="Yahoo 股市上市指數技術分析">
               <span>Yahoo 股市</span>
               <span>↗</span>
             </a>
@@ -1115,17 +1116,17 @@
             ctx.moveTo(paddingLeft, y);
             ctx.lineTo(w - paddingRight, y);
             if (diff === 0) {
-              ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+              ctx.strokeStyle = 'rgba(168, 138, 108, 0.4)';
               ctx.setLineDash([4, 4]);
             } else {
-              ctx.strokeStyle = 'rgba(51, 65, 85, 0.3)';
+              ctx.strokeStyle = 'rgba(68, 60, 56, 0.35)';
               ctx.setLineDash([2, 2]);
             }
             ctx.stroke();
             ctx.setLineDash([]);
 
             ctx.font = '9px monospace';
-            ctx.fillStyle = diff > 0 ? '#f87171' : diff < 0 ? '#34d399' : '#94a3b8';
+            ctx.fillStyle = diff > 0 ? '#f87171' : diff < 0 ? '#34d399' : '#a8a29e';
             ctx.textAlign = 'left';
             ctx.fillText(`${diff > 0 ? '+' : ''}${pct}%`, w - paddingRight + 4, y + 3);
           });
@@ -1133,7 +1134,7 @@
           ctx.textAlign = 'left';
           ctx.fillStyle = '#f87171';
           ctx.fillText(maxPrice.toFixed(1), paddingLeft + 2, 10);
-          ctx.fillStyle = '#94a3b8';
+          ctx.fillStyle = '#d6d3d1';
           ctx.fillText(prevClose.toFixed(1), paddingLeft + 2, getY(prevClose) - 3);
           ctx.fillStyle = '#34d399';
           ctx.fillText(minPrice.toFixed(1), paddingLeft + 2, priceH - 3);
@@ -1163,7 +1164,7 @@
             if (idx === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
           });
-          ctx.strokeStyle = '#eab308';
+          ctx.strokeStyle = '#fbbf24';
           ctx.lineWidth = 1.2;
           ctx.stroke();
 
@@ -1197,7 +1198,7 @@
             { label: '12:00', idx: 36 },
             { label: '13:30', idx: 54 }
           ];
-          ctx.fillStyle = '#64748b';
+          ctx.fillStyle = '#a8a29e';
           ctx.font = '9px monospace';
           timeTicks.forEach(t => {
             const x = getX(t.idx);
@@ -1210,13 +1211,13 @@
             const hX = getX(hoveredIdx);
             const hY = getY(prices[hoveredIdx]);
 
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.strokeStyle = 'rgba(254, 243, 199, 0.6)';
             ctx.setLineDash([2, 2]);
             ctx.beginPath(); ctx.moveTo(hX, 0); ctx.lineTo(hX, h); ctx.stroke();
             ctx.beginPath(); ctx.moveTo(paddingLeft, hY); ctx.lineTo(w - paddingRight, hY); ctx.stroke();
             ctx.setLineDash([]);
 
-            ctx.fillStyle = '#ffffff';
+            ctx.fillStyle = '#fef3c7';
             ctx.beginPath(); ctx.arc(hX, hY, 3.5, 0, Math.PI * 2); ctx.fill();
 
             const curP = prices[hoveredIdx];
@@ -1255,10 +1256,10 @@
           for (let i = 0; i <= 3; i++) {
             const y = (priceH / 3) * i;
             const p = maxPrice - (i / 3) * priceRange;
-            ctx.strokeStyle = 'rgba(51, 65, 85, 0.25)';
+            ctx.strokeStyle = 'rgba(68, 60, 56, 0.35)';
             ctx.beginPath(); ctx.moveTo(paddingLeft, y); ctx.lineTo(w - paddingRight, y); ctx.stroke();
 
-            ctx.fillStyle = '#94a3b8';
+            ctx.fillStyle = '#a8a29e';
             ctx.font = '9px monospace';
             ctx.textAlign = 'left';
             ctx.fillText(p.toFixed(1), w - paddingRight + 4, y + 3);
@@ -1310,11 +1311,11 @@
             ctx.stroke();
           };
 
-          drawMALine(ma5, '#eab308');
-          drawMALine(ma10, '#06b6d4');
-          drawMALine(ma20, '#a855f7');
+          drawMALine(ma5, '#fbbf24');
+          drawMALine(ma10, '#f97316');
+          drawMALine(ma20, '#d97706');
 
-          ctx.fillStyle = '#64748b';
+          ctx.fillStyle = '#a8a29e';
           ctx.font = '9px monospace';
           const kLen = klines.length;
           [0, Math.floor(kLen * 0.33), Math.floor(kLen * 0.66), kLen - 1].forEach(idx => {
@@ -1331,7 +1332,7 @@
             const hX = getX(hoveredIdx);
             const hY = getY(k.close);
 
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.strokeStyle = 'rgba(254, 243, 199, 0.6)';
             ctx.setLineDash([2, 2]);
             ctx.beginPath(); ctx.moveTo(hX, 0); ctx.lineTo(hX, h); ctx.stroke();
             ctx.beginPath(); ctx.moveTo(paddingLeft, hY); ctx.lineTo(w - paddingRight, hY); ctx.stroke();
@@ -1420,30 +1421,30 @@
 
       const getBadgeStyle = (badge) => {
         switch(badge) {
-          case '最新上架': return 'bg-blue-500/20 text-blue-400 border-blue-500/40';
-          case '降價急售': return 'bg-rose-500/20 text-rose-400 border-rose-500/40';
-          case '最新揭露': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40';
-          default: return 'bg-amber-500/20 text-amber-400 border-amber-500/40';
+          case '最新上架': return 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+          case '降價急售': return 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+          case '最新揭露': return 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+          default: return 'bg-orange-500/20 text-orange-300 border-orange-500/40';
         }
       };
 
       container.innerHTML = `
-        <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-4 select-none justify-between">
-          <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-800">
+        <div class="flex flex-col h-full bg-stone-900 text-stone-100 p-4 select-none justify-between">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-stone-800">
             <div class="flex items-center space-x-1 overflow-x-auto pb-1 max-w-full scrollbar-thin">
-              <button class="px-2 py-0.5 text-xs font-semibold rounded-md transition-all ${state.city === 'all' ? 'bg-blue-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:text-white'}" data-city-filter="all">
+              <button class="px-2 py-0.5 text-xs font-semibold rounded-md transition-all ${state.city === 'all' ? 'bg-amber-600 text-white shadow' : 'bg-stone-800 text-stone-400 hover:text-stone-200'}" data-city-filter="all">
                 全部
               </button>
               ${['台北市', '新北市', '桃園市', '台中市', '高雄市', '新竹市'].map(c => `
-                <button class="px-2 py-0.5 text-xs font-medium rounded-md transition-all flex-shrink-0 ${state.city === c ? 'bg-blue-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:text-white'}" data-city-filter="${c}">
+                <button class="px-2 py-0.5 text-xs font-medium rounded-md transition-all flex-shrink-0 ${state.city === c ? 'bg-amber-600 text-white shadow' : 'bg-stone-800 text-stone-400 hover:text-stone-200'}" data-city-filter="${c}">
                   ${c}
                 </button>
               `).join('')}
             </div>
 
             <div class="flex items-center space-x-1.5">
-              <input type="text" id="re-keyword-input" placeholder="搜尋路段、捷運..." value="${state.keyword || ''}" class="bg-slate-950 border border-slate-700 rounded px-2 py-0.5 text-xs text-white focus:outline-none focus:border-blue-500 w-28">
-              <select id="re-sort-select" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-slate-300 focus:outline-none">
+              <input type="text" id="re-keyword-input" placeholder="搜尋路段、捷運..." value="${state.keyword || ''}" class="bg-stone-950 border border-stone-700 rounded px-2 py-0.5 text-xs text-stone-100 focus:outline-none focus:border-amber-500 w-28">
+              <select id="re-sort-select" class="bg-stone-950 border border-stone-700 rounded px-1.5 py-0.5 text-xs text-stone-300 focus:outline-none focus:border-amber-500">
                 <option value="date" ${state.sortBy === 'date' ? 'selected' : ''}>最新發布</option>
                 <option value="price_asc" ${state.sortBy === 'price_asc' ? 'selected' : ''}>總價低至高</option>
                 <option value="price_desc" ${state.sortBy === 'price_desc' ? 'selected' : ''}>總價高至低</option>
@@ -1454,18 +1455,18 @@
 
           <div class="flex-1 overflow-y-auto space-y-2 my-2 pr-1 scrollbar-thin">
             ${listings.map(item => `
-              <div class="p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-blue-500/60 hover:bg-slate-800 transition-all cursor-pointer">
+              <div class="p-2.5 rounded-xl bg-stone-800/60 border border-stone-700/60 hover:border-amber-500/60 hover:bg-stone-800 transition-all cursor-pointer">
                 <div class="flex items-start justify-between">
                   <div class="flex-1 pr-2">
                     <div class="flex items-center space-x-1.5 mb-1">
                       <span class="text-[9px] px-1.5 py-0.5 rounded border ${getBadgeStyle(item.badge)} font-medium">
                         ${item.badge}
                       </span>
-                      <span class="text-xs font-bold text-slate-200 line-clamp-1">
+                      <span class="text-xs font-bold text-stone-200 line-clamp-1">
                         ${item.title}
                       </span>
                     </div>
-                    <div class="text-[11px] text-slate-400 flex items-center space-x-1.5">
+                    <div class="text-[11px] text-stone-400 flex items-center space-x-1.5">
                       <span class="text-amber-400 font-medium">📍 ${item.city} ${item.district}</span>
                       <span>‧</span>
                       <span>${item.layout}</span>
@@ -1478,23 +1479,23 @@
                     <div class="text-sm font-extrabold text-amber-400 font-mono">
                       ${item.totalPrice.toLocaleString()} <span class="text-[10px] font-normal">萬</span>
                     </div>
-                    <div class="text-[10px] text-slate-400 font-mono">
+                    <div class="text-[10px] text-stone-400 font-mono">
                       ${item.unitPrice} 萬/坪
                     </div>
                   </div>
                 </div>
 
-                <div class="flex items-center justify-between mt-1.5 pt-1.5 border-t border-slate-700/40 text-[10px]">
-                  <span class="text-cyan-400">🚇 ${item.metroStation}</span>
-                  <span class="text-slate-500">${item.date}</span>
+                <div class="flex items-center justify-between mt-1.5 pt-1.5 border-t border-stone-700/40 text-[10px]">
+                  <span class="text-orange-300">🚇 ${item.metroStation}</span>
+                  <span class="text-stone-500">${item.date}</span>
                 </div>
               </div>
             `).join('')}
           </div>
 
-          <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1.5 border-t border-slate-800">
+          <div class="flex items-center justify-between text-[10px] text-stone-400 pt-1.5 border-t border-stone-800">
             <span>共顯示 ${listings.length} 筆房產資訊</span>
-            <span class="text-blue-400">即時通報連線中</span>
+            <span class="text-amber-400">即時通報連線中</span>
           </div>
         </div>
       `;
@@ -1541,7 +1542,7 @@
       if (notes.length === 0) {
         notes = [
           { id: 'n-1', text: '📌 自由佈局提示：\n點擊右上角「✏️ 自由佈局」開啟編輯模式，按住卡片頂部把手即可拖曳移動位置，拉動卡片邊緣或右下角可縮放寬高！', color: 'yellow', date: '重要提醒' },
-          { id: 'n-2', text: '🔔 今日待辦：\n1. 追蹤海神颱風路徑\n2. 觀察台股大盤走勢與K線支撐\n3. 預約板橋新板特區賞屋', color: 'blue', date: '今日待辦' }
+          { id: 'n-2', text: '🔔 今日待辦：\n1. 追蹤海神颱風路徑\n2. 觀察台股大盤走勢與K線支撐\n3. 預約板橋新板特區賞屋', color: 'orange', date: '今日待辦' }
         ];
       }
 
@@ -1551,13 +1552,13 @@
       };
 
       container.innerHTML = `
-        <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-4 select-none justify-between">
-          <div class="flex items-center justify-between pb-2.5 border-b border-slate-800">
+        <div class="flex flex-col h-full bg-stone-900 text-stone-100 p-4 select-none justify-between">
+          <div class="flex items-center justify-between pb-2.5 border-b border-stone-800">
             <div class="flex items-center space-x-2">
-              <span class="p-1 rounded-lg bg-amber-500/20 text-amber-400">📝</span>
-              <h3 class="font-bold text-sm text-white">自訂便簽與公告</h3>
+              <span class="p-1.5 rounded-lg bg-amber-500/20 text-amber-400">📝</span>
+              <h3 class="font-bold text-sm text-amber-200">自訂便簽與公告</h3>
             </div>
-            <button id="add-note-btn" class="px-2 py-0.5 rounded bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold">
+            <button id="add-note-btn" class="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold shadow-sm transition-all">
               + 新增便簽
             </button>
           </div>
@@ -1565,15 +1566,15 @@
           <div class="flex-1 overflow-y-auto space-y-2 my-2 pr-1 scrollbar-thin">
             ${notes.map(note => {
               const bgMap = {
-                yellow: 'bg-amber-950/40 border-amber-500/40 text-amber-200',
-                blue: 'bg-blue-950/40 border-blue-500/40 text-blue-200',
-                green: 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
+                yellow: 'bg-amber-950/50 border-amber-600/50 text-amber-100',
+                orange: 'bg-orange-950/50 border-orange-600/50 text-orange-100',
+                terracotta: 'bg-stone-800 border-amber-700/60 text-stone-100'
               };
               return `
-                <div class="p-2.5 rounded-xl border ${bgMap[note.color] || bgMap.yellow} flex flex-col justify-between">
-                  <textarea class="w-full bg-transparent border-0 focus:outline-none text-xs leading-relaxed resize-none text-slate-100 font-sans" rows="3" data-note-id="${note.id}">${note.text}</textarea>
-                  <div class="flex items-center justify-between mt-1.5 pt-1.5 border-t border-slate-700/40 text-[10px]">
-                    <span class="text-slate-400">${note.date}</span>
+                <div class="p-2.5 rounded-xl border ${bgMap[note.color] || bgMap.yellow} flex flex-col justify-between shadow-sm">
+                  <textarea class="w-full bg-transparent border-0 focus:outline-none text-xs leading-relaxed resize-none text-stone-100 font-sans" rows="3" data-note-id="${note.id}">${note.text}</textarea>
+                  <div class="flex items-center justify-between mt-1.5 pt-1.5 border-t border-stone-700/40 text-[10px]">
+                    <span class="text-stone-400">${note.date}</span>
                     <button class="text-rose-400 hover:text-rose-300" data-del-note="${note.id}">
                       🗑️ 刪除
                     </button>
@@ -1591,7 +1592,7 @@
           notes.unshift({
             id: 'n-' + Date.now(),
             text: '新便簽筆記...',
-            color: ['yellow', 'blue', 'green'][notes.length % 3],
+            color: ['yellow', 'orange', 'terracotta'][notes.length % 3],
             date: new Date().toLocaleDateString('zh-TW')
           });
           saveNotes();
@@ -1645,23 +1646,23 @@
       };
 
       container.innerHTML = `
-        <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-4 select-none justify-between">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-            <span class="text-xs font-semibold text-slate-400">🕒 台灣標準時間 (UTC+8)</span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800/40">農曆 七月十九</span>
+        <div class="flex flex-col h-full bg-stone-900 text-stone-100 p-4 select-none justify-between">
+          <div class="flex items-center justify-between pb-2 border-b border-stone-800">
+            <span class="text-xs font-semibold text-amber-300">🕒 台灣標準時間 (UTC+8)</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-800/40">農曆 七月十九</span>
           </div>
 
           <div class="my-auto py-2 text-center">
             <div class="flex items-baseline justify-center">
-              <span id="clock-time-display" class="text-4xl font-black font-mono tracking-wider text-white">--:--</span>
-              <span id="clock-sec-display" class="text-xl font-mono font-bold text-blue-400 ml-1">--</span>
+              <span id="clock-time-display" class="text-4xl font-black font-mono tracking-wider text-amber-100">--:--</span>
+              <span id="clock-sec-display" class="text-xl font-mono font-bold text-orange-400 ml-1">--</span>
             </div>
-            <div id="clock-date-display" class="text-xs font-medium text-slate-300 mt-2">載入中...</div>
+            <div id="clock-date-display" class="text-xs font-medium text-stone-300 mt-2">載入中...</div>
           </div>
 
-          <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] text-slate-400">
+          <div class="pt-2 border-t border-stone-800/80 flex items-center justify-between text-[10px] text-stone-400">
             <span>節氣：處暑</span>
-            <span class="text-emerald-400">系統即時同步</span>
+            <span class="text-amber-400">系統即時同步</span>
           </div>
         </div>
       `;
@@ -1672,7 +1673,7 @@
   };
 
   // ==========================================
-  // 3. GRID MANAGER (GridStack Integration)
+  // 3. GRID MANAGER (GridStack Integration - Warm Theme)
   // ==========================================
 
   const GridManager = {
@@ -1775,13 +1776,13 @@
       el.setAttribute('data-widget-id', widgetId);
 
       el.innerHTML = `
-        <div class="grid-stack-item-content bg-slate-900 border border-slate-800 rounded-2xl shadow-xl flex flex-col overflow-hidden relative group">
-          <div class="widget-drag-handle flex items-center justify-between px-3 py-1.5 bg-slate-800/90 border-b border-slate-700/60 select-none z-20 cursor-grab">
+        <div class="grid-stack-item-content bg-stone-900 border border-stone-800 rounded-2xl shadow-xl flex flex-col overflow-hidden relative group">
+          <div class="widget-drag-handle flex items-center justify-between px-3 py-1.5 bg-stone-800/90 border-b border-stone-700/60 select-none z-20 cursor-grab">
             <div class="flex items-center space-x-2">
-              <span class="text-xs text-slate-300 font-bold tracking-wider">⠿ ${widgetDef.title}</span>
+              <span class="text-xs text-amber-200 font-bold tracking-wider">⠿ ${widgetDef.title}</span>
             </div>
             <div class="widget-edit-controls flex items-center space-x-1.5">
-              <button class="p-1 text-slate-400 hover:text-rose-400 rounded transition-colors" data-remove-widget title="移除此區塊">
+              <button class="p-1 text-stone-400 hover:text-rose-400 rounded transition-colors" data-remove-widget title="移除此區塊">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
             </div>
@@ -1916,7 +1917,7 @@
 
   const App = {
     init() {
-      console.log('🚀 初始化佈告欄應用程式...');
+      console.log('🚀 初始化佈告欄應用程式 (暖色調主題)...');
       GridManager.init();
       this.bindHeaderControls();
       this.updateTickerText();
@@ -1932,8 +1933,8 @@
           GridManager.setEditMode(nextState);
           
           if (nextState) {
-            editToggleBtn.classList.remove('bg-slate-800', 'text-slate-200');
-            editToggleBtn.classList.add('bg-blue-600', 'text-white', 'ring-2', 'ring-blue-400');
+            editToggleBtn.classList.remove('bg-stone-800', 'text-amber-200');
+            editToggleBtn.classList.add('bg-amber-600', 'text-white', 'ring-2', 'ring-amber-400');
             editToggleBtn.innerHTML = `<span>✓ 完成佈局</span>`;
             if (editIndicator) {
               editIndicator.classList.remove('hidden');
@@ -1941,8 +1942,8 @@
             }
             GridManager.showToast('已開啟自由佈局模式：按住卡片頂部把手拖曳，拉動右下角縮放');
           } else {
-            editToggleBtn.classList.remove('bg-blue-600', 'text-white', 'ring-2', 'ring-blue-400');
-            editToggleBtn.classList.add('bg-slate-800', 'text-slate-200');
+            editToggleBtn.classList.remove('bg-amber-600', 'text-white', 'ring-2', 'ring-amber-400');
+            editToggleBtn.classList.add('bg-stone-800', 'text-amber-200');
             editToggleBtn.innerHTML = `<span>✏️ 自由佈局</span>`;
             if (editIndicator) {
               editIndicator.classList.add('hidden');

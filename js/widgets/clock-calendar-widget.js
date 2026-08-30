@@ -1,4 +1,4 @@
-﻿export const ClockCalendarWidget = {
+export const ClockCalendarWidget = {
   id: 'clock-calendar',
   title: '實時時鐘與日曆',
   icon: 'clock',
@@ -25,29 +25,31 @@
     };
 
     container.innerHTML = `
-      <div class="flex flex-col h-full bg-slate-900 text-slate-100 p-4 select-none justify-between">
-        <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-          <span class="text-xs font-semibold text-slate-400">🕒 台灣標準時間 (UTC+8)</span>
-          <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800/40">農曆 七月十九</span>
+      <div class="flex flex-col h-full bg-stone-900 text-stone-100 p-4 select-none justify-between">
+        <!-- Header -->
+        <div class="flex items-center justify-between pb-2 border-b border-stone-800">
+          <span class="text-xs font-semibold text-amber-300">🕒 台灣標準時間 (UTC+8)</span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-800/40">農曆 七月十九</span>
         </div>
 
+        <!-- Clock Face -->
         <div class="my-auto py-2 text-center">
           <div class="flex items-baseline justify-center">
-            <span id="clock-time-display" class="text-5xl font-black font-mono tracking-wider text-white">--:--</span>
-            <span id="clock-sec-display" class="text-2xl font-mono font-bold text-blue-400 ml-1">--</span>
+            <span id="clock-time-display" class="text-4xl font-black font-mono tracking-wider text-amber-100">--:--</span>
+            <span id="clock-sec-display" class="text-xl font-mono font-bold text-orange-400 ml-1">--</span>
           </div>
-          <div id="clock-date-display" class="text-xs font-medium text-slate-300 mt-2">載入中...</div>
+          <div id="clock-date-display" class="text-xs font-medium text-stone-300 mt-2">載入中...</div>
         </div>
 
-        <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+        <!-- Footer Information -->
+        <div class="pt-2 border-t border-stone-800/80 flex items-center justify-between text-[10px] text-stone-400">
           <span>節氣：處暑</span>
-          <span class="text-emerald-400">系統即時同步中</span>
+          <span class="text-amber-400">系統即時同步</span>
         </div>
       </div>
     `;
 
     updateTime();
-    const interval = setInterval(updateTime, 1000);
-    container._clockInterval = interval;
+    setInterval(updateTime, 1000);
   }
 };

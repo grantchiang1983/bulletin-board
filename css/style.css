@@ -1,45 +1,45 @@
-﻿/* Custom Scrollbars */
+/* Warm Tone (暖色調) - Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.1);
+  background: rgba(28, 25, 23, 0.4);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.4);
+  background: rgba(168, 138, 108, 0.4);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.7);
+  background: rgba(217, 119, 6, 0.7);
 }
 
-/* Glassmorphism & UI Effects */
+/* Warm Glassmorphism & UI Effects */
 .glass-card {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  background: rgba(38, 34, 32, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(87, 78, 72, 0.6);
 }
 .dark .glass-card {
-  background: rgba(30, 41, 59, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(51, 65, 85, 0.7);
+  background: rgba(38, 34, 32, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(87, 78, 72, 0.6);
 }
 
 .glass-nav {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(28, 25, 23, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+  border-bottom: 1px solid rgba(68, 60, 56, 0.85);
 }
 .dark .glass-nav {
-  background: rgba(15, 23, 42, 0.9);
+  background: rgba(28, 25, 23, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(30, 41, 59, 0.9);
+  border-bottom: 1px solid rgba(68, 60, 56, 0.85);
 }
 
 /* Pulse animation for live badges */
@@ -67,22 +67,4 @@
 @keyframes ticker {
   0% { transform: translate3d(0, 0, 0); }
   100% { transform: translate3d(-50%, 0, 0); }
-}
-
-/* Radar pulse animation on map */
-@keyframes radar-sweep {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-.radar-sweep-effect {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 200%;
-  height: 200%;
-  transform-origin: 0% 0%;
-  background: conic-gradient(from 0deg, rgba(34, 197, 94, 0.35) 0deg, rgba(34, 197, 94, 0) 60deg);
-  border-radius: 50%;
-  animation: radar-sweep 4s linear infinite;
-  pointer-events: none;
 }

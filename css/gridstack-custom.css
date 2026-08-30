@@ -1,4 +1,4 @@
-/* GridStack Custom Styles */
+/* GridStack Custom Styles - Warm Palette (暖色調) */
 .grid-stack {
   min-height: 80vh;
   margin-bottom: 2rem;
@@ -16,27 +16,27 @@
   width: 100%;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4), 0 2px 6px -1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px -2px rgba(24, 20, 18, 0.6), 0 2px 6px -1px rgba(24, 20, 18, 0.4);
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-/* Edit Mode Styles */
+/* Edit Mode Styles - Warm Amber Highlights */
 body.edit-mode .grid-stack-item-content {
-  border: 2px dashed #3b82f6 !important;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25) !important;
+  border: 2px dashed #f59e0b !important;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.25) !important;
 }
 
 body.edit-mode .widget-drag-handle {
   cursor: move !important;
-  background: rgba(37, 99, 235, 0.3) !important;
-  border-bottom: 1px solid #3b82f6 !important;
+  background: rgba(217, 119, 6, 0.35) !important;
+  border-bottom: 1px solid #f59e0b !important;
   touch-action: none !important;
   user-select: none !important;
   -webkit-user-select: none !important;
 }
 
 body.edit-mode .widget-drag-handle:hover {
-  background: rgba(37, 99, 235, 0.45) !important;
+  background: rgba(217, 119, 6, 0.5) !important;
 }
 
 body.edit-mode .widget-edit-controls {
@@ -58,14 +58,14 @@ body:not(.edit-mode) .ui-resizable-handle {
   display: none !important;
 }
 
-/* Custom Resize Corner */
+/* Custom Resize Corner - Warm Amber Corner */
 .ui-resizable-se {
   width: 18px !important;
   height: 18px !important;
   right: 4px !important;
   bottom: 4px !important;
-  border-right: 4px solid #3b82f6 !important;
-  border-bottom: 4px solid #3b82f6 !important;
+  border-right: 4px solid #f59e0b !important;
+  border-bottom: 4px solid #f59e0b !important;
   border-bottom-right-radius: 4px;
   background: transparent !important;
   cursor: se-resize !important;
@@ -74,7 +74,7 @@ body:not(.edit-mode) .ui-resizable-handle {
 
 /* Placeholder during drag */
 .grid-stack > .grid-stack-placeholder > .placeholder-content {
-  background-color: rgba(59, 130, 246, 0.2) !important;
-  border: 2px dashed #60a5fa !important;
+  background-color: rgba(245, 158, 11, 0.2) !important;
+  border: 2px dashed #fbbf24 !important;
   border-radius: 1rem !important;
 }
