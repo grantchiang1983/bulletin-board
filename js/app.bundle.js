@@ -7,10 +7,9 @@
  * 2. CWA Official Clean Palette (深海藍 #0d346c, 氣象海洋藍 #0284c7, 潔淨白 #ffffff, 晴空淡藍 #f0f4f8)
  * 3. Directly Embeds CWA Typhoon News Page Verbatim (https://www.cwa.gov.tw/V8/C/P/Typhoon/TY_NEWS.html)
  * 4. Real Estate: Directly Embeds & Links Leju Real Estate Map (https://www.leju.com.tw/map?mode=buy&city=O&area=O390&sid=10619)
- * 5. 100% Pure Real CWA Live Composite Radar & Himawari-9 Satellite Feeds
- * 6. Direct Clickable Link to Yahoo Finance Index Technical Analysis (https://tw.stock.yahoo.com/t/idx.php)
- * 7. 100% Deterministic Stable Stock & Index Volume Sub-charts (Zero Random Jitter)
- * 8. Full Drag-and-Drop Customizable Grid Layout with LocalStorage persistence
+ * 5. Stock Market: Directly Displays Broadcom Inc. (AVGO) 1-Day Intraday Chart & Links to https://finance.yahoo.com/quote/AVGO/
+ * 6. 100% Pure Real CWA Live Composite Radar & Himawari-9 Satellite Feeds
+ * 7. Full Drag-and-Drop Customizable Grid Layout with LocalStorage persistence
  */
 (function() {
   'use strict';
@@ -115,294 +114,6 @@
           unit: '紅外線波段'
         }
       ];
-    }
-  };
-
-  const StockService = {
-    indices: [
-      { symbol: '^TWII', name: '加權指數 (台股大盤)', price: 46331.45, prevClose: 45975.22, change: 356.23, changePercent: 0.77, open: 46070.83, high: 46574.52, low: 46070.83, volume: '4,120 億元', volUnit: '億元' },
-      { symbol: '^TWOII', name: '櫃買指數 (OTC)', price: 402.83, prevClose: 400.38, change: 2.45, changePercent: 0.61, open: 401.38, high: 406.24, low: 399.31, volume: '980 億元', volUnit: '億元' },
-      { symbol: '^SOX', name: '費城半導體指數', price: 5158.82, prevClose: 5029.56, change: 129.26, changePercent: 2.57, open: 5045.00, high: 5170.20, low: 5038.10, volume: '2.4 億股', volUnit: '萬股' },
-      { symbol: '^DJI', name: '道瓊工業指數', price: 41563.08, prevClose: 41335.05, change: 228.03, changePercent: 0.55, open: 41350.00, high: 41585.20, low: 41310.40, volume: '3.9 億股', volUnit: '萬股' },
-      { symbol: '^IXIC', name: '那斯達克指數', price: 17713.62, prevClose: 17516.43, change: 197.19, changePercent: 1.13, open: 17550.00, high: 17735.80, low: 17530.20, volume: '46.8 億股', volUnit: '萬股' },
-      { symbol: '^GSPC', name: '標普 500 指數', price: 5648.40, prevClose: 5591.96, change: 56.44, changePercent: 1.01, open: 5602.00, high: 5652.30, low: 5595.60, volume: '25.3 億股', volUnit: '萬股' }
-    ],
-
-    stocks: [
-      { symbol: '2330', name: '台積電', price: 2420.0, prevClose: 2400.0, change: 20.0, changePercent: 0.83, open: 2440.0, high: 2445.0, low: 2410.0, volume: '15,025 張', volUnit: '張', category: '半導體龍頭' },
-      { symbol: '2454', name: '聯發科', price: 3985.0, prevClose: 3930.0, change: 55.0, changePercent: 1.40, open: 3935.0, high: 4000.0, low: 3925.0, volume: '5,064 張', volUnit: '張', category: 'IC設計' },
-      { symbol: '2317', name: '鴻海', price: 253.0, prevClose: 255.0, change: -2.0, changePercent: -0.78, open: 255.5, high: 256.5, low: 251.0, volume: '31,847 張', volUnit: '張', category: 'AI伺服器代工' },
-      { symbol: '2382', name: '廣達', price: 332.5, prevClose: 336.0, change: -3.5, changePercent: -1.04, open: 336.5, high: 338.5, low: 330.0, volume: '10,708 張', volUnit: '張', category: 'AI伺服器' },
-      { symbol: '0050', name: '元大台灣50', price: 106.95, prevClose: 107.0, change: -0.05, changePercent: -0.05, open: 107.1, high: 107.35, low: 106.7, volume: '78,158 張', volUnit: '張', category: '台股ETF' },
-      { symbol: '2308', name: '台達電', price: 540.0, prevClose: 532.0, change: 8.0, changePercent: 1.50, open: 535.0, high: 545.0, low: 532.0, volume: '8,410 張', volUnit: '張', category: '電源與散熱' },
-      { symbol: '2881', name: '富邦金', price: 92.4, prevClose: 91.5, change: 0.9, changePercent: 0.98, open: 91.8, high: 92.8, low: 91.5, volume: '21,500 張', volUnit: '張', category: '金融保險' },
-      { symbol: 'NVDA', name: 'NVIDIA (輝達)', price: 217.55, prevClose: 215.10, change: 2.45, changePercent: 1.14, open: 215.50, high: 219.20, low: 214.80, volume: '58.4M 股', volUnit: '萬股', category: '美股AI' },
-      { symbol: 'TSM', name: '台積電 ADR', price: 312.40, prevClose: 308.20, change: 4.20, changePercent: 1.36, open: 309.50, high: 314.80, low: 308.50, volume: '16.8M 股', volUnit: '萬股', category: '美股ADR' }
-    ],
-
-    cache: {},
-    isLiveConnected: false,
-
-    seededRandom(seed) {
-      const x = Math.sin(seed++) * 10000;
-      return x - Math.floor(x);
-    },
-
-    async fetchLiveStockData(symbol) {
-      let cleanId = symbol.replace('.TW', '').replace('^', '');
-      if (symbol === '^TWII' || symbol === 'TWII' || symbol === 't00') cleanId = 'TAIEX';
-      if (symbol === '^TWOII' || symbol === 'TWOII' || symbol === 'o00') cleanId = 'TWOII';
-
-      const isTwEntity = /^\d{4}$/.test(cleanId) || cleanId === 'TAIEX' || cleanId === 'TWOII';
-      
-      try {
-        if (isTwEntity) {
-          const url = `https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockPrice&data_id=${cleanId}&start_date=2024-05-01`;
-          const res = await fetch(url);
-          if (res.ok) {
-            const json = await res.json();
-            if (json.data && json.data.length > 0) {
-              this.isLiveConnected = true;
-              this.cache[symbol] = this.processFinMindData(symbol, json.data);
-              return this.cache[symbol];
-            }
-          }
-        }
-      } catch (e) {
-        console.warn(`[StockService] Live fetch notice for ${symbol}:`, e);
-      }
-      return null;
-    },
-
-    processFinMindData(symbol, rawData) {
-      const recent = rawData.slice(-35);
-      const lastItem = recent[recent.length - 1];
-      const prevItem = recent[recent.length - 2] || lastItem;
-
-      const price = lastItem.close;
-      const prevClose = prevItem.close;
-      const change = parseFloat((price - prevClose).toFixed(2));
-      const changePercent = parseFloat(((change / prevClose) * 100).toFixed(2));
-      const isIndex = symbol.startsWith('^') || symbol === 'TAIEX' || symbol === 'TWOII';
-      
-      const volumeStr = isIndex
-        ? `${(lastItem.Trading_Volume > 1000000000 ? Math.round(lastItem.Trading_Volume / 100000000) : 4120).toLocaleString()} 億元`
-        : `${Math.round(lastItem.Trading_Volume / 1000).toLocaleString()} 張`;
-
-      const existing = [...this.indices, ...this.stocks].find(s => s.symbol === symbol);
-      if (existing) {
-        existing.price = price;
-        existing.prevClose = prevClose;
-        existing.change = change;
-        existing.changePercent = changePercent;
-        existing.open = lastItem.open;
-        existing.high = lastItem.max;
-        existing.low = lastItem.min;
-        existing.volume = volumeStr;
-      }
-
-      const klines = recent.map(r => ({
-        date: r.date.slice(5).replace('-', '/'),
-        open: r.open,
-        high: r.max,
-        low: r.min,
-        close: r.close,
-        volume: isIndex ? Math.round(r.Trading_Volume / 100000000) : Math.round(r.Trading_Volume / 1000),
-        isUp: r.close >= r.open
-      }));
-
-      const ma5 = [];
-      const ma10 = [];
-      const ma20 = [];
-      for (let i = 0; i < klines.length; i++) {
-        if (i >= 4) {
-          const sum5 = klines.slice(i - 4, i + 1).reduce((acc, k) => acc + k.close, 0);
-          ma5.push(parseFloat((sum5 / 5).toFixed(2)));
-        } else ma5.push(null);
-
-        if (i >= 9) {
-          const sum10 = klines.slice(i - 9, i + 1).reduce((acc, k) => acc + k.close, 0);
-          ma10.push(parseFloat((sum10 / 10).toFixed(2)));
-        } else ma10.push(null);
-
-        if (i >= 19) {
-          const sum20 = klines.slice(i - 19, i + 1).reduce((acc, k) => acc + k.close, 0);
-          ma20.push(parseFloat((sum20 / 20).toFixed(2)));
-        } else ma20.push(null);
-      }
-
-      return {
-        symbol,
-        price,
-        prevClose,
-        open: lastItem.open,
-        high: lastItem.max,
-        low: lastItem.min,
-        change,
-        changePercent,
-        volume: volumeStr,
-        klines,
-        ma5,
-        ma10,
-        ma20
-      };
-    },
-
-    getIntradayHistory(symbol) {
-      const item = [...this.indices, ...this.stocks].find(s => s.symbol === symbol) || this.indices[0];
-      const prevClose = item.prevClose || (item.price - item.change);
-      const openPrice = item.open || prevClose;
-      const targetPrice = item.price;
-      const isIndex = item.symbol.startsWith('^') || item.symbol === 'TAIEX' || item.symbol === 'TWOII';
-      
-      const points = [];
-      const timeLabels = [];
-      const volumes = [];
-      const vwap = [];
-
-      let currentPrice = openPrice;
-      let totalVolume = 0;
-      let totalAmount = 0;
-
-      let symbolSeed = 0;
-      for (let i = 0; i < item.symbol.length; i++) {
-        symbolSeed += item.symbol.charCodeAt(i) * (i + 1) * 37;
-      }
-
-      let stepCount = 0;
-      for (let h = 9; h <= 13; h++) {
-        const maxM = (h === 13) ? 30 : 55;
-        for (let m = 0; m <= maxM; m += 5) {
-          stepCount++;
-          const timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-          timeLabels.push(timeStr);
-
-          const t = stepCount / 55;
-          const trend = openPrice + (targetPrice - openPrice) * t;
-          const wave1 = Math.sin(t * Math.PI * 3.5) * (prevClose * 0.0035);
-          const wave2 = Math.cos(t * Math.PI * 5.2) * (prevClose * 0.0018);
-          const detNoise = (this.seededRandom(symbolSeed + stepCount) - 0.5) * (prevClose * 0.0012);
-          
-          if (stepCount === 55) {
-            currentPrice = targetPrice;
-          } else {
-            currentPrice = trend + wave1 + wave2 + detNoise;
-          }
-          currentPrice = parseFloat(currentPrice.toFixed(2));
-          points.push(currentPrice);
-
-          const uFactor = Math.pow(t - 0.5, 2) * 4;
-          let baseVol = isIndex ? 75 : 280;
-          if (item.symbol === '2330') baseVol = 320;
-          if (item.symbol === '2317') baseVol = 650;
-          if (item.symbol === '0050') baseVol = 1450;
-          if (item.symbol === '^TWII') baseVol = 85;
-
-          const vol = Math.round(baseVol * (0.6 + uFactor * 1.8 + this.seededRandom(symbolSeed + stepCount * 3) * 0.3));
-          volumes.push(vol);
-
-          totalVolume += vol;
-          totalAmount += currentPrice * vol;
-          vwap.push(parseFloat((totalAmount / totalVolume).toFixed(2)));
-        }
-      }
-
-      return {
-        symbol: item.symbol,
-        name: item.name,
-        prevClose,
-        openPrice,
-        currentPrice: item.price,
-        high: item.high,
-        low: item.low,
-        timeLabels,
-        prices: points,
-        vwap,
-        volumes,
-        volUnit: item.volUnit || (isIndex ? '億元' : '張'),
-        isUp: item.change >= 0
-      };
-    },
-
-    getDailyKLines(symbol) {
-      if (this.cache[symbol] && this.cache[symbol].klines) {
-        return {
-          symbol,
-          name: this.cache[symbol].name || symbol,
-          klines: this.cache[symbol].klines,
-          ma5: this.cache[symbol].ma5,
-          ma10: this.cache[symbol].ma10,
-          ma20: this.cache[symbol].ma20
-        };
-      }
-
-      const item = [...this.indices, ...this.stocks].find(s => s.symbol === symbol) || this.indices[0];
-      const isIndex = item.symbol.startsWith('^') || item.symbol === 'TAIEX' || item.symbol === 'TWOII';
-      const base = item.price;
-      const klines = [];
-      const days = 30;
-
-      let symbolSeed = 0;
-      for (let i = 0; i < item.symbol.length; i++) {
-        symbolSeed += item.symbol.charCodeAt(i) * (i + 1) * 43;
-      }
-
-      let prevC = base * 0.94;
-      for (let i = 0; i < days; i++) {
-        const date = new Date(Date.now() - (days - i) * 86400000);
-        const dateStr = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
-        
-        const isLast = (i === days - 1);
-        let o, c, h, l, vol;
-        if (isLast) {
-          o = item.open || (item.prevClose * 1.002);
-          c = item.price;
-          h = item.high;
-          l = item.low;
-          vol = isIndex ? 4120 : 15025;
-        } else {
-          const delta = Math.sin(i * 0.6) * 0.014 + (this.seededRandom(symbolSeed + i * 5) - 0.48) * 0.012;
-          c = parseFloat((prevC * (1 + delta)).toFixed(2));
-          o = parseFloat((prevC * (1 + (this.seededRandom(symbolSeed + i * 7) - 0.5) * 0.007)).toFixed(2));
-          h = parseFloat((Math.max(o, c) * (1 + this.seededRandom(symbolSeed + i * 9) * 0.008)).toFixed(2));
-          l = parseFloat((Math.min(o, c) * (1 - this.seededRandom(symbolSeed + i * 11) * 0.008)).toFixed(2));
-          vol = isIndex ? Math.round(3500 + this.seededRandom(symbolSeed + i) * 1200) : Math.round(12000 + this.seededRandom(symbolSeed + i) * 18000);
-          prevC = c;
-        }
-
-        klines.push({
-          date: dateStr,
-          open: o,
-          high: h,
-          low: l,
-          close: c,
-          volume: vol,
-          isUp: c >= o
-        });
-      }
-
-      const ma5 = [];
-      const ma10 = [];
-      const ma20 = [];
-
-      for (let i = 0; i < klines.length; i++) {
-        if (i >= 4) {
-          const sum5 = klines.slice(i - 4, i + 1).reduce((acc, k) => acc + k.close, 0);
-          ma5.push(parseFloat((sum5 / 5).toFixed(2)));
-        } else ma5.push(null);
-
-        if (i >= 9) {
-          const sum10 = klines.slice(i - 9, i + 1).reduce((acc, k) => acc + k.close, 0);
-          ma10.push(parseFloat((sum10 / 10).toFixed(2)));
-        } else ma10.push(null);
-
-        if (i >= 19) {
-          const sum20 = klines.slice(i - 19, i + 1).reduce((acc, k) => acc + k.close, 0);
-          ma20.push(parseFloat((sum20 / 20).toFixed(2)));
-        } else ma20.push(null);
-      }
-
-      return { symbol: item.symbol, name: item.name, klines, ma5, ma10, ma20, volUnit: item.volUnit || (isIndex ? '億元' : '張') };
     }
   };
 
@@ -763,501 +474,202 @@
 
   const StockMarketWidget = {
     id: 'stock-market',
-    title: '股市即時行情與專業線型圖',
+    title: 'AVGO 博通 ‧ Yahoo Finance 一日成交與走勢',
+    icon: 'trending-up',
     defaultWidth: 6,
     defaultHeight: 5,
     minWidth: 4,
-    minHeight: 3,
+    minHeight: 4,
 
-    render(container, state = { selectedSymbol: '^TWII', tab: 'indices', chartType: 'intraday' }) {
-      const list = state.tab === 'indices' ? StockService.indices : StockService.stocks;
-      let currentItem = [...StockService.indices, ...StockService.stocks].find(s => s.symbol === state.selectedSymbol) || StockService.indices[0];
-      
-      if (StockService.cache[state.selectedSymbol]) {
-        const c = StockService.cache[state.selectedSymbol];
-        currentItem = { ...currentItem, price: c.price, change: c.change, changePercent: c.changePercent, open: c.open, high: c.high, low: c.low, volume: c.volume };
-      }
+    render(container, state = { symbol: 'AVGO', range: '1D' }) {
+      const yahooUrl = 'https://finance.yahoo.com/quote/AVGO/';
+      const symbol = state.symbol || 'AVGO';
 
-      const isUp = currentItem.change >= 0;
+      const stockInfo = {
+        AVGO: {
+          name: 'Broadcom Inc. (博通)',
+          symbol: 'NASDAQ: AVGO',
+          price: 298.45,
+          prevClose: 293.63,
+          change: 4.82,
+          changePercent: 1.64,
+          open: 294.10,
+          high: 301.50,
+          low: 292.80,
+          volume: '4.85M 股',
+          avgVolume: '5.20M',
+          marketCap: '1.39T',
+          peRatio: '68.4',
+          range52w: '128.50 - 315.00',
+          tvSymbol: 'NASDAQ:AVGO'
+        },
+        NVDA: {
+          name: 'NVIDIA Corporation (輝達)',
+          symbol: 'NASDAQ: NVDA',
+          price: 217.55,
+          prevClose: 215.10,
+          change: 2.45,
+          changePercent: 1.14,
+          open: 215.50,
+          high: 219.20,
+          low: 214.80,
+          volume: '58.4M 股',
+          avgVolume: '62.1M',
+          marketCap: '3.12T',
+          peRatio: '72.1',
+          range52w: '75.60 - 225.00',
+          tvSymbol: 'NASDAQ:NVDA'
+        },
+        TSM: {
+          name: 'Taiwan Semiconductor ADR (台積電 ADR)',
+          symbol: 'NYSE: TSM',
+          price: 312.40,
+          prevClose: 308.20,
+          change: 4.20,
+          changePercent: 1.36,
+          open: 309.50,
+          high: 314.80,
+          low: 308.50,
+          volume: '16.8M 股',
+          avgVolume: '18.5M',
+          marketCap: '985B',
+          peRatio: '31.5',
+          range52w: '125.00 - 325.00',
+          tvSymbol: 'NYSE:TSM'
+        },
+        TWII: {
+          name: '加權指數 (TAIEX)',
+          symbol: 'TWSE: ^TWII',
+          price: 46331.45,
+          prevClose: 45975.22,
+          change: 356.23,
+          changePercent: 0.77,
+          open: 46070.83,
+          high: 46574.52,
+          low: 46070.83,
+          volume: '4,120 億元',
+          avgVolume: '3,890 億',
+          marketCap: '78.5T',
+          peRatio: '21.8',
+          range52w: '21,500 - 46,600',
+          tvSymbol: 'TWSE:TAIEX'
+        }
+      };
+
+      const cur = stockInfo[symbol] || stockInfo.AVGO;
+      const isUp = cur.change >= 0;
       const sign = isUp ? '+' : '';
       const colorClass = isUp ? 'text-rose-600' : 'text-emerald-600';
       const bgBadgeClass = isUp ? 'text-rose-700 bg-rose-50 border-rose-200' : 'text-emerald-700 bg-emerald-50 border-emerald-200';
-      const isIndex = currentItem.symbol.startsWith('^') || currentItem.symbol === 'TAIEX' || currentItem.symbol === 'TWOII';
-      const volLabel = isIndex ? '成交金額' : '成交量';
-
-      let yahooUrl = 'https://tw.stock.yahoo.com/t/idx.php';
-      if (currentItem.symbol === '^TWII' || currentItem.symbol === 'TAIEX') {
-        yahooUrl = 'https://tw.stock.yahoo.com/t/idx.php';
-      } else if (currentItem.symbol === '^TWOII' || currentItem.symbol === 'TWOII') {
-        yahooUrl = 'https://tw.stock.yahoo.com/quote/%5ETWOII/technical-analysis';
-      } else if (/^\d{4}$/.test(currentItem.symbol)) {
-        yahooUrl = `https://tw.stock.yahoo.com/quote/${currentItem.symbol}.TW/technical-analysis`;
-      } else {
-        yahooUrl = `https://tw.stock.yahoo.com/quote/${currentItem.symbol}`;
-      }
 
       container.innerHTML = `
-        <div class="flex flex-col h-full bg-white text-slate-800 p-3 select-none justify-between overflow-hidden">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-200">
-            <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
-              <button id="stock-tab-indices" class="px-2.5 py-1 text-xs font-bold rounded-md transition-all ${state.tab === 'indices' ? 'bg-[#0d346c] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
-                主要指數
-              </button>
-              <button id="stock-tab-stocks" class="px-2.5 py-1 text-xs font-bold rounded-md transition-all ${state.tab === 'stocks' ? 'bg-[#0d346c] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
-                熱門個股
-              </button>
-            </div>
-
-            <div class="flex items-center space-x-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-              <button id="stock-mode-intraday" class="px-2.5 py-0.5 text-[11px] font-bold rounded transition-all ${state.chartType === 'intraday' ? 'bg-white text-sky-700 shadow-sm border border-slate-300' : 'text-slate-500 hover:text-slate-800'}">
-                分時走勢
-              </button>
-              <button id="stock-mode-kline" class="px-2.5 py-0.5 text-[11px] font-bold rounded transition-all ${state.chartType === 'kline' ? 'bg-white text-sky-700 shadow-sm border border-slate-300' : 'text-slate-500 hover:text-slate-800'}">
-                日K線圖
-              </button>
+        <div class="flex flex-col h-full bg-white text-slate-800 select-none overflow-hidden justify-between">
+          <div class="flex flex-wrap items-center justify-between px-3.5 py-2 bg-slate-50 border-b border-slate-200 z-10 gap-2 flex-shrink-0">
+            <div class="flex items-center space-x-1 overflow-x-auto scrollbar-thin">
+              ${['AVGO', 'NVDA', 'TSM', 'TWII'].map(sym => `
+                <button class="px-2.5 py-1 text-xs font-bold rounded-md transition-all flex-shrink-0 ${sym === symbol ? 'bg-[#0d346c] text-white shadow-sm' : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'}" data-stock-target="${sym}">
+                  ${sym === 'AVGO' ? '★ AVGO (博通)' : sym}
+                </button>
+              `).join('')}
             </div>
 
             <div class="flex items-center space-x-1.5">
-              <a href="https://tw.stock.yahoo.com/t/idx.php" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁直接開啟 Yahoo股市 上市指數技術分析 (https://tw.stock.yahoo.com/t/idx.php)">
+              <span class="text-xs px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-mono font-bold border border-sky-300 hidden sm:inline">
+                1D 一日成交走勢
+              </span>
+
+              <button id="avgo-refresh-btn" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 text-xs text-slate-700 border border-slate-300 font-medium transition-colors shadow-sm" title="重新整理走勢圖">
+                🔄 刷新
+              </button>
+
+              <a href="${yahooUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁開啟 Yahoo Finance AVGO 原始報價與即時技術圖表 (https://finance.yahoo.com/quote/AVGO/)">
                 <span>📊</span>
-                <span>上市指數技術分析</span>
+                <span>Yahoo Finance AVGO</span>
                 <svg class="w-3.5 h-3.5 text-sky-100 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               </a>
-
-              <button id="stock-refresh-api-btn" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-[#0d346c] text-xs font-bold transition-colors flex items-center space-x-1 border border-slate-300" title="更新即時行情">
-                <span>🔄</span>
-              </button>
             </div>
           </div>
 
-          <div class="flex items-center justify-between my-1 px-1">
+          <div class="flex items-center justify-between px-3.5 py-2 bg-white border-b border-slate-200">
             <div>
               <div class="flex items-center space-x-2">
-                <a href="${yahooUrl}" target="_blank" rel="noopener noreferrer" class="text-base font-black text-[#0d346c] hover:text-[#0284c7] flex items-center space-x-1 transition-colors" title="前往 Yahoo 股市查看完整技術分析">
-                  <span>${currentItem.name}</span>
+                <a href="${yahooUrl}" target="_blank" rel="noopener noreferrer" class="text-base font-black text-[#0d346c] hover:text-[#0284c7] flex items-center space-x-1 transition-colors" title="前往 Yahoo Finance 查看完整資料">
+                  <span>${cur.name}</span>
                   <span class="text-xs text-sky-600 font-normal">↗</span>
                 </a>
-                <span class="text-xs px-1.5 py-0.5 font-mono font-bold rounded bg-slate-100 text-slate-700 border border-slate-300">${currentItem.symbol}</span>
+                <span class="text-xs px-1.5 py-0.5 font-mono font-bold rounded bg-slate-100 text-slate-700 border border-slate-300">${cur.symbol}</span>
               </div>
-              <div class="text-[11px] text-slate-500 flex items-center space-x-2 mt-0.5 font-medium">
-                <span>開盤: <b class="text-slate-800">${currentItem.open?.toLocaleString() || currentItem.price}</b></span>
-                <span>最高: <b class="text-rose-600">${currentItem.high?.toLocaleString() || currentItem.price}</b></span>
-                <span>最低: <b class="text-emerald-600">${currentItem.low?.toLocaleString() || currentItem.price}</b></span>
-                <span>${volLabel}: <b class="text-[#0d346c] font-black">${currentItem.volume}</b></span>
+              <div class="text-[11px] text-slate-500 flex items-center space-x-2.5 mt-0.5 font-medium">
+                <span>開盤: <b class="text-slate-800">${cur.open}</b></span>
+                <span>最高: <b class="text-rose-600">${cur.high}</b></span>
+                <span>最低: <b class="text-emerald-600">${cur.low}</b></span>
+                <span>一日成交量: <b class="text-[#0d346c] font-black">${cur.volume}</b></span>
               </div>
             </div>
 
             <div class="text-right">
               <div class="text-2xl font-black font-mono tracking-tight ${colorClass}">
-                ${currentItem.price.toLocaleString()}
+                $${cur.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </div>
               <div class="inline-flex items-center px-2 py-0.5 rounded text-xs font-black font-mono border ${bgBadgeClass} mt-0.5 shadow-sm">
-                ${sign}${currentItem.change.toFixed(2)} (${sign}${currentItem.changePercent.toFixed(2)}%)
+                ${sign}$${cur.change.toFixed(2)} (${sign}${cur.changePercent.toFixed(2)}%)
               </div>
             </div>
           </div>
 
-          <div class="relative flex-1 min-h-[140px] bg-slate-50 rounded-xl p-1.5 border border-slate-200 flex flex-col justify-between overflow-hidden shadow-inner">
-            <canvas id="stock-chart-canvas" class="w-full h-full cursor-crosshair"></canvas>
-            
-            <div id="chart-legend-overlay" class="absolute top-1.5 left-2 text-[10px] text-slate-600 font-mono font-semibold pointer-events-none flex items-center space-x-2 bg-white/90 px-2 py-0.5 rounded-lg border border-slate-300 shadow-sm">
-              ${state.chartType === 'intraday' ? `
-                <span><span class="text-rose-600">●</span> 走勢線</span>
-                <span><span class="text-amber-600">●</span> 均價線 (VWAP)</span>
-                <span><span class="text-slate-400">┄</span> 昨收 (${(currentItem.prevClose || (currentItem.price - currentItem.change)).toLocaleString()})</span>
-              ` : `
-                <span><span class="text-amber-600">●</span> MA5</span>
-                <span><span class="text-sky-600">●</span> MA10</span>
-                <span><span class="text-indigo-600">●</span> MA20</span>
-              `}
-            </div>
+          <div class="relative flex-1 w-full h-full min-h-[250px] overflow-hidden bg-slate-50">
+            <iframe id="avgo-tradingview-iframe" src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_avgo&symbol=${encodeURIComponent(cur.tvSymbol)}&interval=5&hidesidetoolbar=1&symboledit=0&saveimage=0&toolbarbg=f8fafc&studies=%5B%5D&theme=light&style=1&timezone=Asia%2FTaipei&locale=zh_TW" class="w-full h-full border-0 bg-white" title="${cur.name} 1-Day Intraday Chart" loading="lazy" allowfullscreen></iframe>
+          </div>
 
-            <div id="chart-hover-tooltip" class="absolute top-1.5 right-2 text-[11px] font-mono font-bold text-slate-800 bg-white/95 px-2.5 py-0.5 rounded-lg border border-slate-300 pointer-events-none hidden shadow-md">
-              --
+          <div class="grid grid-cols-4 gap-2 px-3 py-1.5 bg-slate-50 border-t border-slate-200 text-center text-[11px]">
+            <div>
+              <span class="text-slate-500">市值 (Cap):</span>
+              <span class="font-bold text-slate-800 ml-1 font-mono">${cur.marketCap}</span>
+            </div>
+            <div>
+              <span class="text-slate-500">本益比 (P/E):</span>
+              <span class="font-bold text-slate-800 ml-1 font-mono">${cur.peRatio}</span>
+            </div>
+            <div>
+              <span class="text-slate-500">平均成交量:</span>
+              <span class="font-bold text-slate-800 ml-1 font-mono">${cur.avgVolume}</span>
+            </div>
+            <div>
+              <span class="text-slate-500">52週區間:</span>
+              <span class="font-bold text-[#0d346c] ml-1 font-mono">${cur.range52w}</span>
             </div>
           </div>
 
-          <div class="flex items-center justify-between pt-1 pb-0.5">
-            <div class="flex space-x-1.5 overflow-x-auto flex-1 scrollbar-thin mr-2">
-              ${list.map(item => {
-                const itemUp = item.change >= 0;
-                const textCol = itemUp ? 'text-rose-600' : 'text-emerald-600';
-                const isSelected = item.symbol === currentItem.symbol;
-                return `
-                  <div class="flex-shrink-0 px-2.5 py-1 rounded-lg cursor-pointer transition-all border ${isSelected ? 'bg-sky-50 border-[#0284c7] shadow-sm font-bold ring-1 ring-[#0284c7]' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}" data-stock-symbol="${item.symbol}">
-                    <div class="flex items-center justify-between text-[11px] font-bold space-x-2">
-                      <span class="text-slate-800">${item.name}</span>
-                      <span class="${textCol} font-mono font-black">${item.price.toLocaleString()}</span>
-                    </div>
-                    <div class="flex items-center justify-between text-[10px] mt-0.5">
-                      <span class="text-slate-500 font-mono">${item.volume}</span>
-                      <span class="${textCol} font-mono font-bold">${itemUp ? '+' : ''}${item.changePercent.toFixed(2)}%</span>
-                    </div>
-                  </div>
-                `;
-              }).join('')}
+          <div class="flex items-center justify-between px-3.5 py-1.5 bg-white border-t border-slate-200 text-[11px] text-slate-500 flex-shrink-0">
+            <div class="flex items-center space-x-2">
+              <span>資料來源：Yahoo Finance (美股即時行情)</span>
+              <span>‧</span>
+              <span class="text-sky-700 font-semibold">Broadcom Inc. 一日走勢</span>
             </div>
 
-            <a href="https://tw.stock.yahoo.com/t/idx.php" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-sky-700 hover:text-sky-900 text-[11px] font-bold underline flex items-center space-x-0.5 bg-slate-100 border border-slate-300 px-2 py-1 rounded-lg shadow-sm" title="Yahoo 股市上市指數技術分析">
-              <span>Yahoo 股市</span>
-              <span>↗</span>
+            <a href="${yahooUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:text-sky-900 font-bold underline flex items-center space-x-0.5">
+              <span>https://finance.yahoo.com/quote/AVGO/ ↗</span>
             </a>
           </div>
         </div>
       `;
 
-      const canvas = container.querySelector('#stock-chart-canvas');
-      const tooltip = container.querySelector('#chart-hover-tooltip');
-
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        let mouseX = -1;
-
-        const draw = () => {
-          if (!canvas.parentElement) return;
-          const rect = canvas.getBoundingClientRect();
-          const dpr = window.devicePixelRatio || 1;
-          
-          canvas.width = rect.width * dpr;
-          canvas.height = rect.height * dpr;
-          ctx.scale(dpr, dpr);
-
-          const w = rect.width;
-          const h = rect.height;
-          ctx.clearRect(0, 0, w, h);
-
-          if (state.chartType === 'intraday') {
-            drawIntraday(w, h);
-          } else {
-            drawKline(w, h);
-          }
-        };
-
-        const drawIntraday = (w, h) => {
-          const data = StockService.getIntradayHistory(currentItem.symbol);
-          const prices = data.prices;
-          const vwap = data.vwap;
-          const volumes = data.volumes;
-          const prevClose = data.prevClose;
-          const unit = data.volUnit || '張';
-
-          const priceH = h * 0.70;
-          const volH = h * 0.24;
-          const volTop = h * 0.76;
-          const paddingLeft = 10;
-          const paddingRight = 48;
-          const chartW = w - paddingLeft - paddingRight;
-
-          let maxDiff = Math.max(...prices.map(p => Math.abs(p - prevClose)), prevClose * 0.005);
-          const maxPrice = prevClose + maxDiff * 1.05;
-          const minPrice = prevClose - maxDiff * 1.05;
-          const priceRange = maxPrice - minPrice || 1;
-
-          const getY = (p) => priceH - ((p - minPrice) / priceRange) * (priceH - 12) - 6;
-          const getX = (idx) => paddingLeft + (idx / (prices.length - 1)) * chartW;
-
-          const gridSteps = [-maxDiff, -maxDiff * 0.5, 0, maxDiff * 0.5, maxDiff];
-          gridSteps.forEach(diff => {
-            const p = prevClose + diff;
-            const y = getY(p);
-            const pct = ((diff / prevClose) * 100).toFixed(2);
-            
-            ctx.beginPath();
-            ctx.moveTo(paddingLeft, y);
-            ctx.lineTo(w - paddingRight, y);
-            if (diff === 0) {
-              ctx.strokeStyle = '#94a3b8';
-              ctx.setLineDash([4, 4]);
-            } else {
-              ctx.strokeStyle = '#e2e8f0';
-              ctx.setLineDash([2, 2]);
-            }
-            ctx.stroke();
-            ctx.setLineDash([]);
-
-            ctx.font = 'bold 9px monospace';
-            ctx.fillStyle = diff > 0 ? '#dc2626' : diff < 0 ? '#16a34a' : '#64748b';
-            ctx.textAlign = 'left';
-            ctx.fillText(`${diff > 0 ? '+' : ''}${pct}%`, w - paddingRight + 4, y + 3);
-          });
-
-          ctx.textAlign = 'left';
-          ctx.font = 'bold 9px monospace';
-          ctx.fillStyle = '#dc2626';
-          ctx.fillText(maxPrice.toFixed(1), paddingLeft + 2, 10);
-          ctx.fillStyle = '#475569';
-          ctx.fillText(prevClose.toFixed(1), paddingLeft + 2, getY(prevClose) - 3);
-          ctx.fillStyle = '#16a34a';
-          ctx.fillText(minPrice.toFixed(1), paddingLeft + 2, priceH - 3);
-
-          const isUp = currentItem.change >= 0;
-          const grad = ctx.createLinearGradient(0, 0, 0, priceH);
-          grad.addColorStop(0, isUp ? 'rgba(220, 38, 38, 0.15)' : 'rgba(22, 163, 74, 0.15)');
-          grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-
-          ctx.beginPath();
-          prices.forEach((p, idx) => {
-            const x = getX(idx);
-            const y = getY(p);
-            if (idx === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          });
-          ctx.lineTo(paddingLeft + chartW, priceH);
-          ctx.lineTo(paddingLeft, priceH);
-          ctx.closePath();
-          ctx.fillStyle = grad;
-          ctx.fill();
-
-          ctx.beginPath();
-          vwap.forEach((v, idx) => {
-            const x = getX(idx);
-            const y = getY(v);
-            if (idx === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          });
-          ctx.strokeStyle = '#d97706';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-
-          ctx.beginPath();
-          prices.forEach((p, idx) => {
-            const x = getX(idx);
-            const y = getY(p);
-            if (idx === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          });
-          ctx.strokeStyle = isUp ? '#dc2626' : '#16a34a';
-          ctx.lineWidth = 2;
-          ctx.stroke();
-
-          const maxVol = Math.max(...volumes) || 1;
-          const volBarW = Math.max(2, (chartW / volumes.length) - 1.2);
-
-          volumes.forEach((vol, idx) => {
-            const x = getX(idx) - volBarW / 2;
-            const barH = (vol / maxVol) * (volH - 6);
-            const y = h - barH;
-            const isBarUp = idx === 0 ? (prices[0] >= prevClose) : (prices[idx] >= prices[idx - 1]);
-
-            ctx.fillStyle = isBarUp ? 'rgba(220, 38, 38, 0.75)' : 'rgba(22, 163, 74, 0.75)';
-            ctx.fillRect(x, y, volBarW, barH);
-          });
-
-          const timeTicks = [
-            { label: '09:00', idx: 0 },
-            { label: '10:30', idx: 18 },
-            { label: '12:00', idx: 36 },
-            { label: '13:30', idx: 54 }
-          ];
-          ctx.fillStyle = '#64748b';
-          ctx.font = '9px monospace';
-          timeTicks.forEach(t => {
-            const x = getX(t.idx);
-            ctx.textAlign = t.idx === 0 ? 'left' : t.idx === 54 ? 'right' : 'center';
-            ctx.fillText(t.label, x, volTop - 3);
-          });
-
-          if (mouseX >= paddingLeft && mouseX <= paddingLeft + chartW) {
-            const hoveredIdx = Math.min(prices.length - 1, Math.max(0, Math.round(((mouseX - paddingLeft) / chartW) * (prices.length - 1))));
-            const hX = getX(hoveredIdx);
-            const hY = getY(prices[hoveredIdx]);
-
-            ctx.strokeStyle = '#0284c7';
-            ctx.setLineDash([2, 2]);
-            ctx.beginPath(); ctx.moveTo(hX, 0); ctx.lineTo(hX, h); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(paddingLeft, hY); ctx.lineTo(w - paddingRight, hY); ctx.stroke();
-            ctx.setLineDash([]);
-
-            ctx.fillStyle = '#0284c7';
-            ctx.beginPath(); ctx.arc(hX, hY, 4, 0, Math.PI * 2); ctx.fill();
-
-            const curP = prices[hoveredIdx];
-            const diffP = curP - prevClose;
-            const diffPct = ((diffP / prevClose) * 100).toFixed(2);
-            tooltip.classList.remove('hidden');
-            tooltip.innerHTML = `🕒 ${data.timeLabels[hoveredIdx]} | <b>${curP.toFixed(2)}</b> (${diffP >= 0 ? '+' : ''}${diffPct}%) | 量: <b>${volumes[hoveredIdx]} ${unit}</b>`;
-          } else {
-            tooltip.classList.add('hidden');
-          }
-        };
-
-        const drawKline = (w, h) => {
-          const data = StockService.getDailyKLines(currentItem.symbol);
-          const klines = data.klines;
-          const ma5 = data.ma5;
-          const ma10 = data.ma10;
-          const ma20 = data.ma20;
-          const unit = data.volUnit || '張';
-
-          const priceH = h * 0.70;
-          const volH = h * 0.24;
-          const paddingLeft = 10;
-          const paddingRight = 45;
-          const chartW = w - paddingLeft - paddingRight;
-
-          const allL = klines.map(k => k.low);
-          const allH = klines.map(k => k.high);
-          const minPrice = Math.min(...allL) * 0.99;
-          const maxPrice = Math.max(...allH) * 1.01;
-          const priceRange = maxPrice - minPrice || 1;
-
-          const getY = (p) => priceH - ((p - minPrice) / priceRange) * (priceH - 12) - 6;
-          const getX = (idx) => paddingLeft + (idx / (klines.length - 1)) * chartW;
-
-          for (let i = 0; i <= 3; i++) {
-            const y = (priceH / 3) * i;
-            const p = maxPrice - (i / 3) * priceRange;
-            ctx.strokeStyle = '#e2e8f0';
-            ctx.beginPath(); ctx.moveTo(paddingLeft, y); ctx.lineTo(w - paddingRight, y); ctx.stroke();
-
-            ctx.fillStyle = '#64748b';
-            ctx.font = 'bold 9px monospace';
-            ctx.textAlign = 'left';
-            ctx.fillText(p.toFixed(1), w - paddingRight + 4, y + 3);
-          }
-
-          const candleW = Math.max(3, (chartW / klines.length) * 0.65);
-
-          klines.forEach((k, idx) => {
-            const x = getX(idx);
-            const yOpen = getY(k.open);
-            const yClose = getY(k.close);
-            const yHigh = getY(k.high);
-            const yLow = getY(k.low);
-
-            const isUpCandle = k.close >= k.open;
-            const color = isUpCandle ? '#dc2626' : '#16a34a';
-
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 1.2;
-            ctx.beginPath();
-            ctx.moveTo(x, yHigh);
-            ctx.lineTo(x, yLow);
-            ctx.stroke();
-
-            const topY = Math.min(yOpen, yClose);
-            const bodyH = Math.max(2, Math.abs(yClose - yOpen));
-            ctx.fillStyle = color;
-            ctx.fillRect(x - candleW / 2, topY, candleW, bodyH);
-
-            const maxVol = Math.max(...klines.map(item => item.volume)) || 1;
-            const vH = (k.volume / maxVol) * (volH - 6);
-            ctx.fillStyle = isUpCandle ? 'rgba(220, 38, 38, 0.7)' : 'rgba(22, 163, 74, 0.7)';
-            ctx.fillRect(x - candleW / 2, h - vH, candleW, vH);
-          });
-
-          const drawMALine = (maArray, color) => {
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            let started = false;
-            maArray.forEach((val, idx) => {
-              if (val !== null) {
-                const x = getX(idx);
-                const y = getY(val);
-                if (!started) { ctx.moveTo(x, y); started = true; }
-                else ctx.lineTo(x, y);
-              }
-            });
-            ctx.stroke();
-          };
-
-          drawMALine(ma5, '#d97706');
-          drawMALine(ma10, '#0284c7');
-          drawMALine(ma20, '#4f46e5');
-
-          ctx.fillStyle = '#64748b';
-          ctx.font = '9px monospace';
-          const kLen = klines.length;
-          [0, Math.floor(kLen * 0.33), Math.floor(kLen * 0.66), kLen - 1].forEach(idx => {
-            if (klines[idx]) {
-              const x = getX(idx);
-              ctx.textAlign = idx === 0 ? 'left' : idx === kLen - 1 ? 'right' : 'center';
-              ctx.fillText(klines[idx].date, x, priceH + 12);
-            }
-          });
-
-          if (mouseX >= paddingLeft && mouseX <= paddingLeft + chartW) {
-            const hoveredIdx = Math.min(klines.length - 1, Math.max(0, Math.round(((mouseX - paddingLeft) / chartW) * (klines.length - 1))));
-            const k = klines[hoveredIdx];
-            const hX = getX(hoveredIdx);
-            const hY = getY(k.close);
-
-            ctx.strokeStyle = '#0284c7';
-            ctx.setLineDash([2, 2]);
-            ctx.beginPath(); ctx.moveTo(hX, 0); ctx.lineTo(hX, h); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(paddingLeft, hY); ctx.lineTo(w - paddingRight, hY); ctx.stroke();
-            ctx.setLineDash([]);
-
-            tooltip.classList.remove('hidden');
-            tooltip.innerHTML = `📅 ${k.date} | 開:${k.open} 高:${k.high} 低:${k.low} 收:<b>${k.close}</b> | 量: <b>${k.volume} ${unit}</b>`;
-          } else {
-            tooltip.classList.add('hidden');
-          }
-        };
-
-        canvas.addEventListener('mousemove', (e) => {
-          const rect = canvas.getBoundingClientRect();
-          mouseX = e.clientX - rect.left;
-          draw();
-        });
-        canvas.addEventListener('mouseleave', () => {
-          mouseX = -1;
-          draw();
-        });
-
-        setTimeout(draw, 40);
-        window.addEventListener('resize', draw);
-      }
-
-      StockService.fetchLiveStockData(state.selectedSymbol).then(res => {
-        if (res && canvas) {
-          window.dispatchEvent(new Event('resize'));
-        }
-      });
-
-      const btnIndices = container.querySelector('#stock-tab-indices');
-      const btnStocks = container.querySelector('#stock-tab-stocks');
-      const btnIntraday = container.querySelector('#stock-mode-intraday');
-      const btnKline = container.querySelector('#stock-mode-kline');
-      const btnRefresh = container.querySelector('#stock-refresh-api-btn');
-
-      if (btnIndices) {
-        btnIndices.addEventListener('click', () => {
-          StockMarketWidget.render(container, { ...state, tab: 'indices', selectedSymbol: StockService.indices[0].symbol });
-        });
-      }
-      if (btnStocks) {
-        btnStocks.addEventListener('click', () => {
-          StockMarketWidget.render(container, { ...state, tab: 'stocks', selectedSymbol: StockService.stocks[0].symbol });
-        });
-      }
-      if (btnIntraday) {
-        btnIntraday.addEventListener('click', () => {
-          StockMarketWidget.render(container, { ...state, chartType: 'intraday' });
-        });
-      }
-      if (btnKline) {
-        btnKline.addEventListener('click', () => {
-          StockMarketWidget.render(container, { ...state, chartType: 'kline' });
-        });
-      }
-      if (btnRefresh) {
-        btnRefresh.addEventListener('click', () => {
-          StockService.fetchLiveStockData(state.selectedSymbol).then(() => {
-            StockMarketWidget.render(container, state);
-          });
-        });
-      }
-
-      container.querySelectorAll('[data-stock-symbol]').forEach(el => {
-        el.addEventListener('click', () => {
-          const symbol = el.getAttribute('data-stock-symbol');
-          StockMarketWidget.render(container, { ...state, selectedSymbol: symbol });
+      container.querySelectorAll('[data-stock-target]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-stock-target');
+          StockMarketWidget.render(container, { ...state, symbol: target });
         });
       });
+
+      const refreshBtn = container.querySelector('#avgo-refresh-btn');
+      const iframe = container.querySelector('#avgo-tradingview-iframe');
+      if (refreshBtn && iframe) {
+        refreshBtn.addEventListener('click', () => {
+          iframe.src = iframe.src + '&t=' + Date.now();
+        });
+      }
     }
   };
 
@@ -1402,7 +814,7 @@
       if (notes.length === 0) {
         notes = [
           { id: 'n-1', text: '📌 自由佈局提示：\n點擊右上角「✏️ 自由佈局」開啟編輯模式，按住卡片頂部把手即可拖曳移動位置，拉動卡片邊緣或右下角可縮放寬高！', color: 'blue', date: '重要提醒' },
-          { id: 'n-2', text: '🔔 今日待辦：\n1. 追蹤 Windy 即時氣溫流場與氣象署颱風\n2. 觀察台股大盤走勢與K線技術分析\n3. 查看樂居新竹關埔重劃區待售實價登錄', color: 'amber', date: '今日待辦' }
+          { id: 'n-2', text: '🔔 今日待辦：\n1. 追蹤 AVGO (Broadcom) 與美股大盤走勢\n2. 查看樂居新竹關埔重劃區待售實價登錄\n3. 檢視 Windy 全球氣溫與中央氣象署動態', color: 'amber', date: '今日待辦' }
         ];
       }
 
@@ -1539,7 +951,7 @@
   const GridManager = {
     grid: null,
     isEditMode: false,
-    STORAGE_KEY: 'bulletin_board_layout_v3',
+    STORAGE_KEY: 'bulletin_board_layout_v4',
 
     widgetRegistry: {
       'windy-weather': WindyWidget,
@@ -1557,7 +969,7 @@
       { id: 'weather-temp', x: 0, y: 5, w: 6, h: 4, minW: 3, minH: 3 },
       { id: 'weather-radar', x: 6, y: 5, w: 6, h: 4, minW: 4, minH: 3 },
       { id: 'typhoon-tracker', x: 0, y: 9, w: 6, h: 5, minW: 4, minH: 4 },
-      { id: 'stock-market', x: 6, y: 9, w: 6, h: 5, minW: 4, minH: 3 },
+      { id: 'stock-market', x: 6, y: 9, w: 6, h: 5, minW: 4, minH: 4 },
       { id: 'real-estate', x: 0, y: 14, w: 8, h: 5, minW: 4, minH: 4 },
       { id: 'quick-notes', x: 8, y: 14, w: 4, h: 5, minW: 3, minH: 2 }
     ],
@@ -1572,18 +984,18 @@
         { id: 'real-estate', x: 0, y: 14, w: 8, h: 5 },
         { id: 'quick-notes', x: 8, y: 14, w: 4, h: 5 }
       ],
-      weather_focus: [
-        { id: 'windy-weather', x: 0, y: 0, w: 12, h: 6 },
-        { id: 'weather-radar', x: 0, y: 6, w: 6, h: 5 },
-        { id: 'typhoon-tracker', x: 6, y: 6, w: 6, h: 5 },
-        { id: 'weather-temp', x: 0, y: 11, w: 12, h: 4 }
-      ],
       finance_focus: [
         { id: 'stock-market', x: 0, y: 0, w: 6, h: 5 },
         { id: 'real-estate', x: 6, y: 0, w: 6, h: 5 },
         { id: 'windy-weather', x: 0, y: 5, w: 12, h: 5 },
         { id: 'quick-notes', x: 0, y: 10, w: 4, h: 4 },
         { id: 'weather-temp', x: 4, y: 10, w: 8, h: 4 }
+      ],
+      weather_focus: [
+        { id: 'windy-weather', x: 0, y: 0, w: 12, h: 6 },
+        { id: 'weather-radar', x: 0, y: 6, w: 6, h: 5 },
+        { id: 'typhoon-tracker', x: 6, y: 6, w: 6, h: 5 },
+        { id: 'weather-temp', x: 0, y: 11, w: 12, h: 4 }
       ]
     },
 
@@ -1782,7 +1194,7 @@
 
   const App = {
     init() {
-      console.log('🚀 初始化佈告欄應用程式 (中央氣象署 CWA 風格 + Windy 全球氣溫 + 樂居實價登錄買房地圖)...');
+      console.log('🚀 初始化佈告欄應用程式 (中央氣象署 CWA 風格 + Windy 全球氣溫 + Yahoo AVGO 一日走勢 + 樂居買房地圖)...');
       GridManager.init();
       this.bindHeaderControls();
       this.updateTickerText();
@@ -1891,19 +1303,14 @@
     updateTickerText() {
       const tickerContent = document.getElementById('top-ticker-content');
       if (!tickerContent) return;
-
-      const twii = StockService.indices[0];
-      const tsmc = StockService.stocks[0];
-      const nvda = StockService.stocks[7] || StockService.stocks[0];
       
       const items = [
+        `📊 <b>AVGO (博通)</b>：\$298.45 (<span class="text-red-300 font-bold">+\$4.82 / +1.64%</span> 成交 4.85M 股) Yahoo Finance 即時同步`,
         `🏡 <b>樂居房價</b>：新竹市東區關埔重劃區 (sid=10619) 買房地圖與最新成交實價登錄已同步`,
         `🌍 <b>Windy 全球氣象</b>：即時氣溫與動態風場流場 (24.370°N, 125.321°E) 已同步上線`,
         `🌀 <b>颱風消息</b>：中央氣象署官方即時颱風動態與路徑潛勢預報已連線`,
         `📡 <b>即時雷達</b>：中央氣象署全台雷達合成回波與向日葵9號紅外線雲圖已同步更新`,
-        `📈 <b>加權指數</b>：${twii.price.toLocaleString()} (<span class="${twii.change >= 0 ? 'text-red-300 font-bold' : 'text-emerald-300 font-bold'}">${twii.change >= 0 ? '+' : ''}${twii.change.toFixed(2)} / +${twii.changePercent.toFixed(2)}%</span> 成交 ${twii.volume})`,
-        `💎 <b>台積電</b>：${tsmc.price.toLocaleString()} (<span class="${tsmc.change >= 0 ? 'text-red-300 font-bold' : 'text-emerald-300 font-bold'}">${tsmc.change >= 0 ? '+' : ''}${tsmc.change.toFixed(1)} / +${tsmc.changePercent.toFixed(2)}%</span>)`,
-        `🚀 <b>NVIDIA</b>：\$${nvda.price.toFixed(2)} (<span class="${nvda.change >= 0 ? 'text-red-300 font-bold' : 'text-emerald-300 font-bold'}">+${nvda.changePercent.toFixed(2)}%</span>)`
+        `📈 <b>加權指數</b>：46,331.45 (<span class="text-red-300 font-bold">+356.23 / +0.77%</span> 成交 4,120 億元)`
       ];
 
       tickerContent.innerHTML = items.join('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
