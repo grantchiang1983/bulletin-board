@@ -6,7 +6,7 @@
  * 1. Top Hero Section: Windy.com Interactive Global Weather & Temperature Map (24.370, 125.321, 4, p:temp)
  * 2. CWA Official Clean Palette (深海藍 #0d346c, 氣象海洋藍 #0284c7, 潔淨白 #ffffff, 晴空淡藍 #f0f4f8)
  * 3. Directly Embeds CWA Typhoon News Page Verbatim (https://www.cwa.gov.tw/V8/C/P/Typhoon/TY_NEWS.html)
- * 4. Real Estate: Directly Embeds & Links Leju 【惠宇雲品】 (https://www.leju.com.tw/community/L4dc10240794b2d?mode=buy)
+ * 4. Real Estate: Directly Embeds & Links Leju 【惠宇雲品】社區清單 (https://www.leju.com.tw/community_list?city=O&area=O390&oid=L4dc10240794b2d)
  * 5. Stock Market: 100% Pure Official Exchange Real-time Data & Volume for Broadcom Inc. (AVGO) & Direct Links to https://finance.yahoo.com/quote/AVGO/
  * 6. 100% Pure Real CWA Live Composite Radar & Himawari-9 Satellite Feeds
  * 7. Full Drag-and-Drop Customizable Grid Layout with LocalStorage persistence
@@ -453,7 +453,7 @@
             <iframe id="cwa-typhoon-iframe" src="${cwaTyphoonUrl}" class="w-full h-full border-0 bg-white" title="交通部中央氣象署 颱風消息" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
           </div>
 
-          <div class="flex items-center justify-between px-3 py-1.5 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex-shrink-0">
+          <div class="flex items-center justify-between px-3.5 py-1.5 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex-shrink-0">
             <span>資料來源：交通部中央氣象署官方網站</span>
             <a href="${cwaTyphoonUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:text-sky-900 font-bold underline">
               https://www.cwa.gov.tw/V8/C/P/Typhoon/TY_NEWS.html ↗
@@ -560,7 +560,7 @@
 
   const RealEstateWidget = {
     id: 'real-estate',
-    title: '【惠宇雲品】一年均價 71.27 萬/坪 ‧ 樂居實價登錄',
+    title: '【惠宇雲品】新竹市東區 ‧ 樂居實價登錄 (community_list)',
     icon: 'home',
     defaultWidth: 8,
     defaultHeight: 5,
@@ -568,14 +568,15 @@
     minHeight: 4,
 
     render(container) {
-      const lejuUrl = 'https://www.leju.com.tw/community/L4dc10240794b2d?mode=buy';
+      const lejuUrl = 'https://www.leju.com.tw/community_list?city=O&area=O390&oid=L4dc10240794b2d';
 
       container.innerHTML = `
         <div class="flex flex-col h-full bg-white text-slate-800 select-none overflow-hidden justify-between">
+          <!-- Top Toolbar -->
           <div class="flex flex-wrap items-center justify-between px-3.5 py-2 bg-slate-50 border-b border-slate-200 z-10 gap-2 flex-shrink-0">
             <div class="flex items-center space-x-2">
-              <span class="p-1 rounded bg-amber-100 text-amber-800 text-xs font-bold">🏡 樂居實價登錄</span>
-              <span class="text-xs font-black text-[#0d346c]">【惠宇雲品】新竹市東區 (L4dc10240794b2d)</span>
+              <span class="p-1 rounded bg-amber-100 text-amber-800 text-xs font-bold">🏡 樂居社區清單</span>
+              <span class="text-xs font-black text-[#0d346c]">【惠宇雲品】新竹市東區 (oid=L4dc10240794b2d)</span>
             </div>
 
             <div class="flex items-center space-x-1.5">
@@ -583,11 +584,11 @@
                 162 筆交易
               </span>
 
-              <button id="leju-reload-iframe-btn" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 text-xs text-slate-700 border border-slate-300 font-medium transition-colors shadow-sm" title="重新整理惠宇雲品資料">
+              <button id="leju-reload-iframe-btn" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 text-xs text-slate-700 border border-slate-300 font-medium transition-colors shadow-sm" title="重新整理惠宇雲品社區清單資料">
                 🔄 重新整理
               </button>
 
-              <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁開啟樂居【惠宇雲品】社區實價登錄與買房頁面 (https://www.leju.com.tw/community/L4dc10240794b2d?mode=buy)">
+              <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁開啟樂居【惠宇雲品】社區清單與實價登錄頁面 (https://www.leju.com.tw/community_list?city=O&area=O390&oid=L4dc10240794b2d)">
                 <span>🏡</span>
                 <span>樂居【惠宇雲品】</span>
                 <svg class="w-3.5 h-3.5 text-sky-100 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -597,14 +598,15 @@
             </div>
           </div>
 
+          <!-- Community Header Info Card -->
           <div class="flex items-center justify-between px-3.5 py-2.5 bg-white border-b border-slate-200">
             <div>
               <div class="flex items-center space-x-2">
-                <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="text-base font-black text-[#0d346c] hover:text-[#0284c7] flex items-center space-x-1 transition-colors" title="前往樂居查看完整實價登錄">
+                <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="text-base font-black text-[#0d346c] hover:text-[#0284c7] flex items-center space-x-1 transition-colors" title="前往樂居查看完整社區清單與實價登錄">
                   <span>【惠宇雲品】</span>
                   <span class="text-xs text-sky-600 font-normal">↗</span>
                 </a>
-                <span class="text-xs px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold border border-sky-300">關埔重劃區 ‧ 光埔特區</span>
+                <span class="text-xs px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold border border-sky-300">新竹市東區 ‧ 關埔重劃區</span>
               </div>
               <div class="text-[11px] text-slate-500 flex items-center space-x-2 mt-0.5 font-medium">
                 <span>📍 新竹市東區世傑路 288 號</span>
@@ -627,6 +629,7 @@
             </div>
           </div>
 
+          <!-- Community Metrics & Key Highlights Grid -->
           <div class="grid grid-cols-4 gap-2 px-3.5 py-2 bg-slate-50 border-b border-slate-200 text-center text-xs">
             <div class="p-1.5 rounded-lg bg-white border border-slate-200 shadow-sm">
               <div class="text-[10px] text-slate-500 font-medium">一年成交均價</div>
@@ -646,19 +649,21 @@
             </div>
           </div>
 
+          <!-- Embedded Leju Community Iframe Viewer -->
           <div class="relative flex-1 w-full h-full min-h-[220px] overflow-hidden bg-slate-100">
-            <iframe id="leju-community-iframe" src="${lejuUrl}" class="w-full h-full border-0 bg-white" title="樂居 惠宇雲品 實價登錄與待售物件" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+            <iframe id="leju-community-iframe" src="${lejuUrl}" class="w-full h-full border-0 bg-white" title="樂居 惠宇雲品 社區清單與實價登錄" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
           </div>
 
+          <!-- Footer Direct Link -->
           <div class="flex items-center justify-between px-3.5 py-1.5 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex-shrink-0">
             <div class="flex items-center space-x-2">
               <span>資料來源：樂居 (LEJU.com.tw)</span>
               <span>‧</span>
-              <span class="text-sky-700 font-semibold">【惠宇雲品】一年均價71.27萬坪，162筆交易</span>
+              <span class="text-sky-700 font-semibold">【惠宇雲品】社區清單與行情</span>
             </div>
 
             <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:text-sky-900 font-bold underline truncate max-w-[50%]">
-              https://www.leju.com.tw/community/L4dc10240794b2d?mode=buy ↗
+              https://www.leju.com.tw/community_list?city=O&area=O390&oid=L4dc10240794b2d ↗
             </a>
           </div>
         </div>
@@ -694,7 +699,7 @@
       if (notes.length === 0) {
         notes = [
           { id: 'n-1', text: '📌 自由佈局提示：\n點擊右上角「✏️ 自由佈局」開啟編輯模式，按住卡片頂部把手即可拖曳移動位置，拉動卡片邊緣或右下角可縮放寬高！', color: 'blue', date: '重要提醒' },
-          { id: 'n-2', text: '🔔 今日待辦：\n1. 追蹤 AVGO (Broadcom) 官方即時成交量與走勢\n2. 檢視樂居【惠宇雲品】最新實價登錄\n3. 檢視 Windy 全球氣溫與中央氣象署動態', color: 'amber', date: '今日待辦' }
+          { id: 'n-2', text: '🔔 今日待辦：\n1. 追蹤 AVGO (Broadcom) 官方即時成交量與走勢\n2. 檢視樂居【惠宇雲品】社區清單實價登錄\n3. 檢視 Windy 全球氣溫與中央氣象署動態', color: 'amber', date: '今日待辦' }
         ];
       }
 
@@ -831,7 +836,7 @@
   const GridManager = {
     grid: null,
     isEditMode: false,
-    STORAGE_KEY: 'bulletin_board_layout_v6',
+    STORAGE_KEY: 'bulletin_board_layout_v7',
 
     widgetRegistry: {
       'windy-weather': WindyWidget,
@@ -1074,7 +1079,7 @@
 
   const App = {
     init() {
-      console.log('🚀 初始化佈告欄應用程式 (中央氣象署 CWA 風格 + Windy 全球氣溫 + Yahoo AVGO 官方連線 + 樂居【惠宇雲品】)...');
+      console.log('🚀 初始化佈告欄應用程式 (中央氣象署 CWA 風格 + Windy 全球氣溫 + Yahoo AVGO + 樂居【惠宇雲品】community_list)...');
       GridManager.init();
       this.bindHeaderControls();
       this.updateTickerText();
@@ -1185,8 +1190,8 @@
       if (!tickerContent) return;
       
       const items = [
+        `🏡 <b>惠宇雲品</b>：新竹市東區社區清單與實價登錄已連線 (oid=L4dc10240794b2d)`,
         `📊 <b>AVGO (博通)</b>：交易所官方即時成交量與走勢圖已連線 (Yahoo Finance / NASDAQ)`,
-        `🏡 <b>惠宇雲品</b>：一年均價 71.27 萬/坪 (累計 162 筆交易) 樂居實價登錄已同步`,
         `🌍 <b>Windy 全球氣象</b>：即時氣溫與動態風場流場 (24.370°N, 125.321°E) 已同步上線`,
         `🌀 <b>颱風消息</b>：中央氣象署官方即時颱風動態與路徑潛勢預報已連線`,
         `📡 <b>即時雷達</b>：中央氣象署全台雷達合成回波與向日葵9號紅外線雲圖已同步更新`

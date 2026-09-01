@@ -1,6 +1,6 @@
 export const RealEstateWidget = {
   id: 'real-estate',
-  title: '【惠宇雲品】一年均價 71.27 萬/坪 ‧ 樂居實價登錄',
+  title: '【惠宇雲品】新竹市東區 ‧ 樂居實價登錄 (community_list)',
   icon: 'home',
   defaultWidth: 8,
   defaultHeight: 5,
@@ -8,15 +8,15 @@ export const RealEstateWidget = {
   minHeight: 4,
 
   render(container) {
-    const lejuUrl = 'https://www.leju.com.tw/community/L4dc10240794b2d?mode=buy';
+    const lejuUrl = 'https://www.leju.com.tw/community_list?city=O&area=O390&oid=L4dc10240794b2d';
 
     container.innerHTML = `
       <div class="flex flex-col h-full bg-white text-slate-800 select-none overflow-hidden justify-between">
         <!-- Top Toolbar -->
         <div class="flex flex-wrap items-center justify-between px-3.5 py-2 bg-slate-50 border-b border-slate-200 z-10 gap-2 flex-shrink-0">
           <div class="flex items-center space-x-2">
-            <span class="p-1 rounded bg-amber-100 text-amber-800 text-xs font-bold">🏡 樂居實價登錄</span>
-            <span class="text-xs font-black text-[#0d346c]">【惠宇雲品】新竹市東區 (L4dc10240794b2d)</span>
+            <span class="p-1 rounded bg-amber-100 text-amber-800 text-xs font-bold">🏡 樂居社區清單</span>
+            <span class="text-xs font-black text-[#0d346c]">【惠宇雲品】新竹市東區 (oid=L4dc10240794b2d)</span>
           </div>
 
           <div class="flex items-center space-x-1.5">
@@ -24,11 +24,11 @@ export const RealEstateWidget = {
               162 筆交易
             </span>
 
-            <button id="leju-reload-iframe-btn" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 text-xs text-slate-700 border border-slate-300 font-medium transition-colors shadow-sm" title="重新整理惠宇雲品資料">
+            <button id="leju-reload-iframe-btn" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 text-xs text-slate-700 border border-slate-300 font-medium transition-colors shadow-sm" title="重新整理惠宇雲品社區清單資料">
               🔄 重新整理
             </button>
 
-            <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁開啟樂居【惠宇雲品】社區實價登錄與買房頁面 (https://www.leju.com.tw/community/L4dc10240794b2d?mode=buy)">
+            <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁開啟樂居【惠宇雲品】社區清單與實價登錄頁面 (https://www.leju.com.tw/community_list?city=O&area=O390&oid=L4dc10240794b2d)">
               <span>🏡</span>
               <span>樂居【惠宇雲品】</span>
               <svg class="w-3.5 h-3.5 text-sky-100 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -42,11 +42,11 @@ export const RealEstateWidget = {
         <div class="flex items-center justify-between px-3.5 py-2.5 bg-white border-b border-slate-200">
           <div>
             <div class="flex items-center space-x-2">
-              <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="text-base font-black text-[#0d346c] hover:text-[#0284c7] flex items-center space-x-1 transition-colors" title="前往樂居查看完整實價登錄">
+              <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="text-base font-black text-[#0d346c] hover:text-[#0284c7] flex items-center space-x-1 transition-colors" title="前往樂居查看完整社區清單與實價登錄">
                 <span>【惠宇雲品】</span>
                 <span class="text-xs text-sky-600 font-normal">↗</span>
               </a>
-              <span class="text-xs px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold border border-sky-300">關埔重劃區 ‧ 光埔特區</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold border border-sky-300">新竹市東區 ‧ 關埔重劃區</span>
             </div>
             <div class="text-[11px] text-slate-500 flex items-center space-x-2 mt-0.5 font-medium">
               <span>📍 新竹市東區世傑路 288 號</span>
@@ -91,7 +91,7 @@ export const RealEstateWidget = {
 
         <!-- Embedded Leju Community Iframe Viewer -->
         <div class="relative flex-1 w-full h-full min-h-[220px] overflow-hidden bg-slate-100">
-          <iframe id="leju-community-iframe" src="${lejuUrl}" class="w-full h-full border-0 bg-white" title="樂居 惠宇雲品 實價登錄與待售物件" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+          <iframe id="leju-community-iframe" src="${lejuUrl}" class="w-full h-full border-0 bg-white" title="樂居 惠宇雲品 社區清單與實價登錄" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
         </div>
 
         <!-- Footer Direct Link -->
@@ -99,11 +99,11 @@ export const RealEstateWidget = {
           <div class="flex items-center space-x-2">
             <span>資料來源：樂居 (LEJU.com.tw)</span>
             <span>‧</span>
-            <span class="text-sky-700 font-semibold">【惠宇雲品】一年均價71.27萬坪，162筆交易</span>
+            <span class="text-sky-700 font-semibold">【惠宇雲品】社區清單與行情</span>
           </div>
 
           <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:text-sky-900 font-bold underline truncate max-w-[50%]">
-            https://www.leju.com.tw/community/L4dc10240794b2d?mode=buy ↗
+            https://www.leju.com.tw/community_list?city=O&area=O390&oid=L4dc10240794b2d ↗
           </a>
         </div>
       </div>
