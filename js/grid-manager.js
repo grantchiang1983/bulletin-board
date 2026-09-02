@@ -1,68 +1,83 @@
-﻿import { WeatherTempWidget } from './widgets/weather-temp-widget.js';
+import { WindyWidget } from './widgets/windy-widget.js';
+import { WeatherTempWidget } from './widgets/weather-temp-widget.js';
 import { WeatherRadarWidget } from './widgets/weather-radar-widget.js';
 import { TyphoonWidget } from './widgets/typhoon-widget.js';
 import { StockMarketWidget } from './widgets/stock-market-widget.js';
 import { RealEstateWidget } from './widgets/real-estate-widget.js';
+import { RealEstateQianpinWidget } from './widgets/real-estate-qianpin-widget.js';
 import { QuickNotesWidget } from './widgets/quick-notes-widget.js';
 import { ClockCalendarWidget } from './widgets/clock-calendar-widget.js';
 
 export const GridManager = {
   grid: null,
   isEditMode: false,
-  STORAGE_KEY: 'bulletin_board_layout_v1',
+  STORAGE_KEY: 'bulletin_board_layout_v8',
 
   widgetRegistry: {
+    'windy-weather': WindyWidget,
     'weather-temp': WeatherTempWidget,
     'weather-radar': WeatherRadarWidget,
     'typhoon-tracker': TyphoonWidget,
     'stock-market': StockMarketWidget,
     'real-estate': RealEstateWidget,
+    'real-estate-qianpin': RealEstateQianpinWidget,
     'quick-notes': QuickNotesWidget,
     'clock-calendar': ClockCalendarWidget
   },
 
   defaultLayout: [
-    { id: 'weather-temp', x: 0, y: 0, w: 6, h: 4, minW: 3, minH: 3 },
-    { id: 'weather-radar', x: 6, y: 0, w: 6, h: 4, minW: 4, minH: 3 },
-    { id: 'typhoon-tracker', x: 0, y: 4, w: 6, h: 4, minW: 4, minH: 3 },
-    { id: 'stock-market', x: 6, y: 4, w: 6, h: 4, minW: 4, minH: 3 },
-    { id: 'real-estate', x: 0, y: 8, w: 8, h: 4, minW: 4, minH: 3 },
-    { id: 'quick-notes', x: 8, y: 8, w: 4, h: 4, minW: 3, minH: 2 }
+    { id: 'windy-weather', x: 0, y: 0, w: 12, h: 5, minW: 6, minH: 4 },
+    { id: 'weather-temp', x: 0, y: 5, w: 6, h: 4, minW: 3, minH: 3 },
+    { id: 'weather-radar', x: 6, y: 5, w: 6, h: 4, minW: 4, minH: 3 },
+    { id: 'typhoon-tracker', x: 0, y: 9, w: 6, h: 5, minW: 4, minH: 4 },
+    { id: 'stock-market', x: 6, y: 9, w: 6, h: 5, minW: 4, minH: 4 },
+    { id: 'real-estate', x: 0, y: 14, w: 8, h: 5, minW: 4, minH: 4 },
+    { id: 'quick-notes', x: 8, y: 14, w: 4, h: 5, minW: 3, minH: 2 },
+    { id: 'real-estate-qianpin', x: 0, y: 19, w: 8, h: 5, minW: 4, minH: 4 },
+    { id: 'clock-calendar', x: 8, y: 19, w: 4, h: 5, minW: 3, minH: 2 }
   ],
 
   presetLayouts: {
     overview: [
-      { id: 'weather-temp', x: 0, y: 0, w: 6, h: 4 },
-      { id: 'weather-radar', x: 6, y: 0, w: 6, h: 4 },
-      { id: 'typhoon-tracker', x: 0, y: 4, w: 6, h: 4 },
-      { id: 'stock-market', x: 6, y: 4, w: 6, h: 4 },
-      { id: 'real-estate', x: 0, y: 8, w: 8, h: 4 },
-      { id: 'quick-notes', x: 8, y: 8, w: 4, h: 4 }
-    ],
-    weather_focus: [
-      { id: 'weather-radar', x: 0, y: 0, w: 8, h: 5 },
-      { id: 'typhoon-tracker', x: 8, y: 0, w: 4, h: 5 },
-      { id: 'weather-temp', x: 0, y: 5, w: 12, h: 4 }
+      { id: 'windy-weather', x: 0, y: 0, w: 12, h: 5 },
+      { id: 'weather-temp', x: 0, y: 5, w: 6, h: 4 },
+      { id: 'weather-radar', x: 6, y: 5, w: 6, h: 4 },
+      { id: 'typhoon-tracker', x: 0, y: 9, w: 6, h: 5 },
+      { id: 'stock-market', x: 6, y: 9, w: 6, h: 5 },
+      { id: 'real-estate', x: 0, y: 14, w: 8, h: 5 },
+      { id: 'quick-notes', x: 8, y: 14, w: 4, h: 5 },
+      { id: 'real-estate-qianpin', x: 0, y: 19, w: 8, h: 5 },
+      { id: 'clock-calendar', x: 8, y: 19, w: 4, h: 5 }
     ],
     finance_focus: [
-      { id: 'stock-market', x: 0, y: 0, w: 7, h: 5 },
-      { id: 'real-estate', x: 7, y: 0, w: 5, h: 5 },
-      { id: 'quick-notes', x: 0, y: 5, w: 4, h: 4 },
-      { id: 'weather-temp', x: 4, y: 5, w: 8, h: 4 }
+      { id: 'stock-market', x: 0, y: 0, w: 6, h: 5 },
+      { id: 'real-estate', x: 6, y: 0, w: 6, h: 5 },
+      { id: 'real-estate-qianpin', x: 0, y: 5, w: 6, h: 5 },
+      { id: 'quick-notes', x: 6, y: 5, w: 6, h: 5 },
+      { id: 'windy-weather', x: 0, y: 10, w: 12, h: 5 }
+    ],
+    weather_focus: [
+      { id: 'windy-weather', x: 0, y: 0, w: 12, h: 6 },
+      { id: 'weather-radar', x: 0, y: 6, w: 6, h: 5 },
+      { id: 'typhoon-tracker', x: 6, y: 6, w: 6, h: 5 },
+      { id: 'weather-temp', x: 0, y: 11, w: 12, h: 4 }
     ]
   },
 
   init() {
-    // Initialize GridStack with 12 columns
     this.grid = GridStack.init({
       column: 12,
       cellHeight: 105,
       animate: true,
       margin: 12,
-      handle: '.widget-drag-handle',
-      disableDrag: true,
-      disableResize: true,
-      removable: '.trash-zone'
+      staticGrid: true,
+      draggable: {
+        handle: '.widget-drag-handle',
+        scroll: false
+      },
+      resizable: {
+        handles: 'e, se, s, sw, w'
+      }
     });
 
     this.loadLayout();
@@ -74,7 +89,7 @@ export const GridManager = {
     try {
       saved = JSON.parse(localStorage.getItem(this.STORAGE_KEY));
     } catch (e) {
-      console.warn('Failed to parse saved layout, using default:', e);
+      console.warn(e);
     }
 
     const itemsToLoad = (saved && Array.isArray(saved) && saved.length > 0) ? saved : this.defaultLayout;
@@ -89,10 +104,7 @@ export const GridManager = {
 
   addWidget(widgetId, options = {}) {
     const widgetDef = this.widgetRegistry[widgetId];
-    if (!widgetDef) {
-      console.warn(`Widget definition not found for: ${widgetId}`);
-      return;
-    }
+    if (!widgetDef) return;
 
     const w = options.w || widgetDef.defaultWidth || 6;
     const h = options.h || widgetDef.defaultHeight || 4;
@@ -106,25 +118,21 @@ export const GridManager = {
     el.setAttribute('data-widget-id', widgetId);
 
     el.innerHTML = `
-      <div class="grid-stack-item-content bg-slate-900 border border-slate-800 rounded-2xl shadow-xl flex flex-col overflow-hidden relative group">
-        <!-- Edit Mode Header Handle -->
-        <div class="widget-drag-handle flex items-center justify-between px-3 py-1.5 bg-slate-800/80 border-b border-slate-700/60 cursor-grab select-none z-20">
+      <div class="grid-stack-item-content bg-white border border-slate-200 rounded-2xl shadow-md flex flex-col overflow-hidden relative group">
+        <div class="widget-drag-handle flex items-center justify-between px-3.5 py-2 bg-slate-100/90 border-b border-slate-200 select-none z-20 cursor-grab">
           <div class="flex items-center space-x-2">
-            <span class="text-xs text-slate-400 font-bold tracking-wider">⠿ ${widgetDef.title}</span>
+            <span class="text-xs text-[#0d346c] font-black tracking-wide">⠿ ${widgetDef.title}</span>
           </div>
           <div class="widget-edit-controls flex items-center space-x-1.5">
-            <button class="p-1 text-slate-400 hover:text-rose-400 rounded transition-colors" data-remove-widget title="移除此區塊">
+            <button class="p-1 text-slate-400 hover:text-rose-600 rounded transition-colors" data-remove-widget title="移除此區塊">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
           </div>
         </div>
-
-        <!-- Widget Dynamic Content Container -->
         <div class="widget-body-container flex-1 overflow-hidden relative"></div>
       </div>
     `;
 
-    // Remove button listener
     const removeBtn = el.querySelector('[data-remove-widget]');
     if (removeBtn) {
       removeBtn.addEventListener('click', (e) => {
@@ -136,15 +144,9 @@ export const GridManager = {
 
     this.grid.addWidget(el, { x, y, w, h, minW, minH, autoPosition: x === undefined });
 
-    // Render widget body
     const bodyContainer = el.querySelector('.widget-body-container');
     if (bodyContainer && widgetDef.render) {
       widgetDef.render(bodyContainer);
-    }
-
-    if (this.isEditMode) {
-      this.grid.enableMove(true);
-      this.grid.enableResize(true);
     }
   },
 
@@ -152,12 +154,10 @@ export const GridManager = {
     this.isEditMode = enabled;
     if (enabled) {
       document.body.classList.add('edit-mode');
-      this.grid.enableMove(true);
-      this.grid.enableResize(true);
+      this.grid.setStatic(false);
     } else {
       document.body.classList.remove('edit-mode');
-      this.grid.enableMove(false);
-      this.grid.enableResize(false);
+      this.grid.setStatic(true);
       this.saveLayout();
     }
   },
@@ -170,6 +170,7 @@ export const GridManager = {
     layout.forEach(item => {
       this.addWidget(item.id, item);
     });
+    this.setEditMode(this.isEditMode);
     this.saveLayout();
   },
 
@@ -206,7 +207,7 @@ export const GridManager = {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `bulletin_layout_${new Date().toISOString().slice(0,10)}.json`;
+    a.download = `bulletin_cwa_layout_${new Date().toISOString().slice(0,10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
   },
@@ -233,8 +234,7 @@ export const GridManager = {
       }
     });
 
-    this.grid.on('resizestop', (event, el) => {
-      // Trigger resize for canvas inside widget
+    this.grid.on('resizestop', () => {
       window.dispatchEvent(new Event('resize'));
     });
   },
@@ -248,7 +248,7 @@ export const GridManager = {
       setTimeout(() => {
         toast.classList.remove('opacity-100', 'translate-y-0');
         toast.classList.add('opacity-0', 'translate-y-4');
-      }, 2500);
+      }, 2200);
     }
   }
 };
