@@ -486,7 +486,7 @@
       const currentRange = state.range || '1D';
 
       const ranges = [
-        { id: '1D', name: '1D', interval: '1', desc: '1日即時走勢' },
+        { id: '1D', name: '1D', interval: '1', desc: '1日即時走勢 (AM 4:00 - 隔天 AM 4:00)' },
         { id: '5D', name: '5D', interval: '5', desc: '5日走勢' },
         { id: '1M', name: '1M', interval: '30', desc: '1個月走勢' },
         { id: '6M', name: '6M', interval: 'D', desc: '6個月走勢' },
@@ -529,7 +529,7 @@
           </div>
 
           <!-- Yahoo Finance Range Selector Bar (1D, 5D, 1M, 6M, YTD, 1Y, 5Y, All) -->
-          <div class="flex items-center justify-between px-3.5 py-1.5 bg-[#0d346c] text-white border-b border-slate-200 z-10 overflow-x-auto scrollbar-thin">
+          <div class="flex items-center justify-between px-3.5 py-1.5 bg-[#0d346c] text-white border-b border-slate-200 z-10 overflow-x-auto scrollbar-thin flex-shrink-0">
             <div class="flex items-center space-x-1">
               <span class="text-[11px] font-bold text-sky-200 mr-1.5 flex-shrink-0">週期切換:</span>
               ${ranges.map(r => `
@@ -544,9 +544,44 @@
             </div>
           </div>
 
+          <!-- 24-Hour Trading Timeline Axis (4:00 AM -> 隔天 4:00 AM) -->
+          <div class="px-3.5 py-1 bg-slate-900 text-white text-[11px] border-b border-slate-700 flex flex-col gap-1 flex-shrink-0">
+            <div class="flex items-center justify-between font-mono font-bold text-sky-300">
+              <div class="flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>1D 時間軸 (美東時間 ET 完整盤前至盤後)</span>
+              </div>
+              <span class="text-amber-300 text-[10px]">AM 4:00 ➔ 隔天 AM 4:00</span>
+            </div>
+            
+            <!-- Visual Milestones Bar -->
+            <div class="grid grid-cols-5 gap-1 text-[10px] text-center font-mono">
+              <div class="bg-slate-800/90 py-0.5 px-1 rounded border border-slate-700 text-sky-200" title="盤前交易 Pre-Market">
+                <span class="block font-bold">AM 4:00</span>
+                <span class="text-[9px] text-slate-400">🌅 盤前開始</span>
+              </div>
+              <div class="bg-slate-800/90 py-0.5 px-1 rounded border border-slate-700 text-amber-200" title="正規盤開始 Regular Open">
+                <span class="block font-bold">AM 9:30</span>
+                <span class="text-[9px] text-slate-400">🔔 開盤交易</span>
+              </div>
+              <div class="bg-slate-800/90 py-0.5 px-1 rounded border border-slate-700 text-slate-200" title="午間交易 Midday">
+                <span class="block font-bold">PM 12:00</span>
+                <span class="text-[9px] text-slate-400">☀️ 午間盤</span>
+              </div>
+              <div class="bg-slate-800/90 py-0.5 px-1 rounded border border-slate-700 text-rose-200" title="正規盤收盤 Regular Close / 盤後開始">
+                <span class="block font-bold">PM 4:00</span>
+                <span class="text-[9px] text-slate-400">🌙 收盤/盤後</span>
+              </div>
+              <div class="bg-slate-800/90 py-0.5 px-1 rounded border border-slate-700 text-indigo-200" title="隔日盤前 Next Day Open">
+                <span class="block font-bold">隔天 AM 4:00</span>
+                <span class="text-[9px] text-slate-400">🔄 隔日開盤</span>
+              </div>
+            </div>
+          </div>
+
           <!-- Official Live Chart & Real-Time Volume Embed Container -->
-          <div class="relative flex-1 w-full h-full min-h-[260px] overflow-hidden bg-white">
-            <iframe id="avgo-tradingview-live-widget" src="${embedChartUrl}" class="w-full h-full border-0 bg-white" title="Broadcom Inc. (AVGO) Yahoo Finance ${currentRange} 即時走勢與成交量" loading="lazy" allowfullscreen></iframe>
+          <div class="relative flex-1 w-full h-full min-h-[240px] overflow-hidden bg-white">
+            <iframe id="avgo-tradingview-live-widget" src="${embedChartUrl}" class="w-full h-full border-0 bg-white" title="Broadcom Inc. (AVGO) Yahoo Finance ${currentRange} 即時走勢 (AM 4:00 - 隔天 AM 4:00)" loading="lazy" allowfullscreen></iframe>
           </div>
 
           <!-- Footer Direct Link -->
