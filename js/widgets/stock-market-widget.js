@@ -1,48 +1,37 @@
 export const StockMarketWidget = {
   id: 'stock-market',
-  title: '美股即時行情與成交量 ‧ AVGO 博通 (Yahoo Finance / NASDAQ)',
+  title: 'Broadcom Inc. (AVGO) ‧ Yahoo Finance 美股即時行情',
   icon: 'trending-up',
   defaultWidth: 6,
   defaultHeight: 5,
   minWidth: 4,
   minHeight: 4,
 
-  render(container, state = { symbol: 'NASDAQ:AVGO' }) {
-    const symbolMap = {
-      'NASDAQ:AVGO': { name: '博通 Broadcom (AVGO)', yahooUrl: 'https://finance.yahoo.com/quote/AVGO/' },
-      'NASDAQ:NVDA': { name: '輝達 NVIDIA (NVDA)', yahooUrl: 'https://finance.yahoo.com/quote/NVDA/' },
-      'NYSE:TSM': { name: '台積電 ADR (TSM)', yahooUrl: 'https://finance.yahoo.com/quote/TSM/' },
-      'TWSE:TAIEX': { name: '台股加權指數 (TAIEX)', yahooUrl: 'https://tw.stock.yahoo.com/t/idx.php' }
-    };
-
-    const currentSymbol = state.symbol || 'NASDAQ:AVGO';
-    const currentInfo = symbolMap[currentSymbol] || symbolMap['NASDAQ:AVGO'];
+  render(container) {
+    const yahooAvgoUrl = 'https://finance.yahoo.com/quote/AVGO/';
 
     container.innerHTML = `
-      <div class="flex flex-col h-full bg-white text-slate-800 select-none overflow-hidden justify-between">
+      <div class="flex flex-col h-full bg-white text-slate-800 select-none overflow-hidden justify-between text-sm">
         <!-- Top Toolbar -->
         <div class="flex flex-wrap items-center justify-between px-3.5 py-2 bg-slate-50 border-b border-slate-200 z-10 gap-2 flex-shrink-0">
-          <!-- Symbol Switches -->
-          <div class="flex items-center space-x-1 overflow-x-auto scrollbar-thin">
-            ${Object.keys(symbolMap).map(sym => `
-              <button class="px-2.5 py-1 text-xs font-bold rounded-md transition-all flex-shrink-0 ${sym === currentSymbol ? 'bg-[#0d346c] text-white shadow-sm' : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'}" data-stock-symbol="${sym}">
-                ${sym === 'NASDAQ:AVGO' ? '★ AVGO (博通)' : sym.split(':')[1]}
-              </button>
-            `).join('')}
+          <div class="flex items-center space-x-2">
+            <span class="p-1 rounded bg-rose-100 text-rose-800 text-xs font-bold">📈 美股行情</span>
+            <a href="${yahooAvgoUrl}" target="_blank" rel="noopener noreferrer" class="text-xs font-black text-[#0d346c] hover:text-[#0284c7] transition-colors">
+              Broadcom Inc. (AVGO) ‧ NASDAQ ↗
+            </a>
           </div>
 
-          <!-- Actions -->
           <div class="flex items-center space-x-1.5">
             <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold border border-emerald-300 hidden sm:inline flex items-center space-x-1">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse inline-block"></span>
-              <span>交易所官方即時成交量</span>
+              <span>NASDAQ 官方即時連線</span>
             </span>
 
-            <button id="stock-refresh-iframe-btn" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 text-xs text-slate-700 border border-slate-300 font-medium transition-colors shadow-sm" title="重新整理交易所走勢與成交量">
+            <button id="avgo-refresh-btn" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 text-xs text-slate-700 border border-slate-300 font-medium transition-colors shadow-sm" title="重新整理 AVGO 即時走勢與成交量">
               🔄 刷新
             </button>
 
-            <a href="${currentInfo.yahooUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁開啟 Yahoo Finance 官方即時成交資訊 (${currentInfo.yahooUrl})">
+            <a href="${yahooAvgoUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold flex items-center space-x-1 shadow-sm transition-all group/btn" title="在新分頁開啟 Yahoo Finance AVGO 官方即時行情頁面 (https://finance.yahoo.com/quote/AVGO/)">
               <span>📊</span>
               <span>Yahoo Finance</span>
               <svg class="w-3.5 h-3.5 text-sky-100 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,39 +41,51 @@ export const StockMarketWidget = {
           </div>
         </div>
 
+        <!-- Broadcom Info & Key Metrics Header -->
+        <div class="grid grid-cols-4 gap-2 px-3.5 py-2 bg-slate-50 border-b border-slate-200 text-center text-xs flex-shrink-0">
+          <div class="p-1.5 rounded-lg bg-white border border-slate-200 shadow-sm">
+            <div class="text-[10px] text-slate-500 font-medium">股票代碼 / 交易所</div>
+            <div class="font-black text-[#0d346c] text-xs mt-0.5">AVGO (NASDAQ)</div>
+          </div>
+          <div class="p-1.5 rounded-lg bg-white border border-slate-200 shadow-sm">
+            <div class="text-[10px] text-slate-500 font-medium">總市值 (Market Cap)</div>
+            <div class="font-black text-slate-800 text-xs mt-0.5">~1.76 兆美元</div>
+          </div>
+          <div class="p-1.5 rounded-lg bg-white border border-slate-200 shadow-sm">
+            <div class="text-[10px] text-slate-500 font-medium">本益比 (PE TTM)</div>
+            <div class="font-black text-slate-800 text-xs mt-0.5">~61.5</div>
+          </div>
+          <div class="p-1.5 rounded-lg bg-white border border-slate-200 shadow-sm">
+            <div class="text-[10px] text-slate-500 font-medium">產業板塊</div>
+            <div class="font-black text-[#0284c7] text-xs mt-0.5">AI ASIC / 網通晶片</div>
+          </div>
+        </div>
+
         <!-- Official Live Chart & Real-Time Volume Embed Container -->
-        <div class="relative flex-1 w-full h-full min-h-[300px] overflow-hidden bg-white">
-          <iframe id="tradingview-live-widget" src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_stock&symbol=${encodeURIComponent(currentSymbol)}&interval=5&hidesidetoolbar=1&symboledit=0&saveimage=0&toolbarbg=f8fafc&studies=%5B%5D&theme=light&style=1&timezone=Asia%2FTaipei&locale=zh_TW" class="w-full h-full border-0 bg-white" title="${currentInfo.name} 即時行情與成交量" loading="lazy" allowfullscreen></iframe>
+        <div class="relative flex-1 w-full h-full min-h-[260px] overflow-hidden bg-white">
+          <iframe id="avgo-tradingview-live-widget" src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_stock&symbol=NASDAQ%3AAVGO&interval=1&hidesidetoolbar=1&symboledit=0&saveimage=0&toolbarbg=f8fafc&studies=%5B%5D&theme=light&style=1&timezone=America%2FNew_York&locale=zh_TW" class="w-full h-full border-0 bg-white" title="Broadcom Inc. (AVGO) Yahoo Finance / NASDAQ 即時行情與成交量" loading="lazy" allowfullscreen></iframe>
         </div>
 
         <!-- Footer Direct Link -->
         <div class="flex items-center justify-between px-3.5 py-1.5 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex-shrink-0">
           <div class="flex items-center space-x-2">
-            <span>官方行情來源：Yahoo Finance ‧ NASDAQ / NYSE 交易所</span>
+            <span>官方行情來源：Yahoo Finance</span>
             <span>‧</span>
-            <span class="text-sky-700 font-semibold">${currentInfo.name}</span>
+            <span class="text-sky-700 font-semibold">Broadcom Inc. (AVGO)</span>
           </div>
 
-          <a href="${currentInfo.yahooUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:text-sky-900 font-bold underline truncate max-w-[50%]">
-            ${currentInfo.yahooUrl} ↗
+          <a href="${yahooAvgoUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:text-sky-900 font-bold underline truncate max-w-[50%]">
+            https://finance.yahoo.com/quote/AVGO/ ↗
           </a>
         </div>
       </div>
     `;
 
-    // Switch symbols
-    container.querySelectorAll('[data-stock-symbol]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const symbol = btn.getAttribute('data-stock-symbol');
-        StockMarketWidget.render(container, { symbol });
-      });
-    });
-
-    const refreshBtn = container.querySelector('#stock-refresh-iframe-btn');
-    const iframe = container.querySelector('#tradingview-live-widget');
+    const refreshBtn = container.querySelector('#avgo-refresh-btn');
+    const iframe = container.querySelector('#avgo-tradingview-live-widget');
     if (refreshBtn && iframe) {
       refreshBtn.addEventListener('click', () => {
-        iframe.src = iframe.src + '&t=' + Date.now();
+        iframe.src = iframe.src.split('&t=')[0] + '&t=' + Date.now();
       });
     }
   }
