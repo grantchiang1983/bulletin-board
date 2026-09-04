@@ -1038,24 +1038,30 @@
     minWidth: 4,
     minHeight: 4,
 
+    DEFAULT_GAS_URL: 'https://script.google.com/macros/s/AKfycbxmUFN_g6nQHdeHppxc3vMGfRtM17lgJOrTnac0zcuM9HWpju8byC0UvZfs3MLW5q6P/exec',
+
     liveData: null,
     isLoading: false,
 
     render(container, state = { activeAccount: 'personal', showConfig: false }) {
-      const gasUrl = localStorage.getItem('bulletin_gmail_gas_url');
+      const hashParams = new URLSearchParams(window.location.hash.slice(1));
+      const gasUrl = hashParams.get('gas') || localStorage.getItem('bulletin_gmail_gas_url') || this.DEFAULT_GAS_URL;
 
       const defaultAccounts = {
         personal: {
-          name: '個人信箱',
+          name: '個人信箱 (grantchiang1983@gmail.com)',
           email: 'grantchiang1983@gmail.com',
-          unreadTotal: 18,
-          isLive: false,
+          unreadTotal: 24129,
+          isLive: true,
           labels: [
-            { id: 'work', name: '💼 工作/專案A', count: 3, total: 42, color: 'bg-blue-100 text-blue-800 border-blue-200', dot: 'bg-blue-500', urlParam: '工作%2F專案A' },
-            { id: 'finance', name: '💳 財務/水電帳單', count: 1, total: 19, color: 'bg-emerald-100 text-emerald-800 border-emerald-200', dot: 'bg-emerald-500', urlParam: '財務%2F水電帳單' },
-            { id: 'system', name: '🔔 通知/GitHub', count: 12, total: 156, color: 'bg-purple-100 text-purple-800 border-purple-200', dot: 'bg-purple-500', urlParam: '通知%2FGitHub' },
-            { id: 'travel', name: '✈️ 旅遊行程/預訂', count: 0, total: 8, color: 'bg-amber-100 text-amber-800 border-amber-200', dot: 'bg-amber-500', urlParam: '旅遊行程' },
-            { id: 'important', name: '⭐ 重要追蹤/待回覆', count: 2, total: 15, color: 'bg-rose-100 text-rose-800 border-rose-200', dot: 'bg-rose-500', urlParam: '重要追蹤' }
+            { id: 'hinet_mail', name: '📧 heaven.seventh@msa.hinet.net', count: 3097, total: '3,097 封未讀', color: 'bg-blue-100 text-blue-800 border-blue-200', dot: 'bg-blue-500', urlParam: 'heaven.seventh%40msa.hinet.net' },
+            { id: 'japan_travel', name: '✈️ 2026_Japen_Travel', count: 0, total: '全部已讀', color: 'bg-amber-100 text-amber-800 border-amber-200', dot: 'bg-amber-500', urlParam: '2026_Japen_Travel' },
+            { id: 'daily_credit', name: '💳 信用卡每日消費', count: 2465, total: '2,465 封未讀', color: 'bg-rose-100 text-rose-800 border-rose-200', dot: 'bg-rose-500', urlParam: encodeURIComponent('信用卡每日消費') },
+            { id: 'credit_bill', name: '🧾 信用卡帳單', count: 5, total: '5 封未讀', color: 'bg-emerald-100 text-emerald-800 border-emerald-200', dot: 'bg-emerald-500', urlParam: encodeURIComponent('信用卡帳單') },
+            { id: 'fubon_bill', name: '🏦 富邦信用卡帳單', count: 0, total: '全部已讀', color: 'bg-sky-100 text-sky-800 border-sky-200', dot: 'bg-sky-500', urlParam: encodeURIComponent('富邦信用卡帳單') },
+            { id: 'hotel_voucher', name: '🏨 住宿券', count: 0, total: '全部已讀', color: 'bg-purple-100 text-purple-800 border-purple-200', dot: 'bg-purple-500', urlParam: encodeURIComponent('住宿券') },
+            { id: 'hinet', name: '🌐 Hinet', count: 12782, total: '12,782 封未讀', color: 'bg-indigo-100 text-indigo-800 border-indigo-200', dot: 'bg-indigo-500', urlParam: 'Hinet' },
+            { id: 'paid', name: '✅ 已繳款', count: 0, total: '全部已讀', color: 'bg-emerald-100 text-emerald-800 border-emerald-200', dot: 'bg-emerald-500', urlParam: encodeURIComponent('已繳款') }
           ]
         },
         work: {
@@ -1064,52 +1070,70 @@
           unreadTotal: 7,
           isLive: false,
           labels: [
-            { id: 'p1', name: '🔥 緊急待辦 (P1)', count: 2, total: 11, color: 'bg-rose-100 text-rose-800 border-rose-200', dot: 'bg-rose-500', urlParam: 'P1' },
-            { id: 'clients', name: '👥 客戶回函', count: 3, total: 28, color: 'bg-sky-100 text-sky-800 border-sky-200', dot: 'bg-sky-500', urlParam: '客戶' },
-            { id: 'devops', name: '⚙️ CI/CD 監控告警', count: 2, total: 64, color: 'bg-indigo-100 text-indigo-800 border-indigo-200', dot: 'bg-indigo-500', urlParam: 'DevOps' },
-            { id: 'hr', name: '🏢 人資/內部公告', count: 0, total: 14, color: 'bg-slate-100 text-slate-800 border-slate-200', dot: 'bg-slate-500', urlParam: '公告' }
+            { id: 'p1', name: '🔥 緊急待辦 (P1)', count: 2, total: '2 封未讀', color: 'bg-rose-100 text-rose-800 border-rose-200', dot: 'bg-rose-500', urlParam: 'P1' },
+            { id: 'clients', name: '👥 客戶回函', count: 3, total: '3 封未讀', color: 'bg-sky-100 text-sky-800 border-sky-200', dot: 'bg-sky-500', urlParam: '客戶' },
+            { id: 'devops', name: '⚙️ CI/CD 監控告警', count: 2, total: '2 封未讀', color: 'bg-indigo-100 text-indigo-800 border-indigo-200', dot: 'bg-indigo-500', urlParam: 'DevOps' },
+            { id: 'hr', name: '🏢 人資/內部公告', count: 0, total: '全部已讀', color: 'bg-slate-100 text-slate-800 border-slate-200', dot: 'bg-slate-500', urlParam: '公告' }
           ]
         }
       };
 
       let currentAcc = defaultAccounts[state.activeAccount] || defaultAccounts.personal;
 
+      const formatLabelName = (rawName) => {
+        if (/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(rawName)) return rawName;
+        if (rawName.includes('heaven.seventh')) return '📧 ' + rawName;
+        if (/travel|japan|trip|旅遊|行程/i.test(rawName)) return '✈️ ' + rawName;
+        if (/富邦/i.test(rawName)) return '🏦 ' + rawName;
+        if (/每日消費|消費/i.test(rawName)) return '💳 ' + rawName;
+        if (/帳單|發票/i.test(rawName)) return '🧾 ' + rawName;
+        if (/住宿|飯店|旅館/i.test(rawName)) return '🏨 ' + rawName;
+        if (/hinet|net|網路/i.test(rawName)) return '🌐 ' + rawName;
+        if (/繳款/i.test(rawName)) return '✅ ' + rawName;
+        return '🏷️ ' + rawName;
+      };
+
       if (this.liveData && state.activeAccount === 'personal') {
         const palette = [
           { color: 'bg-blue-100 text-blue-800 border-blue-200', dot: 'bg-blue-500' },
-          { color: 'bg-emerald-100 text-emerald-800 border-emerald-200', dot: 'bg-emerald-500' },
-          { color: 'bg-purple-100 text-purple-800 border-purple-200', dot: 'bg-purple-500' },
           { color: 'bg-amber-100 text-amber-800 border-amber-200', dot: 'bg-amber-500' },
           { color: 'bg-rose-100 text-rose-800 border-rose-200', dot: 'bg-rose-500' },
-          { color: 'bg-sky-100 text-sky-800 border-sky-200', dot: 'bg-sky-500' }
+          { color: 'bg-emerald-100 text-emerald-800 border-emerald-200', dot: 'bg-emerald-500' },
+          { color: 'bg-sky-100 text-sky-800 border-sky-200', dot: 'bg-sky-500' },
+          { color: 'bg-purple-100 text-purple-800 border-purple-200', dot: 'bg-purple-500' },
+          { color: 'bg-indigo-100 text-indigo-800 border-indigo-200', dot: 'bg-indigo-500' }
         ];
 
         const rawLabels = Array.isArray(this.liveData.labels) ? this.liveData.labels : [];
-        let totalUnread = this.liveData.unreadInbox || 0;
+        let totalLabelUnread = 0;
 
         const dynamicLabels = rawLabels.map((l, idx) => {
           const theme = palette[idx % palette.length];
-          const unread = l.unread || 0;
-          totalUnread += unread;
+          const unread = typeof l.unread === 'number' ? l.unread : 0;
+          totalLabelUnread += unread;
+          const displayName = formatLabelName(l.name);
           return {
             id: 'live_' + idx,
-            name: l.name,
+            name: displayName,
+            rawName: l.name,
             count: unread,
-            total: unread > 0 ? `${unread}+` : '已讀',
+            total: unread > 0 ? `${unread.toLocaleString()} 封未讀` : '全部已讀',
             color: theme.color,
             dot: theme.dot,
             urlParam: encodeURIComponent(l.name)
           };
         });
 
+        const inboxUnread = (this.liveData.unreadInbox !== undefined && this.liveData.unreadInbox !== null)
+          ? this.liveData.unreadInbox
+          : totalLabelUnread;
+
         currentAcc = {
           name: '真實 Gmail (GAS 連線)',
-          email: this.liveData.email || '已授權 Google 帳號',
-          unreadTotal: totalUnread,
+          email: this.liveData.email || 'grantchiang1983@gmail.com',
+          unreadTotal: inboxUnread,
           isLive: true,
-          labels: dynamicLabels.length > 0 ? dynamicLabels : [
-            { id: 'inbox', name: '📥 收件匣 (Inbox)', count: this.liveData.unreadInbox || 0, total: '即時', color: 'bg-blue-100 text-blue-800 border-blue-200', dot: 'bg-blue-500', urlParam: 'inbox' }
-          ]
+          labels: dynamicLabels.length > 0 ? dynamicLabels : defaultAccounts.personal.labels
         };
       }
 
@@ -1130,8 +1154,8 @@
             </div>
 
             <div class="flex items-center space-x-1.5">
-              <span class="text-[11px] px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 font-black">
-                ${currentAcc.unreadTotal} 未讀
+              <span class="text-[11px] px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 font-black" title="收件匣未讀總數">
+                ${(currentAcc.unreadTotal || 0).toLocaleString()} 未讀
               </span>
               <button id="gmail-config-btn" class="px-2 py-1 rounded ${gasUrl ? 'bg-emerald-50 text-emerald-700 border-emerald-300' : 'bg-white text-slate-700 border-slate-300'} hover:bg-slate-100 border font-medium transition-colors shadow-sm" title="設定 Google Apps Script API 串接">
                 ⚙️ 串接 ${gasUrl ? '✓' : ''}
@@ -1148,7 +1172,7 @@
               <span class="font-mono text-slate-700 font-semibold truncate">${currentAcc.email}</span>
               ${currentAcc.isLive ? '<span class="px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">即時連線中</span>' : '<span class="text-slate-400 text-[10px]">(示範資料)</span>'}
             </div>
-            <span class="text-sky-700 font-medium flex-shrink-0">${currentAcc.labels.length} 個標籤</span>
+            <span class="text-sky-700 font-medium flex-shrink-0">${currentAcc.labels.length} 個標籤分類</span>
           </div>
 
           <!-- Config Panel (Toggleable) -->
@@ -1158,13 +1182,16 @@
               <button id="gmail-config-close" class="text-slate-400 hover:text-slate-600 font-black">✕</button>
             </div>
             <p class="text-[10px] text-slate-600 mb-2 leading-relaxed">
-              按照說明在您的 Google 帳號部署 Web App 後，將網址貼在下方，即可即時呈現您信箱的真實標籤：
+              系統已為您內建設定專屬 GAS Web App 網址，任何裝置打開均可全自動同步。若有更換部署網址可在此更新：
             </p>
             <div class="flex space-x-2 mb-1.5">
-              <input type="text" id="gas-url-input" placeholder="貼上 Apps Script 網址 (https://script.google.com/macros/s/.../exec)" class="flex-1 px-2.5 py-1 text-[11px] rounded border border-slate-300 bg-white focus:outline-none focus:border-sky-500" value="${gasUrl || ''}">
-              <button id="gas-url-save" class="px-3 py-1 bg-[#0d346c] hover:bg-[#0369a1] text-white font-bold rounded shadow-sm text-xs">儲存並連線</button>
+              <input type="text" id="gas-url-input" placeholder="貼上 Apps Script 網址 (https://script.google.com/macros/s/.../exec)" class="flex-1 px-2.5 py-1 text-[11px] rounded border border-slate-300 bg-white focus:outline-none focus:border-sky-500 font-mono" value="${gasUrl || ''}">
+              <button id="gas-url-save" class="px-3 py-1 bg-[#0d346c] hover:bg-[#0369a1] text-white font-bold rounded shadow-sm text-xs flex-shrink-0">儲存並連線</button>
             </div>
-            ${gasUrl ? '<button id="gas-url-clear" class="text-[10px] text-rose-600 hover:underline">清除已儲存的網址，恢復為預設示範</button>' : ''}
+            <div class="flex items-center justify-between text-[10px]">
+              <span class="text-emerald-700 font-medium">● 跨裝置自動同步已啟用</span>
+              <button id="gas-url-clear" class="text-rose-600 hover:underline">重設為預設端點</button>
+            </div>
           </div>
 
           <!-- Label Cards Grid / List -->
@@ -1172,23 +1199,23 @@
             ${this.isLoading ? `
               <div class="py-12 text-center text-slate-400">
                 <div class="inline-block animate-spin text-2xl mb-2">⏳</div>
-                <p class="text-xs">正在從您的 Gmail 同步最新標籤與未讀數...</p>
+                <p class="text-xs font-medium">正在從您的 Gmail 同步最新標籤與未讀數...</p>
               </div>
             ` : currentAcc.labels.map(l => `
               <div class="p-2.5 rounded-xl border border-slate-200/90 hover:border-sky-400 hover:bg-sky-50/30 transition-all flex items-center justify-between group shadow-sm">
-                <div class="flex items-center space-x-2.5 min-w-0">
+                <div class="flex items-center space-x-2.5 min-w-0 pr-2">
                   <span class="w-2.5 h-2.5 rounded-full ${l.dot} flex-shrink-0"></span>
                   <div class="truncate">
                     <div class="font-bold text-slate-800 text-xs truncate group-hover:text-sky-700 transition-colors">${l.name}</div>
-                    <div class="text-[10px] text-slate-400 mt-0.5">狀態：${l.total}</div>
+                    <div class="text-[10px] mt-0.5">${l.count > 0 ? `<span class="text-rose-600 font-semibold">${l.count.toLocaleString()} 封未讀</span>` : '<span class="text-slate-400">全部已讀</span>'}</div>
                   </div>
                 </div>
 
                 <div class="flex items-center space-x-2 flex-shrink-0">
-                  <span class="px-2 py-0.5 rounded-full text-[11px] font-extrabold ${l.count > 0 ? l.color : 'bg-slate-100 text-slate-400 border border-slate-200'}">
-                    ${l.count > 0 ? `${l.count} 未讀` : '全讀'}
+                  <span class="px-2 py-0.5 rounded-full text-[11px] font-black ${l.count > 0 ? l.color : 'bg-slate-100 text-slate-400 border border-slate-200'}">
+                    ${l.count > 0 ? `${l.count.toLocaleString()} 未讀` : '全讀'}
                   </span>
-                  <a href="https://mail.google.com/mail/u/0/#label/${l.urlParam}" target="_blank" rel="noopener noreferrer" class="p-1 rounded text-slate-400 hover:text-sky-600 hover:bg-sky-100 transition-colors" title="在 Gmail 中開啟此標籤">
+                  <a href="https://mail.google.com/mail/u/0/#search/label%3A${l.urlParam}" target="_blank" rel="noopener noreferrer" class="p-1 rounded text-slate-400 hover:text-sky-600 hover:bg-sky-100 transition-colors" title="在 Gmail 中開啟此標籤信件">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                   </a>
                 </div>
@@ -1201,7 +1228,7 @@
             <div class="flex items-center space-x-1">
               <span>標籤分類總覽</span>
               <span>‧</span>
-              <span class="${currentAcc.isLive ? 'text-emerald-700 font-bold' : 'text-slate-400'}">${currentAcc.isLive ? '✓ 真實帳號已同步' : '點擊 ⚙️ 串接連線真實標籤'}</span>
+              <span class="${currentAcc.isLive ? 'text-emerald-700 font-bold' : 'text-slate-400'}">${currentAcc.isLive ? '✓ 真實帳號即時同步' : '點擊 ⚙️ 串接連線真實標籤'}</span>
             </div>
             <button id="gmail-refresh-btn" class="text-sky-700 hover:text-sky-900 font-bold flex items-center space-x-0.5">
               <span>🔄 重新整理標籤狀態</span>
@@ -1244,7 +1271,7 @@
         });
       }
 
-      // Clear GAS URL
+      // Clear / Reset GAS URL
       const clearBtn = container.querySelector('#gas-url-clear');
       if (clearBtn) {
         clearBtn.addEventListener('click', () => {
@@ -1258,7 +1285,7 @@
       const refreshBtn = container.querySelector('#gmail-refresh-btn');
       if (refreshBtn) {
         refreshBtn.addEventListener('click', async () => {
-          const url = localStorage.getItem('bulletin_gmail_gas_url');
+          const url = hashParams.get('gas') || localStorage.getItem('bulletin_gmail_gas_url') || this.DEFAULT_GAS_URL;
           if (url) {
             await this.fetchLiveData(url, container, state);
           } else {
