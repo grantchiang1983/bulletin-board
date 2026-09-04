@@ -1584,7 +1584,7 @@
   // ==========================================
 
   const AuthManager = {
-    DEFAULT_HASH: '1629a589b2b16f26d423e8592eb08ec72b21b8c8e76b30f690f9aac7ea5f6b7f', // SHA-256 for '720528'
+    DEFAULT_HASH: '1629a589b2b16f26d423e8592eb08ec72b21b8c8e76b30f690f9aac7ea5f6b7f', // Default SHA-256 hash
 
     async sha256(str) {
       if (window.crypto && window.crypto.subtle) {
