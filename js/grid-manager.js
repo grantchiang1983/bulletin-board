@@ -7,11 +7,13 @@ import { RealEstateWidget } from './widgets/real-estate-widget.js';
 import { RealEstateQianpinWidget } from './widgets/real-estate-qianpin-widget.js';
 import { QuickNotesWidget } from './widgets/quick-notes-widget.js';
 import { ClockCalendarWidget } from './widgets/clock-calendar-widget.js';
+import { GmailLabelsWidget } from './widgets/gmail-labels-widget.js';
+import { GmailAiClassifierWidget } from './widgets/gmail-ai-classifier-widget.js';
 
 export const GridManager = {
   grid: null,
   isEditMode: false,
-  STORAGE_KEY: 'bulletin_board_layout_v8',
+  STORAGE_KEY: 'bulletin_board_layout_v9',
 
   widgetRegistry: {
     'windy-weather': WindyWidget,
@@ -22,7 +24,9 @@ export const GridManager = {
     'real-estate': RealEstateWidget,
     'real-estate-qianpin': RealEstateQianpinWidget,
     'quick-notes': QuickNotesWidget,
-    'clock-calendar': ClockCalendarWidget
+    'clock-calendar': ClockCalendarWidget,
+    'gmail-labels': GmailLabelsWidget,
+    'gmail-ai-classifier': GmailAiClassifierWidget
   },
 
   defaultLayout: [
@@ -34,7 +38,9 @@ export const GridManager = {
     { id: 'real-estate', x: 0, y: 14, w: 8, h: 5, minW: 4, minH: 4 },
     { id: 'quick-notes', x: 8, y: 14, w: 4, h: 5, minW: 3, minH: 2 },
     { id: 'real-estate-qianpin', x: 0, y: 19, w: 8, h: 5, minW: 4, minH: 4 },
-    { id: 'clock-calendar', x: 8, y: 19, w: 4, h: 5, minW: 3, minH: 2 }
+    { id: 'clock-calendar', x: 8, y: 19, w: 4, h: 5, minW: 3, minH: 2 },
+    { id: 'gmail-labels', x: 0, y: 24, w: 6, h: 5, minW: 4, minH: 4 },
+    { id: 'gmail-ai-classifier', x: 6, y: 24, w: 6, h: 5, minW: 4, minH: 4 }
   ],
 
   presetLayouts: {
@@ -47,7 +53,9 @@ export const GridManager = {
       { id: 'real-estate', x: 0, y: 14, w: 8, h: 5 },
       { id: 'quick-notes', x: 8, y: 14, w: 4, h: 5 },
       { id: 'real-estate-qianpin', x: 0, y: 19, w: 8, h: 5 },
-      { id: 'clock-calendar', x: 8, y: 19, w: 4, h: 5 }
+      { id: 'clock-calendar', x: 8, y: 19, w: 4, h: 5 },
+      { id: 'gmail-labels', x: 0, y: 24, w: 6, h: 5 },
+      { id: 'gmail-ai-classifier', x: 6, y: 24, w: 6, h: 5 }
     ],
     finance_focus: [
       { id: 'stock-market', x: 0, y: 0, w: 6, h: 5 },
