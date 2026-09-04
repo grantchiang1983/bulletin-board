@@ -120,8 +120,9 @@ function classifyEmailsWithGemini() {
   const threads = GmailApp.search('is:unread label:INBOX', 0, 5);
   threads.forEach(t => {
     const msg = t.getMessages()[0];
-    const prompt = `分析以下信件類別 (工作/財務/系統) 與急迫度 (高/中/低) 並給出15字摘要：\n主旨: ${msg.getSubject()}\n內文: ${msg.getPlainBody().slice(0, 300)}`;
-    // 呼叫 Gemini REST API 判斷後執行:
+    const subject = msg.getSubject();
+    const content = msg.getPlainBody().slice(0, 300);
+    // 呼叫 Gemini REST API 判斷類別後自動貼上標籤:
     // GmailApp.getUserLabelByName(resultCategory).addToThread(t);
   });
 }</pre>
