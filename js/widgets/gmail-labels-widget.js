@@ -1,8 +1,8 @@
 export const GmailLabelsWidget = {
   id: 'gmail-labels',
-  title: 'Gmail 信件標籤統整 ‧ 多帳號分類總覽 (方法二)',
+  title: 'Gmail 信件標籤統整 ‧ 多帳號分類總覽',
   icon: 'mail',
-  defaultWidth: 6,
+  defaultWidth: 12,
   defaultHeight: 5,
   minWidth: 4,
   minHeight: 4,
@@ -168,7 +168,7 @@ export const GmailLabelsWidget = {
         </div>
 
         <!-- Label Cards Grid / List -->
-        <div class="flex-1 p-3 overflow-y-auto space-y-2 bg-white scrollbar-thin">
+        <div class="flex-1 p-3 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-2 bg-white scrollbar-thin content-start">
           ${this.isLoading ? `
             <div class="py-12 text-center text-slate-400">
               <div class="inline-block animate-spin text-2xl mb-2">⏳</div>
