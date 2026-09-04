@@ -8,14 +8,11 @@ import { RealEstateQianpinWidget } from './widgets/real-estate-qianpin-widget.js
 import { QuickNotesWidget } from './widgets/quick-notes-widget.js';
 import { ClockCalendarWidget } from './widgets/clock-calendar-widget.js';
 import { GmailLabelsWidget } from './widgets/gmail-labels-widget.js';
-import { ThreadsNativeCrawlerWidget } from './widgets/threads-native-crawler-widget.js';
-import { ThreadsGoogleTrendsWidget } from './widgets/threads-google-trends-widget.js';
-import { ThreadsWebEmbedWidget } from './widgets/threads-web-embed-widget.js';
 
 export const GridManager = {
   grid: null,
   isEditMode: false,
-  STORAGE_KEY: 'bulletin_board_layout_v12',
+  STORAGE_KEY: 'bulletin_board_layout_v13',
 
   widgetRegistry: {
     'windy-weather': WindyWidget,
@@ -27,10 +24,7 @@ export const GridManager = {
     'real-estate-qianpin': RealEstateQianpinWidget,
     'quick-notes': QuickNotesWidget,
     'clock-calendar': ClockCalendarWidget,
-    'gmail-labels': GmailLabelsWidget,
-    'threads-native-crawler': ThreadsNativeCrawlerWidget,
-    'threads-google-trends': ThreadsGoogleTrendsWidget,
-    'threads-web-embed': ThreadsWebEmbedWidget
+    'gmail-labels': GmailLabelsWidget
   },
 
   defaultLayout: [
@@ -43,10 +37,7 @@ export const GridManager = {
     { id: 'quick-notes', x: 8, y: 14, w: 4, h: 5, minW: 3, minH: 2 },
     { id: 'real-estate-qianpin', x: 0, y: 19, w: 8, h: 5, minW: 4, minH: 4 },
     { id: 'clock-calendar', x: 8, y: 19, w: 4, h: 5, minW: 3, minH: 2 },
-    { id: 'gmail-labels', x: 0, y: 24, w: 12, h: 5, minW: 4, minH: 4 },
-    { id: 'threads-native-crawler', x: 0, y: 29, w: 6, h: 5, minW: 4, minH: 4 },
-    { id: 'threads-google-trends', x: 6, y: 29, w: 6, h: 5, minW: 4, minH: 4 },
-    { id: 'threads-web-embed', x: 0, y: 34, w: 12, h: 6, minW: 4, minH: 4 }
+    { id: 'gmail-labels', x: 0, y: 24, w: 12, h: 5, minW: 4, minH: 4 }
   ],
 
   presetLayouts: {
@@ -60,10 +51,7 @@ export const GridManager = {
       { id: 'quick-notes', x: 8, y: 14, w: 4, h: 5 },
       { id: 'real-estate-qianpin', x: 0, y: 19, w: 8, h: 5 },
       { id: 'clock-calendar', x: 8, y: 19, w: 4, h: 5 },
-      { id: 'gmail-labels', x: 0, y: 24, w: 12, h: 5 },
-      { id: 'threads-native-crawler', x: 0, y: 29, w: 6, h: 5 },
-      { id: 'threads-google-trends', x: 6, y: 29, w: 6, h: 5 },
-      { id: 'threads-web-embed', x: 0, y: 34, w: 12, h: 6 }
+      { id: 'gmail-labels', x: 0, y: 24, w: 12, h: 5 }
     ],
     finance_focus: [
       { id: 'stock-market', x: 0, y: 0, w: 6, h: 5 },
