@@ -1,0 +1,37 @@
+name: 🔄 Update Real Estate Data
+
+on:
+  schedule:
+    # Runs daily at 01:00 UTC (09:00 Taiwan Time)
+    - cron: '0 1 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Update Script
+        run: |
+          if [ -f "scripts/update_real_estate.py" ]; then
+            python scripts/update_real_estate.py
+          elif [ -f "bulletin-board/scripts/update_real_estate.py" ]; then
+            python bulletin-board/scripts/update_real_estate.py
+          fi
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/real-estate-data.json bulletin-board/data/real-estate-data.json || true
+          git diff --staged --quiet || (git commit -m "chore(data): 自動同步樂居實價登錄最新行情 [skip ci]" && git push)
