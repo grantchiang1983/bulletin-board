@@ -36,7 +36,28 @@
                                         "ping":  "73.18",
                                         "parking":  "有車位",
                                         "rooms":  "3房",
-                                        "postings":  "8個刊登"
+                                        "postings":  "8個刊登",
+                                        "initialPrice180d":  "4380萬",
+                                        "diff180d":  "-182萬",
+                                        "diffPercent":  "-4.2%",
+                                        "trendStatus":  "▼ 累計調降 182 萬 (屋主顯著讓利)",
+                                        "history180d":  [
+                                                            {
+                                                                "date":  "04/22",
+                                                                "price":  "4380萬",
+                                                                "note":  "180天前初掛牌"
+                                                            },
+                                                            {
+                                                                "date":  "07/15",
+                                                                "price":  "4280萬",
+                                                                "note":  "調降 100 萬"
+                                                            },
+                                                            {
+                                                                "date":  "10/19",
+                                                                "price":  "4198萬",
+                                                                "note":  "讓利再降 82 萬 (最新)"
+                                                            }
+                                                        ]
                                     },
                                     {
                                         "rank":  2,
@@ -47,7 +68,28 @@
                                         "ping":  "83.27",
                                         "parking":  "有車位",
                                         "rooms":  "4房",
-                                        "postings":  "15個刊登"
+                                        "postings":  "15個刊登",
+                                        "initialPrice180d":  "4888萬",
+                                        "diff180d":  "-100萬",
+                                        "diffPercent":  "-2.0%",
+                                        "trendStatus":  "▼ 累計調降 100 萬 (降後持平)",
+                                        "history180d":  [
+                                                            {
+                                                                "date":  "05/10",
+                                                                "price":  "4888萬",
+                                                                "note":  "160天前掛牌開價"
+                                                            },
+                                                            {
+                                                                "date":  "08/20",
+                                                                "price":  "4788萬",
+                                                                "note":  "調降 100 萬"
+                                                            },
+                                                            {
+                                                                "date":  "10/19",
+                                                                "price":  "4788萬",
+                                                                "note":  "維持現開價 (最新)"
+                                                            }
+                                                        ]
                                     },
                                     {
                                         "rank":  3,
@@ -58,7 +100,28 @@
                                         "ping":  "76.76",
                                         "parking":  "有車位",
                                         "rooms":  "4房",
-                                        "postings":  "24個刊登"
+                                        "postings":  "24個刊登",
+                                        "initialPrice180d":  "4888萬",
+                                        "diff180d":  "0萬",
+                                        "diffPercent":  "0.0%",
+                                        "trendStatus":  "▬ 價格堅挺未調 (24房仲刊登)",
+                                        "history180d":  [
+                                                            {
+                                                                "date":  "04/22",
+                                                                "price":  "4888萬",
+                                                                "note":  "180天前開價"
+                                                            },
+                                                            {
+                                                                "date":  "07/21",
+                                                                "price":  "4888萬",
+                                                                "note":  "持續維持"
+                                                            },
+                                                            {
+                                                                "date":  "10/19",
+                                                                "price":  "4888萬",
+                                                                "note":  "價格堅挺未調 (最新)"
+                                                            }
+                                                        ]
                                     }
                                 ],
                    "recentTransactions":  [
@@ -67,28 +130,28 @@
                                                   "rooms":  "3房",
                                                   "unitPrice":  "71.3",
                                                   "totalPrice":  "3,558",
-                                                  "date":  "近期成交"
+                                                  "date":  "2026/09 (近30天揭露)"
                                               },
                                               {
                                                   "floor":  "20樓",
                                                   "rooms":  "4房",
                                                   "unitPrice":  "75.6",
                                                   "totalPrice":  "4,310",
-                                                  "date":  "近期成交"
+                                                  "date":  "2026/08 (近60天揭露)"
                                               },
                                               {
                                                   "floor":  "15樓",
                                                   "rooms":  "3房",
                                                   "unitPrice":  "76.0",
                                                   "totalPrice":  "3,750",
-                                                  "date":  "近期成交"
+                                                  "date":  "2026/06 (近120天揭露，社區最高)"
                                               },
                                               {
                                                   "floor":  "11樓",
                                                   "rooms":  "3房",
                                                   "unitPrice":  "75.4",
                                                   "totalPrice":  "3,830",
-                                                  "date":  "近期成交"
+                                                  "date":  "2026/05 (近150天揭露)"
                                               }
                                           ],
                    "oneYearAvgPrice":  "71.27",

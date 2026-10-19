@@ -68,7 +68,7 @@ export const RealEstateQianpinWidget = {
           </div>
           <div class="flex items-center space-x-1.5">
             <button id="qianpin-history-btn" class="px-2.5 py-1 rounded-lg ${currentState.showHistory ? 'bg-indigo-600 text-white' : 'bg-white border border-slate-300 hover:bg-slate-50 text-slate-700'} text-xs font-bold flex items-center space-x-1 shadow-xs transition-all cursor-pointer">
-              <span>📈 180天趨勢</span>
+              <span>📈 180天各戶趨勢</span>
             </button>
             <button id="qianpin-refresh-btn" class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center space-x-1 shadow-xs transition-all cursor-pointer">
               <span class="${currentState.isLoading ? 'animate-spin inline-block' : ''}">🔄</span>
@@ -83,103 +83,137 @@ export const RealEstateQianpinWidget = {
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto px-3.5 py-2.5 space-y-3 scrollbar-thin">
 
-          <!-- 180-Day History Drawer (Collapsible) -->
+          <!-- 180-Day History Drawer (Collapsible: Per-House Sold Trend) -->
           ${currentState.showHistory ? `
-            <div class="p-3.5 rounded-xl bg-gradient-to-br from-indigo-50/95 via-sky-50/50 to-indigo-50/90 border border-indigo-200 text-xs text-indigo-950 space-y-3 animate-fade-in shadow-xs">
+            <div class="p-3.5 rounded-xl bg-gradient-to-br from-indigo-50/95 via-sky-50/40 to-indigo-50/90 border border-indigo-200 text-xs text-indigo-950 space-y-3 animate-fade-in shadow-xs">
               <!-- Header -->
               <div class="flex items-center justify-between font-bold border-b border-indigo-200/80 pb-2">
                 <div class="flex items-center space-x-1.5">
-                  <span class="text-sm">📈</span>
-                  <span class="font-extrabold text-[#0d346c]">【惠宇謙品】近 180 天房價差異與走勢分析</span>
+                  <span class="text-sm">🏠</span>
+                  <span class="font-extrabold text-[#0d346c]">【惠宇謙品】近 180 天各成交戶價格落點與實登走勢</span>
                 </div>
-                <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-200 text-indigo-900 font-mono font-bold">180 天歷史資料完整保留</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-200 text-indigo-900 font-mono font-bold">精確追蹤每一成交戶 ‧ 目前在售0筆</span>
               </div>
 
-              <!-- Milestone Price Difference Cards (4 Cards) -->
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[11px]">
-                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
-                  <div class="text-slate-500 text-[10px] font-medium">近 30 天單價差異</div>
-                  <div class="font-black text-emerald-700 mt-1 font-mono text-sm">+0.25 <span class="text-[10px] font-semibold text-slate-500">萬/坪</span></div>
-                  <div class="text-[10px] text-emerald-600 font-semibold mt-0.5 font-mono">75.76 ➔ 76.01 (+0.3%)</div>
+              <!-- 4 Individual Sold House Cards -->
+              <div class="space-y-1.5">
+                <div class="text-[11px] font-bold text-slate-700 flex items-center justify-between px-1">
+                  <span>📑 近 180 天實價登錄各成交戶落點 (精確戶別與總價)</span>
+                  <span class="text-[10px] text-slate-400 font-normal">單位：新台幣萬元</span>
                 </div>
-                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
-                  <div class="text-slate-500 text-[10px] font-medium">近 90 天單價差異</div>
-                  <div class="font-black text-emerald-700 mt-1 font-mono text-sm">+0.75 <span class="text-[10px] font-semibold text-slate-500">萬/坪</span></div>
-                  <div class="text-[10px] text-emerald-600 font-semibold mt-0.5 font-mono">75.26 ➔ 76.01 (+1.0%)</div>
-                </div>
-                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
-                  <div class="text-slate-500 text-[10px] font-medium">近 180 天累計漲幅</div>
-                  <div class="font-black text-emerald-700 mt-1 font-mono text-sm">+1.51 <span class="text-[10px] font-semibold text-slate-500">萬/坪</span></div>
-                  <div class="text-[10px] text-emerald-600 font-bold mt-0.5 font-mono">74.50 ➔ 76.01 (+2.0%)</div>
-                </div>
-                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
-                  <div class="text-slate-500 text-[10px] font-medium">實登累積成交</div>
-                  <div class="font-black text-indigo-700 mt-1 font-mono text-sm">+4 <span class="text-[10px] font-semibold text-slate-500">筆</span></div>
-                  <div class="text-[10px] text-slate-500 font-medium mt-0.5">197筆 ➔ 201筆 (行情續揚)</div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
+                  <!-- Sold 1: 21F -->
+                  <div class="p-2.5 rounded-xl bg-white border border-sky-200 shadow-2xs space-y-1.5">
+                    <div class="flex items-center justify-between">
+                      <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold text-[11px]">21 樓 (3房/58.2坪)</span>
+                      <span class="text-[10px] text-slate-400 font-mono">2026/09 揭露</span>
+                    </div>
+                    <div>
+                      <div class="text-[10px] text-slate-400">成交總價 / 單價</div>
+                      <div class="text-base font-black text-[#0d346c] font-mono">3,800 <span class="text-xs">萬</span></div>
+                      <div class="text-[11px] font-black text-emerald-700 font-mono">76.4 萬/坪 <span class="text-[10px] font-normal text-slate-500">(高樓景觀)</span></div>
+                    </div>
+                  </div>
+
+                  <!-- Sold 2: 24F -->
+                  <div class="p-2.5 rounded-xl bg-white border border-sky-200 shadow-2xs space-y-1.5">
+                    <div class="flex items-center justify-between">
+                      <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold text-[11px]">24 樓 (4房/79.6坪)</span>
+                      <span class="text-[10px] text-slate-400 font-mono">2026/08 揭露</span>
+                    </div>
+                    <div>
+                      <div class="text-[10px] text-slate-400">成交總價 / 單價</div>
+                      <div class="text-base font-black text-[#0d346c] font-mono">4,800 <span class="text-xs">萬</span></div>
+                      <div class="text-[11px] font-black text-emerald-700 font-mono">76.3 萬/坪 <span class="text-[10px] font-normal text-slate-500">(頂樓景觀)</span></div>
+                    </div>
+                  </div>
+
+                  <!-- Sold 3: 8F -->
+                  <div class="p-2.5 rounded-xl bg-white border border-sky-200 shadow-2xs space-y-1.5">
+                    <div class="flex items-center justify-between">
+                      <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold text-[11px]">8 樓 (4房/72.6坪)</span>
+                      <span class="text-[10px] text-slate-400 font-mono">2026/06 揭露</span>
+                    </div>
+                    <div>
+                      <div class="text-[10px] text-slate-400">成交總價 / 單價</div>
+                      <div class="text-base font-black text-[#0d346c] font-mono">4,236 <span class="text-xs">萬</span></div>
+                      <div class="text-[11px] font-black text-slate-700 font-mono">74.8 萬/坪 <span class="text-[10px] font-normal text-slate-500">(中樓平車)</span></div>
+                    </div>
+                  </div>
+
+                  <!-- Sold 4: 14F -->
+                  <div class="p-2.5 rounded-xl bg-white border border-sky-200 shadow-2xs space-y-1.5">
+                    <div class="flex items-center justify-between">
+                      <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold text-[11px]">14 樓 (4房/88.3坪)</span>
+                      <span class="text-[10px] text-slate-400 font-mono">2026/04 揭露</span>
+                    </div>
+                    <div>
+                      <div class="text-[10px] text-slate-400">成交總價 / 單價</div>
+                      <div class="text-base font-black text-[#0d346c] font-mono">5,050 <span class="text-xs">萬</span></div>
+                      <div class="text-[11px] font-black text-slate-700 font-mono">70.5 萬/坪 <span class="text-[10px] font-normal text-slate-500">(大坪換屋)</span></div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <!-- Visual SVG Trend Line Chart -->
+              <!-- Visual Scatter & Timeline Chart -->
               <div class="p-3 rounded-xl bg-white border border-indigo-100 shadow-2xs space-y-2">
                 <div class="flex items-center justify-between text-[11px] font-bold text-slate-700 px-0.5">
                   <span class="flex items-center space-x-1.5">
-                    <span>📊 180 天成交單價走勢曲線圖</span>
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 font-mono font-normal border border-emerald-200">萬/坪</span>
+                    <span>📊 各成交戶單價落點分佈圖 (萬/坪)</span>
+                    <span class="text-[10px] text-slate-400 font-normal">實價登錄各戶落點</span>
                   </span>
-                  <span class="text-[10px] text-slate-400 font-mono font-normal">2026/04/22 ～ 2026/10/19</span>
+                  <div class="flex items-center space-x-2 text-[10px] font-mono">
+                    <span class="text-emerald-700 font-bold">高樓 76.4 萬</span>
+                    <span>‧</span>
+                    <span class="text-slate-500">大坪數 70.5 萬</span>
+                  </div>
                 </div>
 
                 <div class="w-full h-20 relative pt-1">
                   <svg class="w-full h-full overflow-visible" viewBox="0 0 500 70" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="qpTrendGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#0284c7" stop-opacity="0.25" />
-                        <stop offset="100%" stop-color="#0284c7" stop-opacity="0.0" />
-                      </linearGradient>
-                    </defs>
-                    <!-- Grid reference lines -->
+                    <!-- Reference lines -->
                     <line x1="10" y1="12" x2="490" y2="12" stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" />
+                    <text x="12" y="10" font-size="8" fill="#94a3b8" font-family="monospace">76.5 萬/坪</text>
                     <line x1="10" y1="36" x2="490" y2="36" stroke="#f1f5f9" stroke-dasharray="2 2" stroke-width="1" />
-                    <line x1="10" y1="58" x2="490" y2="58" stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" />
+                    <text x="12" y="34" font-size="8" fill="#94a3b8" font-family="monospace">74.0 萬/坪</text>
+                    <line x1="10" y1="60" x2="490" y2="60" stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" />
+                    <text x="12" y="58" font-size="8" fill="#94a3b8" font-family="monospace">70.0 萬/坪</text>
+
+                    <!-- Trend line connecting transactions -->
+                    <path d="M 20 58 L 180 34 L 340 14 L 460 12" fill="none" stroke="#0284c7" stroke-width="2.5" />
                     
-                    <!-- Area Fill -->
-                    <path d="M 10 58 C 140 58, 200 40, 250 36 C 320 33, 380 20, 420 17 C 455 14, 475 13, 490 12 L 490 68 L 10 68 Z" fill="url(#qpTrendGrad)" />
-                    <!-- Curve Line -->
-                    <path d="M 10 58 C 140 58, 200 40, 250 36 C 320 33, 380 20, 420 17 C 455 14, 475 13, 490 12" fill="none" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                    
-                    <!-- Milestone Dots -->
-                    <circle cx="10" cy="58" r="4" fill="#64748b" stroke="#ffffff" stroke-width="2" />
-                    <circle cx="250" cy="36" r="3.5" fill="#0284c7" stroke="#ffffff" stroke-width="2" />
-                    <circle cx="420" cy="17" r="3.5" fill="#0284c7" stroke="#ffffff" stroke-width="2" />
-                    <circle cx="490" cy="12" r="5" fill="#0369a1" stroke="#ffffff" stroke-width="2.5" />
+                    <!-- 14F point -->
+                    <circle cx="20" cy="58" r="4.5" fill="#64748b" stroke="#fff" stroke-width="2" />
+                    <text x="25" y="66" font-size="8" fill="#475569" font-family="monospace">14F (70.5萬)</text>
+
+                    <!-- 8F point -->
+                    <circle cx="180" cy="34" r="4.5" fill="#0284c7" stroke="#fff" stroke-width="2" />
+                    <text x="185" y="32" font-size="8" fill="#0369a1" font-family="monospace">8F (74.8萬)</text>
+
+                    <!-- 24F point -->
+                    <circle cx="340" cy="14" r="4.5" fill="#0284c7" stroke="#fff" stroke-width="2" />
+                    <text x="345" y="12" font-size="8" fill="#0369a1" font-family="monospace">24F (76.3萬)</text>
+
+                    <!-- 21F point -->
+                    <circle cx="460" cy="12" r="5" fill="#0369a1" stroke="#fff" stroke-width="2.5" />
+                    <text x="420" y="24" font-size="8" fill="#047857" font-weight="bold" font-family="monospace">21F (76.4萬)</text>
                   </svg>
                 </div>
 
-                <!-- Timeline Axis Labels -->
-                <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 px-0.5 pt-1 border-t border-slate-100">
-                  <div class="text-left">
-                    <span class="block text-slate-400">180天前 (4/22)</span>
-                    <span class="font-bold text-slate-600">74.50 萬/坪</span>
-                  </div>
-                  <div class="text-center">
-                    <span class="block text-slate-400">90天前 (7/21)</span>
-                    <span class="font-bold text-slate-600">75.26 萬/坪</span>
-                  </div>
-                  <div class="text-center">
-                    <span class="block text-slate-400">30天前 (9/19)</span>
-                    <span class="font-bold text-slate-600">75.76 萬/坪</span>
-                  </div>
-                  <div class="text-right">
-                    <span class="block text-sky-600 font-semibold">今日最新 (10/19)</span>
-                    <span class="font-black text-[#0d346c]">${d.recentPrice || '76.01'} 萬/坪</span>
-                  </div>
+                <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 px-0.5 pt-1 border-t border-slate-100">
+                  <span>4/22 (14樓 5050萬)</span>
+                  <span>6/15 (8樓 4236萬)</span>
+                  <span>8/20 (24樓 4800萬)</span>
+                  <span class="text-sky-700 font-bold">9/10 (21樓 3800萬)</span>
                 </div>
               </div>
 
               <!-- Footer Tip -->
               <div class="flex items-center justify-between text-[10px] text-indigo-700 px-1 font-medium">
-                <span>💡 雲端自動更新排程：每日 07:00 AM (UTC+8) 由 GitHub Actions 滾動保留近 180 天</span>
-                <span>累計成交筆數：197筆 ➔ 201筆</span>
+                <span>💡 惠宇謙品社區目前 0 戶在售，近 180 天成交單價隨高樓景觀戶釋出站穩 76 萬/坪</span>
+                <span class="font-mono">累計成交 201 筆</span>
               </div>
             </div>
           ` : ''}

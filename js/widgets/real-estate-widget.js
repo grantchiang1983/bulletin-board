@@ -36,7 +36,16 @@ export const RealEstateWidget = {
         ping: "73.18",
         parking: "有車位",
         rooms: "3房",
-        postings: "8個刊登"
+        postings: "8個刊登",
+        initialPrice180d: "4380萬",
+        diff180d: "-182萬",
+        diffPercent: "-4.2%",
+        trendStatus: "▼ 累計調降 182 萬 (屋主顯著讓利)",
+        history180d: [
+          { date: "04/22", price: "4380萬", note: "180天前初掛牌" },
+          { date: "07/15", price: "4280萬", note: "調降 100 萬" },
+          { date: "10/19", price: "4198萬", note: "讓利再降 82 萬 (最新)" }
+        ]
       },
       {
         rank: 2,
@@ -47,7 +56,16 @@ export const RealEstateWidget = {
         ping: "83.27",
         parking: "有車位",
         rooms: "4房",
-        postings: "15個刊登"
+        postings: "15個刊登",
+        initialPrice180d: "4888萬",
+        diff180d: "-100萬",
+        diffPercent: "-2.0%",
+        trendStatus: "▼ 累計調降 100 萬 (降後持平)",
+        history180d: [
+          { date: "05/10", price: "4888萬", note: "160天前掛牌開價" },
+          { date: "08/20", price: "4788萬", note: "調降 100 萬" },
+          { date: "10/19", price: "4788萬", note: "維持現開價 (最新)" }
+        ]
       },
       {
         rank: 3,
@@ -58,7 +76,16 @@ export const RealEstateWidget = {
         ping: "76.76",
         parking: "有車位",
         rooms: "4房",
-        postings: "24個刊登"
+        postings: "24個刊登",
+        initialPrice180d: "4888萬",
+        diff180d: "0萬",
+        diffPercent: "0.0%",
+        trendStatus: "▬ 開價堅挺未降 (24房仲刊登)",
+        history180d: [
+          { date: "04/22", price: "4888萬", note: "180天前開價" },
+          { date: "07/21", price: "4888萬", note: "持續維持" },
+          { date: "10/19", price: "4888萬", note: "價格堅挺未調 (最新)" }
+        ]
       }
     ],
     recentTransactions: [
@@ -109,7 +136,7 @@ export const RealEstateWidget = {
           </div>
           <div class="flex items-center space-x-1.5">
             <button id="yunpin-history-btn" class="px-2.5 py-1 rounded-lg ${currentState.showHistory ? 'bg-indigo-600 text-white' : 'bg-white border border-slate-300 hover:bg-slate-50 text-slate-700'} text-xs font-bold flex items-center space-x-1 shadow-xs transition-all cursor-pointer">
-              <span>📈 180天趨勢</span>
+              <span>📈 180天各戶趨勢</span>
             </button>
             <button id="yunpin-refresh-btn" class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center space-x-1 shadow-xs transition-all cursor-pointer">
               <span class="${currentState.isLoading ? 'animate-spin inline-block' : ''}">🔄</span>
@@ -124,103 +151,236 @@ export const RealEstateWidget = {
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto px-3.5 py-2 space-y-3 scrollbar-thin">
 
-          <!-- 180-Day History Drawer (Collapsible) -->
+          <!-- 180-Day History Drawer (Collapsible: Per-House Price Trend) -->
           ${currentState.showHistory ? `
-            <div class="p-3.5 rounded-xl bg-gradient-to-br from-indigo-50/95 via-sky-50/50 to-indigo-50/90 border border-indigo-200 text-xs text-indigo-950 space-y-3 animate-fade-in shadow-xs">
+            <div class="p-3.5 rounded-xl bg-gradient-to-br from-indigo-50/95 via-sky-50/40 to-indigo-50/90 border border-indigo-200 text-xs text-indigo-950 space-y-3 animate-fade-in shadow-xs">
               <!-- Header -->
               <div class="flex items-center justify-between font-bold border-b border-indigo-200/80 pb-2">
                 <div class="flex items-center space-x-1.5">
-                  <span class="text-sm">📈</span>
-                  <span class="font-extrabold text-[#0d346c]">【惠宇雲品】近 180 天房價差異與走勢分析</span>
+                  <span class="text-sm">🏠</span>
+                  <span class="font-extrabold text-[#0d346c]">【惠宇雲品】各在售物件 180 天價格調降走勢與成交歷程</span>
                 </div>
-                <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-200 text-indigo-900 font-mono font-bold">180 天歷史資料完整保留</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-200 text-indigo-900 font-mono font-bold">精確追蹤每一戶 ‧ 非社區平均</span>
               </div>
 
-              <!-- Milestone Price Difference Cards (4 Cards) -->
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[11px]">
-                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
-                  <div class="text-slate-500 text-[10px] font-medium">近 30 天單價差異</div>
-                  <div class="font-black text-emerald-700 mt-1 font-mono text-sm">+0.27 <span class="text-[10px] font-semibold text-slate-500">萬/坪</span></div>
-                  <div class="text-[10px] text-emerald-600 font-semibold mt-0.5 font-mono">71.00 ➔ 71.27 (+0.4%)</div>
+              <!-- 3 Individual Listing Price Trend Cards -->
+              <div class="space-y-1.5">
+                <div class="text-[11px] font-bold text-slate-700 flex items-center justify-between px-1">
+                  <span>📋 目前在售 3 戶 ‧ 180 天開價歷程與調價階梯</span>
+                  <span class="text-[10px] text-slate-400 font-normal">單位：新台幣萬元</span>
                 </div>
-                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
-                  <div class="text-slate-500 text-[10px] font-medium">近 90 天單價差異</div>
-                  <div class="font-black text-emerald-700 mt-1 font-mono text-sm">+0.67 <span class="text-[10px] font-semibold text-slate-500">萬/坪</span></div>
-                  <div class="text-[10px] text-emerald-600 font-semibold mt-0.5 font-mono">70.60 ➔ 71.27 (+0.9%)</div>
-                </div>
-                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
-                  <div class="text-slate-500 text-[10px] font-medium">近 180 天累計漲幅</div>
-                  <div class="font-black text-emerald-700 mt-1 font-mono text-sm">+1.47 <span class="text-[10px] font-semibold text-slate-500">萬/坪</span></div>
-                  <div class="text-[10px] text-emerald-600 font-bold mt-0.5 font-mono">69.80 ➔ 71.27 (+2.1%)</div>
-                </div>
-                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
-                  <div class="text-slate-500 text-[10px] font-medium">在售最低總價門檻</div>
-                  <div class="font-black text-indigo-700 mt-1 font-mono text-sm">+48 <span class="text-[10px] font-semibold text-slate-500">萬</span></div>
-                  <div class="text-[10px] text-slate-500 font-medium mt-0.5">4150萬 ➔ 4198萬 (在售-2戶)</div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                  <!-- House 1: 15F -->
+                  <div class="p-3 rounded-xl bg-white border border-emerald-200 shadow-2xs space-y-2 flex flex-col justify-between">
+                    <div>
+                      <div class="flex items-center justify-between">
+                        <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-xs">15 樓 (3房/73.18坪)</span>
+                        <span class="px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 font-black text-[10px]">▼ 累計降 182 萬</span>
+                      </div>
+                      <div class="mt-2 flex items-baseline justify-between">
+                        <div>
+                          <div class="text-[10px] text-slate-400">目前開價 (最新)</div>
+                          <div class="text-lg font-black text-emerald-700 font-mono">4,198 <span class="text-xs">萬</span></div>
+                        </div>
+                        <div class="text-right">
+                          <div class="text-[10px] text-slate-400">180天前掛牌</div>
+                          <div class="text-xs line-through text-slate-400 font-mono">4,380 萬</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Step Timeline -->
+                    <div class="bg-slate-50 p-2 rounded-lg space-y-1 text-[10px] font-mono border border-slate-100">
+                      <div class="flex justify-between text-slate-500">
+                        <span>4/22 初次掛牌</span>
+                        <span class="font-bold">4,380 萬 (59.8萬/坪)</span>
+                      </div>
+                      <div class="flex justify-between text-rose-600 font-semibold">
+                        <span>7/15 降價 100 萬</span>
+                        <span>➔ 4,280 萬 (58.5萬/坪)</span>
+                      </div>
+                      <div class="flex justify-between text-emerald-700 font-bold">
+                        <span>10/19 再讓利 82 萬</span>
+                        <span>➔ 4,198 萬 (57.4萬/坪)</span>
+                      </div>
+                    </div>
+                    <div class="text-[10px] text-emerald-700 font-medium">💡 屋主讓利幅度最大 (-4.2%)，單價降 2.4 萬/坪</div>
+                  </div>
+
+                  <!-- House 2: 13F -->
+                  <div class="p-3 rounded-xl bg-white border border-sky-200 shadow-2xs space-y-2 flex flex-col justify-between">
+                    <div>
+                      <div class="flex items-center justify-between">
+                        <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold text-xs">13 樓 (4房/83.27坪)</span>
+                        <span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-black text-[10px]">▼ 累計降 100 萬</span>
+                      </div>
+                      <div class="mt-2 flex items-baseline justify-between">
+                        <div>
+                          <div class="text-[10px] text-slate-400">目前開價 (最新)</div>
+                          <div class="text-lg font-black text-sky-700 font-mono">4,788 <span class="text-xs">萬</span></div>
+                        </div>
+                        <div class="text-right">
+                          <div class="text-[10px] text-slate-400">160天前掛牌</div>
+                          <div class="text-xs line-through text-slate-400 font-mono">4,888 萬</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Step Timeline -->
+                    <div class="bg-slate-50 p-2 rounded-lg space-y-1 text-[10px] font-mono border border-slate-100">
+                      <div class="flex justify-between text-slate-500">
+                        <span>5/10 上架掛牌</span>
+                        <span class="font-bold">4,888 萬 (58.7萬/坪)</span>
+                      </div>
+                      <div class="flex justify-between text-amber-700 font-semibold">
+                        <span>8/20 降價 100 萬</span>
+                        <span>➔ 4,788 萬 (57.5萬/坪)</span>
+                      </div>
+                      <div class="flex justify-between text-slate-600 font-bold">
+                        <span>10/19 維持現況</span>
+                        <span>➔ 4,788 萬 (57.5萬/坪)</span>
+                      </div>
+                    </div>
+                    <div class="text-[10px] text-sky-700 font-medium">💡 四房大坪數降價 -2.0% 後目前維持開價</div>
+                  </div>
+
+                  <!-- House 3: 3F -->
+                  <div class="p-3 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-2 flex flex-col justify-between">
+                    <div>
+                      <div class="flex items-center justify-between">
+                        <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-bold text-xs">3 樓 (3+1房/76.76坪)</span>
+                        <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-bold text-[10px]">▬ 價格堅挺未調</span>
+                      </div>
+                      <div class="mt-2 flex items-baseline justify-between">
+                        <div>
+                          <div class="text-[10px] text-slate-400">目前開價 (最新)</div>
+                          <div class="text-lg font-black text-slate-800 font-mono">4,888 <span class="text-xs">萬</span></div>
+                        </div>
+                        <div class="text-right">
+                          <div class="text-[10px] text-slate-400">180天前開價</div>
+                          <div class="text-xs text-slate-600 font-mono">4,888 萬</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Step Timeline -->
+                    <div class="bg-slate-50 p-2 rounded-lg space-y-1 text-[10px] font-mono border border-slate-100">
+                      <div class="flex justify-between text-slate-500">
+                        <span>4/22 掛牌開價</span>
+                        <span class="font-bold">4,888 萬 (63.7萬/坪)</span>
+                      </div>
+                      <div class="flex justify-between text-slate-500 font-semibold">
+                        <span>7/21 持續維持</span>
+                        <span>➔ 4,888 萬 (63.7萬/坪)</span>
+                      </div>
+                      <div class="flex justify-between text-slate-700 font-bold">
+                        <span>10/19 價格未調</span>
+                        <span>➔ 4,888 萬 (63.7萬/坪)</span>
+                      </div>
+                    </div>
+                    <div class="text-[10px] text-slate-600 font-medium">💡 開價最堅挺 (0%)，多達 24 家仲介聯合刊登</div>
+                  </div>
                 </div>
               </div>
 
-              <!-- Visual SVG Trend Line Chart -->
+              <!-- Multi-House Price Comparison SVG Chart -->
               <div class="p-3 rounded-xl bg-white border border-indigo-100 shadow-2xs space-y-2">
                 <div class="flex items-center justify-between text-[11px] font-bold text-slate-700 px-0.5">
                   <span class="flex items-center space-x-1.5">
-                    <span>📊 180 天均價走勢曲線圖</span>
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 font-mono font-normal border border-emerald-200">萬/坪</span>
+                    <span>📊 各戶 180 天開價軌跡對比圖</span>
+                    <span class="text-[10px] text-slate-400 font-normal">多戶開價走勢疊圖</span>
                   </span>
-                  <span class="text-[10px] text-slate-400 font-mono font-normal">2026/04/22 ～ 2026/10/19</span>
+                  <div class="flex items-center space-x-3 text-[10px] font-bold">
+                    <span class="flex items-center space-x-1 text-emerald-700">
+                      <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span>
+                      <span>15樓 (4380➔4198)</span>
+                    </span>
+                    <span class="flex items-center space-x-1 text-sky-700">
+                      <span class="w-2.5 h-2.5 rounded-full bg-sky-600 inline-block"></span>
+                      <span>13樓 (4888➔4788)</span>
+                    </span>
+                    <span class="flex items-center space-x-1 text-amber-700">
+                      <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+                      <span>3樓 (4888維持)</span>
+                    </span>
+                  </div>
                 </div>
 
-                <div class="w-full h-20 relative pt-1">
-                  <svg class="w-full h-full overflow-visible" viewBox="0 0 500 70" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="ypTrendGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#059669" stop-opacity="0.25" />
-                        <stop offset="100%" stop-color="#059669" stop-opacity="0.0" />
-                      </linearGradient>
-                    </defs>
-                    <!-- Grid reference lines -->
+                <div class="w-full h-24 relative pt-1">
+                  <svg class="w-full h-full overflow-visible" viewBox="0 0 500 80" preserveAspectRatio="none">
+                    <!-- Background Grid -->
                     <line x1="10" y1="12" x2="490" y2="12" stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" />
-                    <line x1="10" y1="36" x2="490" y2="36" stroke="#f1f5f9" stroke-dasharray="2 2" stroke-width="1" />
-                    <line x1="10" y1="58" x2="490" y2="58" stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" />
-                    
-                    <!-- Area Fill -->
-                    <path d="M 10 58 C 140 58, 200 40, 250 36 C 320 33, 380 22, 420 18 C 455 15, 475 13, 490 12 L 490 68 L 10 68 Z" fill="url(#ypTrendGrad)" />
-                    <!-- Curve Line -->
-                    <path d="M 10 58 C 140 58, 200 40, 250 36 C 320 33, 380 22, 420 18 C 455 15, 475 13, 490 12" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                    
-                    <!-- Milestone Dots -->
-                    <circle cx="10" cy="58" r="4" fill="#64748b" stroke="#ffffff" stroke-width="2" />
-                    <circle cx="250" cy="36" r="3.5" fill="#059669" stroke="#ffffff" stroke-width="2" />
-                    <circle cx="420" cy="18" r="3.5" fill="#059669" stroke="#ffffff" stroke-width="2" />
-                    <circle cx="490" cy="12" r="5" fill="#047857" stroke="#ffffff" stroke-width="2.5" />
+                    <text x="12" y="10" font-size="8" fill="#94a3b8" font-family="monospace">5,000萬</text>
+                    <line x1="10" y1="40" x2="490" y2="40" stroke="#f1f5f9" stroke-dasharray="2 2" stroke-width="1" />
+                    <text x="12" y="38" font-size="8" fill="#94a3b8" font-family="monospace">4,500萬</text>
+                    <line x1="10" y1="68" x2="490" y2="68" stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" />
+                    <text x="12" y="66" font-size="8" fill="#94a3b8" font-family="monospace">4,100萬</text>
+
+                    <!-- 3F Amber Line (4888萬 flat) -->
+                    <path d="M 10 20 L 490 20" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6 3" />
+                    <circle cx="10" cy="20" r="3.5" fill="#f59e0b" stroke="#fff" stroke-width="2" />
+                    <circle cx="250" cy="20" r="3.5" fill="#f59e0b" stroke="#fff" stroke-width="2" />
+                    <circle cx="490" cy="20" r="4.5" fill="#d97706" stroke="#fff" stroke-width="2" />
+
+                    <!-- 13F Sky Blue Line (4888 -> 4788) -->
+                    <path d="M 60 20 L 330 20 L 340 28 L 490 28" fill="none" stroke="#0284c7" stroke-width="2.5" />
+                    <circle cx="60" cy="20" r="3.5" fill="#0284c7" stroke="#fff" stroke-width="2" />
+                    <circle cx="340" cy="28" r="3.5" fill="#0284c7" stroke="#fff" stroke-width="2" />
+                    <circle cx="490" cy="28" r="4.5" fill="#0369a1" stroke="#fff" stroke-width="2" />
+
+                    <!-- 15F Emerald Line (4380 -> 4280 -> 4198) -->
+                    <path d="M 10 48 L 240 48 L 250 56 L 450 56 L 460 64 L 490 64" fill="none" stroke="#059669" stroke-width="2.5" />
+                    <circle cx="10" cy="48" r="3.5" fill="#059669" stroke="#fff" stroke-width="2" />
+                    <circle cx="250" cy="56" r="3.5" fill="#059669" stroke="#fff" stroke-width="2" />
+                    <circle cx="490" cy="64" r="5" fill="#047857" stroke="#fff" stroke-width="2.5" />
                   </svg>
                 </div>
 
-                <!-- Timeline Axis Labels -->
-                <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 px-0.5 pt-1 border-t border-slate-100">
-                  <div class="text-left">
-                    <span class="block text-slate-400">180天前 (4/22)</span>
-                    <span class="font-bold text-slate-600">69.80 萬/坪</span>
+                <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 px-0.5 pt-1 border-t border-slate-100">
+                  <span>180天前 (4/22)</span>
+                  <span>120天前 (6/20)</span>
+                  <span>60天前 (8/20)</span>
+                  <span class="text-[#0d346c] font-bold">今日最新 (10/19)</span>
+                </div>
+              </div>
+
+              <!-- Sold Transactions in 180 Days -->
+              <div class="p-2.5 rounded-xl bg-white border border-indigo-100 shadow-2xs space-y-1.5">
+                <div class="flex items-center justify-between text-[11px] font-bold text-slate-700 px-0.5">
+                  <span class="flex items-center space-x-1.5">
+                    <span>📑 近 180 天實價登錄各成交戶明細 (揭露落點)</span>
+                  </span>
+                  <span class="text-[10px] text-slate-400 font-normal">提供買方開價與成交比對</span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[10px]">
+                  <div class="p-1.5 rounded-lg bg-sky-50/60 border border-sky-100">
+                    <div class="text-slate-500 font-semibold">19樓 (3房/近30天)</div>
+                    <div class="font-black text-[#0d346c] text-xs font-mono mt-0.5">3,558 萬</div>
+                    <div class="text-[10px] text-sky-700 font-mono">71.3 萬/坪</div>
                   </div>
-                  <div class="text-center">
-                    <span class="block text-slate-400">90天前 (7/21)</span>
-                    <span class="font-bold text-slate-600">70.60 萬/坪</span>
+                  <div class="p-1.5 rounded-lg bg-sky-50/60 border border-sky-100">
+                    <div class="text-slate-500 font-semibold">20樓 (4房/近60天)</div>
+                    <div class="font-black text-[#0d346c] text-xs font-mono mt-0.5">4,310 萬</div>
+                    <div class="text-[10px] text-sky-700 font-mono">75.6 萬/坪</div>
                   </div>
-                  <div class="text-center">
-                    <span class="block text-slate-400">30天前 (9/19)</span>
-                    <span class="font-bold text-slate-600">71.00 萬/坪</span>
+                  <div class="p-1.5 rounded-lg bg-rose-50/60 border border-rose-100">
+                    <div class="text-rose-700 font-semibold">15樓 (3房/歷史高)</div>
+                    <div class="font-black text-rose-700 text-xs font-mono mt-0.5">3,750 萬</div>
+                    <div class="text-[10px] text-rose-600 font-mono">76.0 萬/坪</div>
                   </div>
-                  <div class="text-right">
-                    <span class="block text-emerald-600 font-semibold">今日最新 (10/19)</span>
-                    <span class="font-black text-emerald-700">${d.recentPrice || '71.27'} 萬/坪</span>
+                  <div class="p-1.5 rounded-lg bg-sky-50/60 border border-sky-100">
+                    <div class="text-slate-500 font-semibold">11樓 (3房/近150天)</div>
+                    <div class="font-black text-[#0d346c] text-xs font-mono mt-0.5">3,830 萬</div>
+                    <div class="text-[10px] text-sky-700 font-mono">75.4 萬/坪</div>
                   </div>
                 </div>
               </div>
 
               <!-- Footer Tip -->
               <div class="flex items-center justify-between text-[10px] text-indigo-700 px-1 font-medium">
-                <span>💡 雲端自動更新排程：每日 07:00 AM (UTC+8) 由 GitHub Actions 滾動保留近 180 天</span>
-                <span>在售戶數變化：5戶 ➔ 3戶</span>
+                <span>💡 追蹤每一間房子的開價調整歷程，可清晰判斷各戶屋主的讓利意願與議價空間</span>
+                <span class="font-mono">15樓降幅最深 (-4.2%)</span>
               </div>
             </div>
           ` : ''}
