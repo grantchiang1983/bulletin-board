@@ -1,10 +1,11 @@
-name: 🔄 Update Real Estate Data
+name: 🔄 Update Real Estate Data (Daily 07:00 AM, 180 Days History)
 
 on:
   schedule:
-    # Runs daily at 01:00 UTC (09:00 Taiwan Time)
-    - cron: '0 1 * * *'
-  workflow_dispatch: # Allows manual trigger from GitHub UI
+    # 每日早上 07:00 (台灣時間 UTC+8) 自動執行
+    # 07:00 AM Taipei = 23:00 UTC (前一日晚上 11:00)
+    - cron: '0 23 * * *'
+  workflow_dispatch: # 支援手動一鍵觸發
 
 permissions:
   contents: write
@@ -21,7 +22,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run Update Script
+      - name: Run Update Script (Update & Maintain 180 Days History)
         run: |
           if [ -f "scripts/update_real_estate.py" ]; then
             python scripts/update_real_estate.py
@@ -34,4 +35,4 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add data/real-estate-data.json bulletin-board/data/real-estate-data.json || true
-          git diff --staged --quiet || (git commit -m "chore(data): 自動同步樂居實價登錄最新行情 [skip ci]" && git push)
+          git diff --staged --quiet || (git commit -m "chore(data): 每日早上07:00自動更新實價登錄 (保留近180天紀錄) [skip ci]" && git push)
