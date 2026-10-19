@@ -16,7 +16,7 @@ export const RealEstateWidget = {
     recentPrice: "71.27",
     totalTransactions: "162",
     highestPrice: "76.05",
-    currentForSaleMinPrice: "4198",
+    currentForSaleMinPrice: "3888",
     chargingStation: "⚡ 有 (私)",
     schoolDistricts: ["龍山國小", "關埔國小", "光武國中"],
     roomDistribution: {
@@ -29,22 +29,22 @@ export const RealEstateWidget = {
     listings: [
       {
         rank: 1,
-        floor: "15樓",
-        isNew: false,
-        title: "🌿永慶裕展🧧【惠宇雲品】鄉村四改三房雙連號平車",
-        price: "4198萬",
-        ping: "73.18",
+        floor: "4樓",
+        isNew: true,
+        title: "✨最新降價 ‧ 關埔好市多商圈【惠宇雲品】精裝景觀3房+平車",
+        price: "3888萬",
+        ping: "56.76",
         parking: "有車位",
         rooms: "3房",
-        postings: "8個刊登",
-        initialPrice180d: "4380萬",
-        diff180d: "-182萬",
-        diffPercent: "-4.2%",
-        trendStatus: "▼ 累計調降 182 萬 (屋主顯著讓利)",
+        postings: "5個刊登",
+        initialPrice180d: "4080萬",
+        diff180d: "-192萬",
+        diffPercent: "-4.7%",
+        trendStatus: "▼ 累計調降 192 萬 (全社區最低總價)",
         history180d: [
-          { date: "04/22", price: "4380萬", note: "180天前初掛牌" },
-          { date: "07/15", price: "4280萬", note: "調降 100 萬" },
-          { date: "10/19", price: "4198萬", note: "讓利再降 82 萬 (最新)" }
+          { date: "04/22", price: "4080萬", note: "180天前掛牌開價" },
+          { date: "07/15", price: "3980萬", note: "調降 100 萬" },
+          { date: "10/20", price: "3888萬", note: "最新降價讓利 92 萬 (全社區唯一3字頭)" }
         ]
       },
       {
@@ -171,21 +171,21 @@ export const RealEstateWidget = {
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-                  <!-- House 1: 15F -->
+                  <!-- House 1: 4F -->
                   <div class="p-3 rounded-xl bg-white border border-emerald-200 shadow-2xs space-y-2 flex flex-col justify-between">
                     <div>
                       <div class="flex items-center justify-between">
-                        <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-xs">15 樓 (3房/73.18坪)</span>
-                        <span class="px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 font-black text-[10px]">▼ 累計降 182 萬</span>
+                        <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-xs">4 樓 (3房/56.76坪)</span>
+                        <span class="px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 font-black text-[10px]">▼ 累計降 192 萬</span>
                       </div>
                       <div class="mt-2 flex items-baseline justify-between">
                         <div>
                           <div class="text-[10px] text-slate-400">目前開價 (最新)</div>
-                          <div class="text-lg font-black text-emerald-700 font-mono">4,198 <span class="text-xs">萬</span></div>
+                          <div class="text-lg font-black text-emerald-700 font-mono">3,888 <span class="text-xs">萬</span></div>
                         </div>
                         <div class="text-right">
                           <div class="text-[10px] text-slate-400">180天前掛牌</div>
-                          <div class="text-xs line-through text-slate-400 font-mono">4,380 萬</div>
+                          <div class="text-xs line-through text-slate-400 font-mono">4,080 萬</div>
                         </div>
                       </div>
                     </div>
@@ -194,18 +194,18 @@ export const RealEstateWidget = {
                     <div class="bg-slate-50 p-2 rounded-lg space-y-1 text-[10px] font-mono border border-slate-100">
                       <div class="flex justify-between text-slate-500">
                         <span>4/22 初次掛牌</span>
-                        <span class="font-bold">4,380 萬 (59.8萬/坪)</span>
+                        <span class="font-bold">4,080 萬 (71.9萬/坪)</span>
                       </div>
                       <div class="flex justify-between text-rose-600 font-semibold">
                         <span>7/15 降價 100 萬</span>
-                        <span>➔ 4,280 萬 (58.5萬/坪)</span>
+                        <span>➔ 3,980 萬 (70.1萬/坪)</span>
                       </div>
                       <div class="flex justify-between text-emerald-700 font-bold">
-                        <span>10/19 再讓利 82 萬</span>
-                        <span>➔ 4,198 萬 (57.4萬/坪)</span>
+                        <span>10/20 最新再降 92 萬</span>
+                        <span>➔ 3,888 萬 (68.5萬/坪)</span>
                       </div>
                     </div>
-                    <div class="text-[10px] text-emerald-700 font-medium">💡 屋主讓利幅度最大 (-4.2%)，單價降 2.4 萬/坪</div>
+                    <div class="text-[10px] text-emerald-700 font-medium">💡 全社區唯一 3 字頭門檻，累計讓利 -192 萬 (-4.7%)</div>
                   </div>
 
                   <!-- House 2: 13F -->
@@ -294,7 +294,7 @@ export const RealEstateWidget = {
                   <div class="flex items-center space-x-3 text-[10px] font-bold">
                     <span class="flex items-center space-x-1 text-emerald-700">
                       <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span>
-                      <span>15樓 (4380➔4198)</span>
+                      <span>4樓 (4080➔3888)</span>
                     </span>
                     <span class="flex items-center space-x-1 text-sky-700">
                       <span class="w-2.5 h-2.5 rounded-full bg-sky-600 inline-block"></span>
@@ -315,7 +315,7 @@ export const RealEstateWidget = {
                     <line x1="10" y1="40" x2="490" y2="40" stroke="#f1f5f9" stroke-dasharray="2 2" stroke-width="1" />
                     <text x="12" y="38" font-size="8" fill="#94a3b8" font-family="monospace">4,500萬</text>
                     <line x1="10" y1="68" x2="490" y2="68" stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" />
-                    <text x="12" y="66" font-size="8" fill="#94a3b8" font-family="monospace">4,100萬</text>
+                    <text x="12" y="66" font-size="8" fill="#94a3b8" font-family="monospace">3,800萬</text>
 
                     <!-- 3F Amber Line (4888萬 flat) -->
                     <path d="M 10 20 L 490 20" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6 3" />
@@ -329,11 +329,11 @@ export const RealEstateWidget = {
                     <circle cx="340" cy="28" r="3.5" fill="#0284c7" stroke="#fff" stroke-width="2" />
                     <circle cx="490" cy="28" r="4.5" fill="#0369a1" stroke="#fff" stroke-width="2" />
 
-                    <!-- 15F Emerald Line (4380 -> 4280 -> 4198) -->
-                    <path d="M 10 48 L 240 48 L 250 56 L 450 56 L 460 64 L 490 64" fill="none" stroke="#059669" stroke-width="2.5" />
-                    <circle cx="10" cy="48" r="3.5" fill="#059669" stroke="#fff" stroke-width="2" />
-                    <circle cx="250" cy="56" r="3.5" fill="#059669" stroke="#fff" stroke-width="2" />
-                    <circle cx="490" cy="64" r="5" fill="#047857" stroke="#fff" stroke-width="2.5" />
+                    <!-- 4F Emerald Line (4080 -> 3980 -> 3888) -->
+                    <path d="M 10 56 L 240 56 L 250 62 L 450 62 L 460 68 L 490 68" fill="none" stroke="#059669" stroke-width="2.5" />
+                    <circle cx="10" cy="56" r="3.5" fill="#059669" stroke="#fff" stroke-width="2" />
+                    <circle cx="250" cy="62" r="3.5" fill="#059669" stroke="#fff" stroke-width="2" />
+                    <circle cx="490" cy="68" r="5" fill="#047857" stroke="#fff" stroke-width="2.5" />
                   </svg>
                 </div>
 
@@ -341,7 +341,7 @@ export const RealEstateWidget = {
                   <span>180天前 (4/22)</span>
                   <span>120天前 (6/20)</span>
                   <span>60天前 (8/20)</span>
-                  <span class="text-[#0d346c] font-bold">今日最新 (10/19)</span>
+                  <span class="text-[#0d346c] font-bold">今日最新 (10/20)</span>
                 </div>
               </div>
 
@@ -380,7 +380,7 @@ export const RealEstateWidget = {
               <!-- Footer Tip -->
               <div class="flex items-center justify-between text-[10px] text-indigo-700 px-1 font-medium">
                 <span>💡 追蹤每一間房子的開價調整歷程，可清晰判斷各戶屋主的讓利意願與議價空間</span>
-                <span class="font-mono">15樓降幅最深 (-4.2%)</span>
+                <span class="font-mono">4樓降幅最深 (-4.7%，目前全社區唯一 3,888 萬總價門檻)</span>
               </div>
             </div>
           ` : ''}
@@ -451,7 +451,7 @@ export const RealEstateWidget = {
           <div>
             <div class="flex items-center justify-between text-xs font-bold text-[#0d346c] mb-1.5 px-1">
               <span>📋 待售物件 (${d.listings ? d.listings.length : 0} 筆)</span>
-              <span class="text-[11px] text-slate-400 font-normal">低總價起：<b class="text-emerald-700 font-mono font-bold">${d.currentForSaleMinPrice || '4198'} 萬</b></span>
+              <span class="text-[11px] text-slate-400 font-normal">低總價起：<b class="text-emerald-700 font-mono font-bold">${d.currentForSaleMinPrice || '3888'} 萬</b></span>
             </div>
             <table class="w-full text-xs border-collapse">
               <thead>
