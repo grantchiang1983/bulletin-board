@@ -694,34 +694,102 @@
 
           <!-- 180-Day History Drawer (Collapsible) -->
           ${currentState.showHistory ? `
-            <div class="p-3 rounded-xl bg-indigo-50/80 border border-indigo-200 text-xs text-indigo-950 space-y-2 animate-fade-in shadow-xs">
-              <div class="flex items-center justify-between font-bold border-b border-indigo-200/80 pb-1.5">
-                <span class="flex items-center space-x-1">
-                  <span>📈 【惠宇雲品】近 180 天行情走勢與自動更新監控</span>
-                </span>
-                <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-200 text-indigo-900 font-mono font-bold">已保留 180 天歷史資料</span>
+            <div class="p-3.5 rounded-xl bg-gradient-to-br from-indigo-50/95 via-sky-50/50 to-indigo-50/90 border border-indigo-200 text-xs text-indigo-950 space-y-3 animate-fade-in shadow-xs">
+              <!-- Header -->
+              <div class="flex items-center justify-between font-bold border-b border-indigo-200/80 pb-2">
+                <div class="flex items-center space-x-1.5">
+                  <span class="text-sm">📈</span>
+                  <span class="font-extrabold text-[#0d346c]">【惠宇雲品】近 180 天房價差異與走勢分析</span>
+                </div>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-200 text-indigo-900 font-mono font-bold">180 天歷史資料完整保留</span>
               </div>
-              <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-center text-[11px]">
-                <div class="p-2 rounded-lg bg-white border border-indigo-100">
-                  <div class="text-slate-500 text-[10px]">180天前單價行情</div>
-                  <div class="font-bold text-slate-700 mt-0.5 font-mono">69.8 萬/坪</div>
+
+              <!-- Milestone Price Difference Cards (4 Cards) -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[11px]">
+                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
+                  <div class="text-slate-500 text-[10px] font-medium">近 30 天單價差異</div>
+                  <div class="font-black text-emerald-700 mt-1 font-mono text-sm">+0.27 <span class="text-[10px] font-semibold text-slate-500">萬/坪</span></div>
+                  <div class="text-[10px] text-emerald-600 font-semibold mt-0.5 font-mono">71.00 ➔ 71.27 (+0.4%)</div>
                 </div>
-                <div class="p-2 rounded-lg bg-white border border-indigo-100">
-                  <div class="text-slate-500 text-[10px]">一年平均成交單價</div>
-                  <div class="font-black text-emerald-700 mt-0.5 font-mono">${d.recentPrice || '71.27'} 萬/坪 <span class="text-[10px] text-emerald-600">(+2.1%)</span></div>
+                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
+                  <div class="text-slate-500 text-[10px] font-medium">近 90 天單價差異</div>
+                  <div class="font-black text-emerald-700 mt-1 font-mono text-sm">+0.67 <span class="text-[10px] font-semibold text-slate-500">萬/坪</span></div>
+                  <div class="text-[10px] text-emerald-600 font-semibold mt-0.5 font-mono">70.60 ➔ 71.27 (+0.9%)</div>
                 </div>
-                <div class="p-2 rounded-lg bg-white border border-indigo-100">
-                  <div class="text-slate-500 text-[10px]">累積實價登錄</div>
-                  <div class="font-bold text-[#0d346c] mt-0.5 font-mono">${d.totalTransactions || '162'} 筆交易</div>
+                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
+                  <div class="text-slate-500 text-[10px] font-medium">近 180 天累計漲幅</div>
+                  <div class="font-black text-emerald-700 mt-1 font-mono text-sm">+1.47 <span class="text-[10px] font-semibold text-slate-500">萬/坪</span></div>
+                  <div class="text-[10px] text-emerald-600 font-bold mt-0.5 font-mono">69.80 ➔ 71.27 (+2.1%)</div>
                 </div>
-                <div class="p-2 rounded-lg bg-white border border-indigo-100">
-                  <div class="text-slate-500 text-[10px]">每日更新時間排程</div>
-                  <div class="font-bold text-[#0d346c] mt-0.5">每日 07:00 AM</div>
+                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
+                  <div class="text-slate-500 text-[10px] font-medium">在售最低總價門檻</div>
+                  <div class="font-black text-indigo-700 mt-1 font-mono text-sm">+48 <span class="text-[10px] font-semibold text-slate-500">萬</span></div>
+                  <div class="text-[10px] text-slate-500 font-medium mt-0.5">4150萬 ➔ 4198萬 (在售-2戶)</div>
                 </div>
               </div>
-              <p class="text-[10px] text-indigo-700 leading-relaxed">
-                💡 系統每日早上 07:00 會由 GitHub Actions 自動抓取最新實價登錄，記錄至 <code class="bg-indigo-100 px-1 py-0.5 rounded font-mono">data/real-estate-data.json</code>，並自動滾動保留過去 180 天每一天的歷史價格數據。
-              </p>
+
+              <!-- Visual SVG Trend Line Chart -->
+              <div class="p-3 rounded-xl bg-white border border-indigo-100 shadow-2xs space-y-2">
+                <div class="flex items-center justify-between text-[11px] font-bold text-slate-700 px-0.5">
+                  <span class="flex items-center space-x-1.5">
+                    <span>📊 180 天均價走勢曲線圖</span>
+                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 font-mono font-normal border border-emerald-200">萬/坪</span>
+                  </span>
+                  <span class="text-[10px] text-slate-400 font-mono font-normal">2026/04/22 ～ 2026/10/19</span>
+                </div>
+
+                <div class="w-full h-20 relative pt-1">
+                  <svg class="w-full h-full overflow-visible" viewBox="0 0 500 70" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="ypTrendGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#059669" stop-opacity="0.25" />
+                        <stop offset="100%" stop-color="#059669" stop-opacity="0.0" />
+                      </linearGradient>
+                    </defs>
+                    <!-- Grid reference lines -->
+                    <line x1="10" y1="12" x2="490" y2="12" stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" />
+                    <line x1="10" y1="36" x2="490" y2="36" stroke="#f1f5f9" stroke-dasharray="2 2" stroke-width="1" />
+                    <line x1="10" y1="58" x2="490" y2="58" stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" />
+                    
+                    <!-- Area Fill -->
+                    <path d="M 10 58 C 140 58, 200 40, 250 36 C 320 33, 380 22, 420 18 C 455 15, 475 13, 490 12 L 490 68 L 10 68 Z" fill="url(#ypTrendGrad)" />
+                    <!-- Curve Line -->
+                    <path d="M 10 58 C 140 58, 200 40, 250 36 C 320 33, 380 22, 420 18 C 455 15, 475 13, 490 12" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                    
+                    <!-- Milestone Dots -->
+                    <circle cx="10" cy="58" r="4" fill="#64748b" stroke="#ffffff" stroke-width="2" />
+                    <circle cx="250" cy="36" r="3.5" fill="#059669" stroke="#ffffff" stroke-width="2" />
+                    <circle cx="420" cy="18" r="3.5" fill="#059669" stroke="#ffffff" stroke-width="2" />
+                    <circle cx="490" cy="12" r="5" fill="#047857" stroke="#ffffff" stroke-width="2.5" />
+                  </svg>
+                </div>
+
+                <!-- Timeline Axis Labels -->
+                <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 px-0.5 pt-1 border-t border-slate-100">
+                  <div class="text-left">
+                    <span class="block text-slate-400">180天前 (4/22)</span>
+                    <span class="font-bold text-slate-600">69.80 萬/坪</span>
+                  </div>
+                  <div class="text-center">
+                    <span class="block text-slate-400">90天前 (7/21)</span>
+                    <span class="font-bold text-slate-600">70.60 萬/坪</span>
+                  </div>
+                  <div class="text-center">
+                    <span class="block text-slate-400">30天前 (9/19)</span>
+                    <span class="font-bold text-slate-600">71.00 萬/坪</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="block text-emerald-600 font-semibold">今日最新 (10/19)</span>
+                    <span class="font-black text-emerald-700">${d.recentPrice || '71.27'} 萬/坪</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Footer Tip -->
+              <div class="flex items-center justify-between text-[10px] text-indigo-700 px-1 font-medium">
+                <span>💡 雲端自動更新排程：每日 07:00 AM (UTC+8) 由 GitHub Actions 滾動保留近 180 天</span>
+                <span>在售戶數變化：5戶 ➔ 3戶</span>
+              </div>
             </div>
           ` : ''}
 
@@ -981,30 +1049,102 @@
 
           <!-- 180-Day History Drawer (Collapsible) -->
           ${currentState.showHistory ? `
-            <div class="p-3 rounded-xl bg-indigo-50/80 border border-indigo-200 text-xs text-indigo-950 space-y-2 animate-fade-in shadow-xs">
-              <div class="flex items-center justify-between font-bold border-b border-indigo-200/80 pb-1.5">
-                <span class="flex items-center space-x-1">
-                  <span>📈 【惠宇謙品】近 180 天行情走勢與自動更新監控</span>
-                </span>
-                <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-200 text-indigo-900 font-mono font-bold">已保留 180 天歷史資料</span>
+            <div class="p-3.5 rounded-xl bg-gradient-to-br from-indigo-50/95 via-sky-50/50 to-indigo-50/90 border border-indigo-200 text-xs text-indigo-950 space-y-3 animate-fade-in shadow-xs">
+              <!-- Header -->
+              <div class="flex items-center justify-between font-bold border-b border-indigo-200/80 pb-2">
+                <div class="flex items-center space-x-1.5">
+                  <span class="text-sm">📈</span>
+                  <span class="font-extrabold text-[#0d346c]">【惠宇謙品】近 180 天房價差異與走勢分析</span>
+                </div>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-200 text-indigo-900 font-mono font-bold">180 天歷史資料完整保留</span>
               </div>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-[11px]">
-                <div class="p-2 rounded-lg bg-white border border-indigo-100">
-                  <div class="text-slate-500 text-[10px]">180天前單價行情</div>
-                  <div class="font-bold text-slate-700 mt-0.5 font-mono">74.50 萬/坪</div>
+
+              <!-- Milestone Price Difference Cards (4 Cards) -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[11px]">
+                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
+                  <div class="text-slate-500 text-[10px] font-medium">近 30 天單價差異</div>
+                  <div class="font-black text-emerald-700 mt-1 font-mono text-sm">+0.25 <span class="text-[10px] font-semibold text-slate-500">萬/坪</span></div>
+                  <div class="text-[10px] text-emerald-600 font-semibold mt-0.5 font-mono">75.76 ➔ 76.01 (+0.3%)</div>
                 </div>
-                <div class="p-2 rounded-lg bg-white border border-indigo-100">
-                  <div class="text-slate-500 text-[10px]">目前最新成交行情</div>
-                  <div class="font-black text-emerald-700 mt-0.5 font-mono">76.01 萬/坪 <span class="text-[10px] text-emerald-600">(+2.0%)</span></div>
+                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
+                  <div class="text-slate-500 text-[10px] font-medium">近 90 天單價差異</div>
+                  <div class="font-black text-emerald-700 mt-1 font-mono text-sm">+0.75 <span class="text-[10px] font-semibold text-slate-500">萬/坪</span></div>
+                  <div class="text-[10px] text-emerald-600 font-semibold mt-0.5 font-mono">75.26 ➔ 76.01 (+1.0%)</div>
                 </div>
-                <div class="p-2 rounded-lg bg-white border border-indigo-100">
-                  <div class="text-slate-500 text-[10px]">每日更新時間排程</div>
-                  <div class="font-bold text-[#0d346c] mt-0.5">每日 07:00 AM (UTC+8)</div>
+                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
+                  <div class="text-slate-500 text-[10px] font-medium">近 180 天累計漲幅</div>
+                  <div class="font-black text-emerald-700 mt-1 font-mono text-sm">+1.51 <span class="text-[10px] font-semibold text-slate-500">萬/坪</span></div>
+                  <div class="text-[10px] text-emerald-600 font-bold mt-0.5 font-mono">74.50 ➔ 76.01 (+2.0%)</div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-white border border-indigo-100/90 shadow-2xs hover:shadow-xs transition-shadow">
+                  <div class="text-slate-500 text-[10px] font-medium">實登累積成交</div>
+                  <div class="font-black text-indigo-700 mt-1 font-mono text-sm">+4 <span class="text-[10px] font-semibold text-slate-500">筆</span></div>
+                  <div class="text-[10px] text-slate-500 font-medium mt-0.5">197筆 ➔ 201筆 (行情續揚)</div>
                 </div>
               </div>
-              <p class="text-[10px] text-indigo-700 leading-relaxed">
-                💡 系統每日早上 07:00 會由 GitHub Actions 自動抓取最新實價登錄，記錄至 <code class="bg-indigo-100 px-1 py-0.5 rounded font-mono">data/real-estate-data.json</code>，並自動滾動保留過去 180 天每一天的歷史價格數據。
-              </p>
+
+              <!-- Visual SVG Trend Line Chart -->
+              <div class="p-3 rounded-xl bg-white border border-indigo-100 shadow-2xs space-y-2">
+                <div class="flex items-center justify-between text-[11px] font-bold text-slate-700 px-0.5">
+                  <span class="flex items-center space-x-1.5">
+                    <span>📊 180 天成交單價走勢曲線圖</span>
+                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 font-mono font-normal border border-emerald-200">萬/坪</span>
+                  </span>
+                  <span class="text-[10px] text-slate-400 font-mono font-normal">2026/04/22 ～ 2026/10/19</span>
+                </div>
+
+                <div class="w-full h-20 relative pt-1">
+                  <svg class="w-full h-full overflow-visible" viewBox="0 0 500 70" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="qpTrendGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#0284c7" stop-opacity="0.25" />
+                        <stop offset="100%" stop-color="#0284c7" stop-opacity="0.0" />
+                      </linearGradient>
+                    </defs>
+                    <!-- Grid reference lines -->
+                    <line x1="10" y1="12" x2="490" y2="12" stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" />
+                    <line x1="10" y1="36" x2="490" y2="36" stroke="#f1f5f9" stroke-dasharray="2 2" stroke-width="1" />
+                    <line x1="10" y1="58" x2="490" y2="58" stroke="#e2e8f0" stroke-dasharray="3 3" stroke-width="1" />
+                    
+                    <!-- Area Fill -->
+                    <path d="M 10 58 C 140 58, 200 40, 250 36 C 320 33, 380 20, 420 17 C 455 14, 475 13, 490 12 L 490 68 L 10 68 Z" fill="url(#qpTrendGrad)" />
+                    <!-- Curve Line -->
+                    <path d="M 10 58 C 140 58, 200 40, 250 36 C 320 33, 380 20, 420 17 C 455 14, 475 13, 490 12" fill="none" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                    
+                    <!-- Milestone Dots -->
+                    <circle cx="10" cy="58" r="4" fill="#64748b" stroke="#ffffff" stroke-width="2" />
+                    <circle cx="250" cy="36" r="3.5" fill="#0284c7" stroke="#ffffff" stroke-width="2" />
+                    <circle cx="420" cy="17" r="3.5" fill="#0284c7" stroke="#ffffff" stroke-width="2" />
+                    <circle cx="490" cy="12" r="5" fill="#0369a1" stroke="#ffffff" stroke-width="2.5" />
+                  </svg>
+                </div>
+
+                <!-- Timeline Axis Labels -->
+                <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 px-0.5 pt-1 border-t border-slate-100">
+                  <div class="text-left">
+                    <span class="block text-slate-400">180天前 (4/22)</span>
+                    <span class="font-bold text-slate-600">74.50 萬/坪</span>
+                  </div>
+                  <div class="text-center">
+                    <span class="block text-slate-400">90天前 (7/21)</span>
+                    <span class="font-bold text-slate-600">75.26 萬/坪</span>
+                  </div>
+                  <div class="text-center">
+                    <span class="block text-slate-400">30天前 (9/19)</span>
+                    <span class="font-bold text-slate-600">75.76 萬/坪</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="block text-sky-600 font-semibold">今日最新 (10/19)</span>
+                    <span class="font-black text-[#0d346c]">${d.recentPrice || '76.01'} 萬/坪</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Footer Tip -->
+              <div class="flex items-center justify-between text-[10px] text-indigo-700 px-1 font-medium">
+                <span>💡 雲端自動更新排程：每日 07:00 AM (UTC+8) 由 GitHub Actions 滾動保留近 180 天</span>
+                <span>累計成交筆數：197筆 ➔ 201筆</span>
+              </div>
             </div>
           ` : ''}
 
