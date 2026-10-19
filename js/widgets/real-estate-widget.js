@@ -16,30 +16,19 @@ export const RealEstateWidget = {
     recentPrice: "71.27",
     totalTransactions: "162",
     highestPrice: "76.05",
-    currentForSaleMinPrice: "3888",
+    currentForSaleMinPrice: "4198",
     chargingStation: "⚡ 有 (私)",
     schoolDistricts: ["龍山國小", "關埔國小", "光武國中"],
     roomDistribution: {
       open: "--",
       one: "--",
       two: "--",
-      three: "2 戶",
+      three: "1 戶",
       fourPlus: "2 戶"
     },
     listings: [
       {
         rank: 1,
-        floor: "4樓",
-        isNew: true,
-        title: "✨最新降價 ‧ 關埔好市多商圈【惠宇雲品】精裝景觀3房+平車",
-        price: "3888萬",
-        ping: "56.76",
-        parking: "有車位",
-        rooms: "3房",
-        postings: "5個刊登"
-      },
-      {
-        rank: 2,
         floor: "15樓",
         isNew: false,
         title: "🌿永慶裕展🧧【惠宇雲品】鄉村四改三房雙連號平車",
@@ -50,7 +39,7 @@ export const RealEstateWidget = {
         postings: "8個刊登"
       },
       {
-        rank: 3,
+        rank: 2,
         floor: "13樓",
         isNew: false,
         title: "⭐惠宇雲品⭐最大四房景觀戶+B1雙連號車位~關埔好市多",
@@ -61,7 +50,7 @@ export const RealEstateWidget = {
         postings: "15個刊登"
       },
       {
-        rank: 4,
+        rank: 3,
         floor: "3樓",
         isNew: false,
         title: "關埔好市多商圈『惠宇雲品』大器美3+1房＋雙平車",
@@ -234,7 +223,7 @@ export const RealEstateWidget = {
           <div>
             <div class="flex items-center justify-between text-xs font-bold text-[#0d346c] mb-1.5 px-1">
               <span>📋 待售物件 (${d.listings ? d.listings.length : 0} 筆)</span>
-              <span class="text-[11px] text-slate-400 font-normal">低總價起：<b class="text-emerald-700 font-mono font-bold">${d.currentForSaleMinPrice || '3888'} 萬</b></span>
+              <span class="text-[11px] text-slate-400 font-normal">低總價起：<b class="text-emerald-700 font-mono font-bold">${d.currentForSaleMinPrice || '4198'} 萬</b></span>
             </div>
             <table class="w-full text-xs border-collapse">
               <thead>
