@@ -568,7 +568,7 @@
   };
   const RealEstateWidget = {
   id: 'real-estate',
-  title: '【惠宇雲品】樂居實價登錄 ‧ 世傑路288號',
+  title: '【惠宇雲品】一年均價 71.27 萬/坪 ‧ 162筆交易 ‧ 樂居實價登錄',
   icon: 'home',
   defaultWidth: 8,
   defaultHeight: 5,
@@ -580,66 +580,71 @@
     totalUnits: "119",
     age: "11",
     publicRatio: "32.32",
-    recentPrice: "71.3",
+    oneYearAvgPrice: "71.27",
+    recentPrice: "71.27",
+    totalTransactions: "162",
     highestPrice: "76.05",
-    currentForSaleMinPrice: "4198",
+    currentForSaleMinPrice: "3888",
     chargingStation: "⚡ 有 (私)",
     schoolDistricts: ["龍山國小", "關埔國小", "光武國中"],
     roomDistribution: {
       open: "--",
       one: "--",
       two: "--",
-      three: "1 戶",
+      three: "2 戶",
       fourPlus: "2 戶"
     },
     listings: [
       {
         rank: 1,
+        floor: "4樓",
+        isNew: true,
+        title: "✨最新降價 ‧ 關埔好市多商圈【惠宇雲品】精裝景觀3房+平車",
+        price: "3888萬",
+        ping: "56.76",
+        parking: "有車位",
+        rooms: "3房",
+        postings: "5個刊登"
+      },
+      {
+        rank: 2,
         floor: "15樓",
+        isNew: false,
         title: "🌿永慶裕展🧧【惠宇雲品】鄉村四改三房雙連號平車",
         price: "4198萬",
         ping: "73.18",
         parking: "有車位",
-        rooms: "4房",
+        rooms: "3房",
         postings: "8個刊登"
       },
       {
-        rank: 2,
+        rank: 3,
         floor: "13樓",
-        isNew: true,
-        title: "⭐惠宇雲品⭐最大四房景觀戶+B1雙車位~關埔商圈",
-        price: "4980萬",
+        isNew: false,
+        title: "⭐惠宇雲品⭐最大四房景觀戶+B1雙連號車位~關埔好市多",
+        price: "4788萬",
         ping: "83.27",
         parking: "有車位",
         rooms: "4房",
-        postings: "13個刊登"
+        postings: "15個刊登"
       },
       {
-        rank: 3,
+        rank: 4,
         floor: "3樓",
-        title: "關埔好市多商圈『惠宇雲品』精裝美3+1房＋雙平車",
+        isNew: false,
+        title: "關埔好市多商圈『惠宇雲品』大器美3+1房＋雙平車",
         price: "4888萬",
         ping: "76.76",
         parking: "有車位",
         rooms: "4房",
         postings: "24個刊登"
-      },
-      {
-        rank: 4,
-        floor: "3樓",
-        title: "惠宇雲品3+1房雙車",
-        price: "4888萬",
-        ping: "76.76",
-        parking: "有車位",
-        rooms: "3房",
-        postings: "1個刊登"
       }
     ],
     recentTransactions: [
-      { floor: "19樓", rooms: "3房", unitPrice: "71.3", totalPrice: "3,558", date: "近期成交" },
-      { floor: "20樓", rooms: "4房", unitPrice: "75.6", totalPrice: "4,310", date: "近期成交" },
-      { floor: "15樓", rooms: "3房", unitPrice: "76.0", totalPrice: "3,750", date: "近期成交" },
-      { floor: "11樓", rooms: "3房", unitPrice: "75.4", totalPrice: "3,830", date: "近期成交" }
+      { floor: "19樓", rooms: "3房", unitPrice: "71.27", totalPrice: "3,558", date: "近期成交" },
+      { floor: "20樓", rooms: "4房", unitPrice: "75.60", totalPrice: "4,310", date: "近期成交" },
+      { floor: "15樓", rooms: "3房", unitPrice: "76.05", totalPrice: "3,750", date: "歷史最高" },
+      { floor: "11樓", rooms: "3房", unitPrice: "75.40", totalPrice: "3,830", date: "近期成交" }
     ]
   },
 
@@ -674,8 +679,11 @@
           <div class="flex items-center space-x-2">
             <span class="p-1 rounded bg-amber-100 text-amber-800 text-xs font-bold">🏡 樂居</span>
             <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="text-xs font-black text-[#0d346c] hover:text-[#0284c7] transition-colors">【惠宇雲品】世傑路288號 ↗</a>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-mono font-bold border border-emerald-200 hidden sm:inline">
-              ⏰ 每日 07:00 自動同步 (180天存檔)
+            <span class="text-xs px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-mono font-bold border border-sky-300 hidden sm:inline">
+              ${d.totalTransactions || '162'} 筆交易
+            </span>
+            <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono font-bold border border-emerald-300 hidden md:inline">
+              均價 ${d.recentPrice || '71.27'} 萬/坪
             </span>
           </div>
           <div class="flex items-center space-x-1.5">
@@ -704,22 +712,26 @@
                 </span>
                 <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-200 text-indigo-900 font-mono font-bold">已保留 180 天歷史資料</span>
               </div>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-[11px]">
+              <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-center text-[11px]">
                 <div class="p-2 rounded-lg bg-white border border-indigo-100">
                   <div class="text-slate-500 text-[10px]">180天前單價行情</div>
                   <div class="font-bold text-slate-700 mt-0.5 font-mono">69.8 萬/坪</div>
                 </div>
                 <div class="p-2 rounded-lg bg-white border border-indigo-100">
-                  <div class="text-slate-500 text-[10px]">目前最新成交行情</div>
-                  <div class="font-black text-emerald-700 mt-0.5 font-mono">71.3 萬/坪 <span class="text-[10px] text-emerald-600">(+2.1%)</span></div>
+                  <div class="text-slate-500 text-[10px]">一年平均成交單價</div>
+                  <div class="font-black text-emerald-700 mt-0.5 font-mono">${d.recentPrice || '71.27'} 萬/坪 <span class="text-[10px] text-emerald-600">(+2.1%)</span></div>
+                </div>
+                <div class="p-2 rounded-lg bg-white border border-indigo-100">
+                  <div class="text-slate-500 text-[10px]">累積實價登錄</div>
+                  <div class="font-bold text-[#0d346c] mt-0.5 font-mono">${d.totalTransactions || '162'} 筆交易</div>
                 </div>
                 <div class="p-2 rounded-lg bg-white border border-indigo-100">
                   <div class="text-slate-500 text-[10px]">每日更新時間排程</div>
-                  <div class="font-bold text-[#0d346c] mt-0.5">每日 07:00 AM (UTC+8)</div>
+                  <div class="font-bold text-[#0d346c] mt-0.5">每日 07:00 AM</div>
                 </div>
               </div>
               <p class="text-[10px] text-indigo-700 leading-relaxed">
-                💡 系統每日早上 07:00 會由 GitHub Actions 自動抓取最新行情，記錄至 <code class="bg-indigo-100 px-1 py-0.5 rounded font-mono">data/real-estate-data.json</code>，並自動滾動保留過去 180 天每一天的歷史價格數據。
+                💡 系統每日早上 07:00 會由 GitHub Actions 自動抓取最新實價登錄，記錄至 <code class="bg-indigo-100 px-1 py-0.5 rounded font-mono">data/real-estate-data.json</code>，並自動滾動保留過去 180 天每一天的歷史價格數據。
               </p>
             </div>
           ` : ''}
@@ -739,7 +751,7 @@
               <div class="font-black text-[#0d346c] text-base mt-0.5">${d.publicRatio}<span class="text-xs font-bold">%</span></div>
             </div>
             <div class="p-2 rounded-xl bg-emerald-50 border border-emerald-200">
-              <div class="text-[10px] text-slate-500 font-medium">最新成交</div>
+              <div class="text-[10px] text-slate-500 font-medium">一年均價</div>
               <div class="font-black text-emerald-700 text-base mt-0.5">${d.recentPrice}<span class="text-xs font-bold">萬/坪</span></div>
             </div>
             <div class="p-2 rounded-xl bg-amber-50 border border-amber-200">
@@ -755,7 +767,7 @@
               ${d.schoolDistricts.map(s => `<span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-semibold border border-sky-200 text-[11px]">${s}</span>`).join(' ')}
             </div>
             <div class="text-[11px] text-slate-500 font-medium">
-              <span>歷史最高單價：<b class="text-rose-600 font-mono">${d.highestPrice} 萬/坪</b></span>
+              <span>累積實登：<b class="text-[#0d346c] font-mono">${d.totalTransactions || '162'} 筆</b> ‧ 最高單價：<b class="text-rose-600 font-mono">${d.highestPrice} 萬/坪</b></span>
             </div>
           </div>
 
@@ -777,7 +789,7 @@
               </div>
               <div class="p-1.5 rounded-lg bg-emerald-50 border border-emerald-300">
                 <div class="text-[10px] text-emerald-700 font-medium">3房</div>
-                <div class="font-black text-emerald-700 mt-0.5">${d.roomDistribution.three || '1 戶'}</div>
+                <div class="font-black text-emerald-700 mt-0.5">${d.roomDistribution.three || '2 戶'}</div>
               </div>
               <div class="p-1.5 rounded-lg bg-emerald-50 border border-emerald-300">
                 <div class="text-[10px] text-emerald-700 font-medium">4房+</div>
@@ -790,7 +802,7 @@
           <div>
             <div class="flex items-center justify-between text-xs font-bold text-[#0d346c] mb-1.5 px-1">
               <span>📋 待售物件 (${d.listings ? d.listings.length : 0} 筆)</span>
-              <span class="text-[11px] text-slate-400 font-normal">低總價起：<b class="text-emerald-700 font-mono font-bold">${d.currentForSaleMinPrice || '4198'} 萬</b></span>
+              <span class="text-[11px] text-slate-400 font-normal">低總價起：<b class="text-emerald-700 font-mono font-bold">${d.currentForSaleMinPrice || '3888'} 萬</b></span>
             </div>
             <table class="w-full text-xs border-collapse">
               <thead>
@@ -811,7 +823,7 @@
                     <td class="px-2 py-2 font-bold text-[#0d346c]">${item.rank || (idx + 1)}.</td>
                     <td class="px-2 py-2 font-bold">
                       ${item.floor}
-                      ${item.isNew ? '<span class="text-[10px] px-1 py-0.5 rounded bg-rose-100 text-rose-700 font-bold ml-0.5">新</span>' : ''}
+                      ${item.isNew ? '<span class="text-[10px] px-1 py-0.5 rounded bg-rose-100 text-rose-700 font-bold ml-0.5">新上架</span>' : ''}
                     </td>
                     <td class="px-2 py-2">
                       <div class="font-semibold text-slate-800 leading-snug">${item.title}</div>
@@ -834,10 +846,10 @@
           <div class="flex items-center space-x-2">
             <span>資料來源：樂居 ‧ 每日 07:00 AM (UTC+8) 自動更新</span>
             <span>‧</span>
-            <span class="text-sky-700 font-semibold">保留近180天紀錄</span>
+            <span class="text-sky-700 font-semibold">一年均價 ${d.recentPrice || '71.27'} 萬/坪，${d.totalTransactions || '162'} 筆交易</span>
           </div>
           <a href="${lejuUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:text-sky-900 font-bold underline truncate max-w-[45%]">
-            查看樂居即時社區頁 ↗
+            查看樂居【惠宇雲品】社區頁 ↗
           </a>
         </div>
       </div>
