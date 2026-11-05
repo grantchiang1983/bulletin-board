@@ -28,13 +28,6 @@ def prune_and_update_history(data, now):
     history = data.get("history", [])
     
     # Snapshot today's record
-    yunpin_snapshot = {
-        "recentPrice": data.get("yunpin", {}).get("recentPrice", "71.3"),
-        "highestPrice": data.get("yunpin", {}).get("highestPrice", "76.05"),
-        "listingsCount": len(data.get("yunpin", {}).get("listings", [])),
-        "minPrice": data.get("yunpin", {}).get("currentForSaleMinPrice", "4198")
-    }
-    
     qianpin_snapshot = {
         "recentPrice": data.get("qianpin", {}).get("recentPrice", "76.01"),
         "highestPrice": data.get("qianpin", {}).get("highestPrice", "76.4"),
@@ -47,7 +40,7 @@ def prune_and_update_history(data, now):
     for item in history:
         if item.get("date") == today_str:
             item["timestamp"] = now.isoformat()
-            item["yunpin"] = yunpin_snapshot
+            item.pop("yunpin", None)
             item["qianpin"] = qianpin_snapshot
             updated_today = True
             break
@@ -56,7 +49,6 @@ def prune_and_update_history(data, now):
         history.append({
             "date": today_str,
             "timestamp": now.isoformat(),
-            "yunpin": yunpin_snapshot,
             "qianpin": qianpin_snapshot
         })
         
