@@ -12,7 +12,7 @@ import { GmailLabelsWidget } from './widgets/gmail-labels-widget.js';
 export const GridManager = {
   grid: null,
   isEditMode: false,
-  STORAGE_KEY: 'bulletin_board_layout_v13',
+  STORAGE_KEY: 'bulletin_board_layout_v14',
 
   widgetRegistry: {
     'windy-weather': WindyWidget,
@@ -33,10 +33,10 @@ export const GridManager = {
     { id: 'weather-radar', x: 6, y: 5, w: 6, h: 4, minW: 4, minH: 3 },
     { id: 'typhoon-tracker', x: 0, y: 9, w: 6, h: 5, minW: 4, minH: 4 },
     { id: 'stock-market', x: 6, y: 9, w: 6, h: 5, minW: 4, minH: 4 },
-    { id: 'real-estate', x: 0, y: 14, w: 12, h: 1, minW: 3, minH: 1 },
-    { id: 'real-estate-qianpin', x: 0, y: 15, w: 12, h: 1, minW: 3, minH: 1 },
-    { id: 'clock-calendar', x: 0, y: 16, w: 12, h: 5, minW: 4, minH: 3 },
-    { id: 'gmail-labels', x: 0, y: 21, w: 12, h: 5, minW: 4, minH: 4 }
+    { id: 'real-estate', x: 0, y: 14, w: 6, h: 2, minW: 3, minH: 1 },
+    { id: 'real-estate-qianpin', x: 0, y: 16, w: 6, h: 2, minW: 3, minH: 1 },
+    { id: 'clock-calendar', x: 6, y: 14, w: 6, h: 4, minW: 4, minH: 3 },
+    { id: 'gmail-labels', x: 0, y: 18, w: 12, h: 5, minW: 4, minH: 4 }
   ],
 
   presetLayouts: {
@@ -46,10 +46,10 @@ export const GridManager = {
       { id: 'weather-radar', x: 6, y: 5, w: 6, h: 4 },
       { id: 'typhoon-tracker', x: 0, y: 9, w: 6, h: 5 },
       { id: 'stock-market', x: 6, y: 9, w: 6, h: 5 },
-      { id: 'real-estate', x: 0, y: 14, w: 12, h: 1 },
-      { id: 'real-estate-qianpin', x: 0, y: 15, w: 12, h: 1 },
-      { id: 'clock-calendar', x: 0, y: 16, w: 12, h: 5 },
-      { id: 'gmail-labels', x: 0, y: 21, w: 12, h: 5 }
+      { id: 'real-estate', x: 0, y: 14, w: 6, h: 2 },
+      { id: 'real-estate-qianpin', x: 0, y: 16, w: 6, h: 2 },
+      { id: 'clock-calendar', x: 6, y: 14, w: 6, h: 4 },
+      { id: 'gmail-labels', x: 0, y: 18, w: 12, h: 5 }
     ],
     finance_focus: [
       { id: 'stock-market', x: 0, y: 0, w: 6, h: 5 },
@@ -91,16 +91,12 @@ export const GridManager = {
       saved = JSON.parse(localStorage.getItem(this.STORAGE_KEY));
       if (saved && Array.isArray(saved)) {
         const re = saved.find(i => i && i.id === 'real-estate');
-        if (re && re.h > 1) {
-          re.h = 1;
-          re.minH = 1;
-          re.w = 12;
-        }
         const req = saved.find(i => i && i.id === 'real-estate-qianpin');
-        if (req && req.h > 1) {
-          req.h = 1;
-          req.minH = 1;
-          req.w = 12;
+        const cc = saved.find(i => i && i.id === 'clock-calendar');
+        if (re && req && cc) {
+          re.x = 0; re.y = 14; re.w = 6; re.h = 2; re.minH = 1;
+          req.x = 0; req.y = 16; req.w = 6; req.h = 2; req.minH = 1;
+          cc.x = 6; cc.y = 14; cc.w = 6; cc.h = 4;
         }
       }
     } catch (e) {

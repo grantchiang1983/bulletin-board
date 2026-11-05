@@ -2,8 +2,8 @@ export const RealEstateWidget = {
   id: 'real-estate',
   title: '【惠宇雲品】待售物件',
   icon: 'home',
-  defaultWidth: 12,
-  defaultHeight: 1,
+  defaultWidth: 6,
+  defaultHeight: 2,
   minWidth: 3,
   minHeight: 1,
 

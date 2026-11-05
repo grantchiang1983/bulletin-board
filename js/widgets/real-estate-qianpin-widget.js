@@ -2,8 +2,8 @@ export const RealEstateQianpinWidget = {
   id: 'real-estate-qianpin',
   title: '【惠宇謙品】實價登錄',
   icon: 'home',
-  defaultWidth: 12,
-  defaultHeight: 1,
+  defaultWidth: 6,
+  defaultHeight: 2,
   minWidth: 3,
   minHeight: 1,
 
