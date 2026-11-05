@@ -1501,8 +1501,7 @@
       { id: 'stock-market', x: 6, y: 9, w: 6, h: 5, minW: 4, minH: 4 },
       { id: 'real-estate', x: 0, y: 14, w: 12, h: 1, minW: 3, minH: 1 },
       { id: 'real-estate-qianpin', x: 0, y: 15, w: 12, h: 1, minW: 3, minH: 1 },
-      { id: 'quick-notes', x: 8, y: 16, w: 4, h: 5, minW: 3, minH: 2 },
-      { id: 'clock-calendar', x: 0, y: 16, w: 8, h: 5, minW: 3, minH: 2 },
+      { id: 'clock-calendar', x: 0, y: 16, w: 12, h: 5, minW: 4, minH: 3 },
       { id: 'gmail-labels', x: 0, y: 21, w: 12, h: 5, minW: 4, minH: 4 }
     ],
 
@@ -1515,16 +1514,14 @@
         { id: 'stock-market', x: 6, y: 9, w: 6, h: 5 },
         { id: 'real-estate', x: 0, y: 14, w: 12, h: 1 },
         { id: 'real-estate-qianpin', x: 0, y: 15, w: 12, h: 1 },
-        { id: 'quick-notes', x: 8, y: 16, w: 4, h: 5 },
-        { id: 'clock-calendar', x: 0, y: 16, w: 8, h: 5 },
+        { id: 'clock-calendar', x: 0, y: 16, w: 12, h: 5 },
         { id: 'gmail-labels', x: 0, y: 21, w: 12, h: 5 }
       ],
       finance_focus: [
         { id: 'stock-market', x: 0, y: 0, w: 6, h: 5 },
         { id: 'real-estate', x: 0, y: 5, w: 12, h: 1 },
         { id: 'real-estate-qianpin', x: 0, y: 6, w: 12, h: 1 },
-        { id: 'quick-notes', x: 6, y: 7, w: 6, h: 5 },
-        { id: 'windy-weather', x: 0, y: 12, w: 12, h: 5 }
+        { id: 'windy-weather', x: 0, y: 7, w: 12, h: 5 }
       ],
       weather_focus: [
         { id: 'windy-weather', x: 0, y: 0, w: 12, h: 6 },
@@ -1579,7 +1576,7 @@
       const itemsToLoad = (saved && Array.isArray(saved) && saved.length > 0) ? saved : this.defaultLayout;
       this.grid.removeAll();
 
-      itemsToLoad.filter(item => item && item.id !== 'gmail-ai-classifier').forEach(item => {
+      itemsToLoad.filter(item => item && item.id !== 'gmail-ai-classifier' && item.id !== 'quick-notes').forEach(item => {
         this.addWidget(item.id, item);
       });
 
