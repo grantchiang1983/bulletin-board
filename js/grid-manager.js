@@ -34,10 +34,10 @@ export const GridManager = {
     { id: 'typhoon-tracker', x: 0, y: 9, w: 6, h: 5, minW: 4, minH: 4 },
     { id: 'stock-market', x: 6, y: 9, w: 6, h: 5, minW: 4, minH: 4 },
     { id: 'real-estate', x: 0, y: 14, w: 12, h: 1, minW: 3, minH: 1 },
-    { id: 'quick-notes', x: 8, y: 14, w: 4, h: 5, minW: 3, minH: 2 },
-    { id: 'real-estate-qianpin', x: 0, y: 19, w: 8, h: 5, minW: 4, minH: 4 },
-    { id: 'clock-calendar', x: 8, y: 19, w: 4, h: 5, minW: 3, minH: 2 },
-    { id: 'gmail-labels', x: 0, y: 24, w: 12, h: 5, minW: 4, minH: 4 }
+    { id: 'real-estate-qianpin', x: 0, y: 15, w: 12, h: 1, minW: 3, minH: 1 },
+    { id: 'quick-notes', x: 8, y: 16, w: 4, h: 5, minW: 3, minH: 2 },
+    { id: 'clock-calendar', x: 0, y: 16, w: 8, h: 5, minW: 3, minH: 2 },
+    { id: 'gmail-labels', x: 0, y: 21, w: 12, h: 5, minW: 4, minH: 4 }
   ],
 
   presetLayouts: {
@@ -48,17 +48,17 @@ export const GridManager = {
       { id: 'typhoon-tracker', x: 0, y: 9, w: 6, h: 5 },
       { id: 'stock-market', x: 6, y: 9, w: 6, h: 5 },
       { id: 'real-estate', x: 0, y: 14, w: 12, h: 1 },
-      { id: 'quick-notes', x: 8, y: 15, w: 4, h: 5 },
-      { id: 'real-estate-qianpin', x: 0, y: 15, w: 8, h: 5 },
-      { id: 'clock-calendar', x: 8, y: 20, w: 4, h: 5 },
-      { id: 'gmail-labels', x: 0, y: 25, w: 12, h: 5 }
+      { id: 'real-estate-qianpin', x: 0, y: 15, w: 12, h: 1 },
+      { id: 'quick-notes', x: 8, y: 16, w: 4, h: 5 },
+      { id: 'clock-calendar', x: 0, y: 16, w: 8, h: 5 },
+      { id: 'gmail-labels', x: 0, y: 21, w: 12, h: 5 }
     ],
     finance_focus: [
       { id: 'stock-market', x: 0, y: 0, w: 6, h: 5 },
       { id: 'real-estate', x: 0, y: 5, w: 12, h: 1 },
-      { id: 'real-estate-qianpin', x: 0, y: 6, w: 6, h: 5 },
-      { id: 'quick-notes', x: 6, y: 6, w: 6, h: 5 },
-      { id: 'windy-weather', x: 0, y: 11, w: 12, h: 5 }
+      { id: 'real-estate-qianpin', x: 0, y: 6, w: 12, h: 1 },
+      { id: 'quick-notes', x: 6, y: 7, w: 6, h: 5 },
+      { id: 'windy-weather', x: 0, y: 12, w: 12, h: 5 }
     ],
     weather_focus: [
       { id: 'windy-weather', x: 0, y: 0, w: 12, h: 6 },
@@ -98,6 +98,12 @@ export const GridManager = {
           re.h = 1;
           re.minH = 1;
           re.w = 12;
+        }
+        const req = saved.find(i => i && i.id === 'real-estate-qianpin');
+        if (req && req.h > 1) {
+          req.h = 1;
+          req.minH = 1;
+          req.w = 12;
         }
       }
     } catch (e) {
